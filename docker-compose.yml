@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "8379:6379"
+    volumes:
+      - yayasanalmunawwar_redis_data:/data
+    networks:
+      - yayasanalmunawwar-net
+  mysql:
+    image: mysql:8.0.34
+    environment:
+      MYSQL_ROOT_PASSWORD: password12345
+    volumes:
+      - yayasanalmunawwar_mysql_data:/var/lib/mysql
+    ports:
+      - "3333:3306"
+    networks:
+      - yayasanalmunawwar-net
+    command: --default-authentication-plugin=mysql_native_password
+
+networks:
+  yayasanalmunawwar-net:
+    driver: bridge
+
+volumes:
+  yayasanalmunawwar_redis_data:
+  yayasanalmunawwar_mysql_data:

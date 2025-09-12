@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -63,5 +64,38 @@ class User extends Authenticatable
     public function isEditor(): bool
     {
         return $this->role === 'editor';
+    }
+
+    /**
+     * Check if user is parent
+     */
+    public function isParent(): bool
+    {
+        return $this->role === 'parent';
+    }
+
+    /**
+     * Get parent's students (placeholder - would typically be a relationship)
+     */
+    public function students()
+    {
+        // In a real application, this would be a proper relationship
+        // return $this->hasMany(Student::class, 'parent_id');
+        return collect([
+            (object) [
+                'id' => 1,
+                'name' => 'Ahmad Rizki',
+                'student_id' => 'STD001',
+                'class' => 'Grade 5A',
+                'parent_id' => $this->id
+            ],
+            (object) [
+                'id' => 2,
+                'name' => 'Siti Nurhaliza',
+                'student_id' => 'STD002',
+                'class' => 'Grade 3B',
+                'parent_id' => $this->id
+            ]
+        ]);
     }
 }

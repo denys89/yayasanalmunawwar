@@ -3,70 +3,95 @@
 @section('title', 'Edit FAQ')
 @section('page-title', 'Edit FAQ')
 
-@section('content')
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Edit FAQ</h1>
-    <div>
-        <a href="{{ route('cms.faqs.show', $faq) }}" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm">
-            <i class="bi bi-eye fa-sm text-white-50"></i> View
-        </a>
-        <a href="{{ route('cms.faqs.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-            <i class="bi bi-arrow-left fa-sm text-white-50"></i> Back to FAQs
-        </a>
-    </div>
+@section('page-actions')
+<div class="flex space-x-3">
+    <a href="{{ route('cms.faqs.show', $faq) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+        </svg>
+        View
+    </a>
+    <a href="{{ route('cms.faqs.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+        </svg>
+        Back to FAQs
+    </a>
 </div>
+@endsection
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">FAQ Information</h6>
-    </div>
-    <div class="card-body">
-        <form action="{{ route('cms.faqs.update', $faq) }}" method="POST">
-            @csrf
-            @method('PUT')
-            
-            <div class="form-group">
-                <label for="question">Question</label>
-                <input type="text" class="form-control @error('question') is-invalid @enderror" 
-                       id="question" name="question" value="{{ old('question', $faq->question) }}" required>
-                @error('question')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+@section('content')
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">FAQ Information</h3>
+        </div>
+        <div class="p-6">
+            <form action="{{ route('cms.faqs.update', $faq) }}" method="POST">
+                @csrf
+                @method('PUT')
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="question" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Question <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('question') border-red-500 @enderror" 
+                               id="question" name="question" value="{{ old('question', $faq->question) }}" required>
+                        @error('question')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="form-group">
-                <label for="answer">Answer</label>
-                <textarea class="form-control @error('answer') is-invalid @enderror" 
-                          id="answer" name="answer" rows="5" required>{{ old('answer', $faq->answer) }}</textarea>
-                @error('answer')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                    <div>
+                        <label for="answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Answer <span class="text-red-500">*</span>
+                        </label>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('answer') border-red-500 @enderror" 
+                                  id="answer" name="answer" rows="5" required>{{ old('answer', $faq->answer) }}</textarea>
+                        @error('answer')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="form-group">
-                <label for="order">Display Order</label>
-                <input type="number" class="form-control @error('order') is-invalid @enderror" 
-                       id="order" name="order" value="{{ old('order', $faq->order) }}" min="0">
-                @error('order')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                    <div>
+                        <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Display Order
+                        </label>
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('order') border-red-500 @enderror" 
+                               id="order" name="order" value="{{ old('order', $faq->order ?? 0) }}" min="0">
+                        @error('order')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" 
-                       {{ old('is_active', $faq->is_active) ? 'checked' : '' }}>
-                <label class="form-check-label" for="is_active">
-                    Active
-                </label>
-            </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
+                               id="is_active" name="is_active" value="1" 
+                               {{ old('is_active', $faq->is_active) ? 'checked' : '' }}>
+                        <label class="ml-2 block text-sm text-gray-700 dark:text-gray-300" for="is_active">
+                            Active
+                        </label>
+                    </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-circle"></i> Update FAQ
-            </button>
-            <a href="{{ route('cms.faqs.show', $faq) }}" class="btn btn-secondary">
-                <i class="bi bi-x-circle"></i> Cancel
-            </a>
-        </form>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
+                            </svg>
+                            Update FAQ
+                        </button>
+                        <a href="{{ route('cms.faqs.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

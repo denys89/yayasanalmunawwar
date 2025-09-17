@@ -74,6 +74,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'editor'])->group(functi
     Route::prefix('editor')->group(function () {
         // Pages Management (Editor access)
         Route::get('pages', [PageController::class, 'index'])->name('pages.editor.index');
+        Route::get('pages/create', [PageController::class, 'create'])->name('pages.editor.create');
+        Route::post('pages', [PageController::class, 'store'])->name('pages.editor.store');
         Route::get('pages/{page}/edit', [PageController::class, 'edit'])->name('pages.editor.edit');
         Route::patch('pages/{page}', [PageController::class, 'update'])->name('pages.editor.update');
         

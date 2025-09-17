@@ -4,110 +4,110 @@
 @section('page-title', 'Program Details')
 
 @section('content')
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Program Details</h1>
-    <div>
-        <a href="{{ route('cms.programs.edit', $program) }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
-            <i class="bi bi-pencil fa-sm text-white-50"></i> Edit
+<div class="mb-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Program Details</h1>
+    <div class="flex gap-2">
+        <a href="{{ route('cms.programs.edit', $program) }}" class="inline-flex items-center gap-2 rounded-md bg-amber-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M4 16.25V20h3.75l11-11L15 5.25 4 16.25Z"/><path fill-rule="evenodd" d="M18.71 3.29a1 1 0 0 1 1.41 1.41l-1.17 1.17-2.12-2.12 1.88-1.88Z" clip-rule="evenodd"/></svg>
+            Edit
         </a>
-        <a href="{{ route('cms.programs.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-            <i class="bi bi-arrow-left fa-sm text-white-50"></i> Back to Programs
+        <a href="{{ route('cms.programs.index') }}" class="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M19 12.75H6.31l4.22 4.22a.75.75 0 1 1-1.06 1.06l-5.5-5.5a.75.75 0 0 1 0-1.06l5.5-5.5a.75.75 0 1 1 1.06 1.06L6.31 11.25H19a.75.75 0 0 1 0 1.5Z" clip-rule="evenodd"/></svg>
+            Back to Programs
         </a>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Program Information</h6>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="lg:col-span-2">
+        <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
+                <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Program Information</h2>
             </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="font-weight-bold">Title:</label>
-                    <p class="mt-1">{{ $program->title }}</p>
-                </div>
-
-                @if($program->image)
-                <div class="mb-3">
-                    <label class="font-weight-bold">Featured Image:</label>
-                    <div class="mt-1">
-                        <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->title }}" class="img-fluid" style="max-height: 300px;">
+            <div class="p-4">
+                <dl class="space-y-4 text-sm">
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Title</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->title }}</dd>
                     </div>
-                </div>
-                @endif
 
-                <div class="mb-3">
-                    <label class="font-weight-bold">Description:</label>
-                    <div class="mt-1">
-                        {!! nl2br(e($program->description)) !!}
+                    @if($program->image)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Featured Image</dt>
+                        <dd class="mt-1">
+                            <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->title }}" class="max-h-72 w-auto rounded border border-gray-200 object-cover dark:border-gray-700">
+                        </dd>
                     </div>
-                </div>
+                    @endif
 
-                <div class="mb-3">
-                    <label class="font-weight-bold">Content:</label>
-                    <div class="mt-1">
-                        {!! nl2br(e($program->content)) !!}
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Description</dt>
+                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! nl2br(e($program->description)) !!}</dd>
                     </div>
-                </div>
 
-                @if($program->duration)
-                <div class="mb-3">
-                    <label class="font-weight-bold">Duration:</label>
-                    <p class="mt-1">{{ $program->duration }}</p>
-                </div>
-                @endif
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Content</dt>
+                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! nl2br(e($program->content)) !!}</dd>
+                    </div>
 
-                @if($program->price)
-                <div class="mb-3">
-                    <label class="font-weight-bold">Price:</label>
-                    <p class="mt-1">{{ $program->price }}</p>
-                </div>
-                @endif
+                    @if($program->duration)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Duration</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->duration }}</dd>
+                    </div>
+                    @endif
 
-                <div class="mb-3">
-                    <label class="font-weight-bold">Status:</label>
-                    <p class="mt-1">
-                        <span class="badge badge-{{ $program->is_active ? 'success' : 'secondary' }}">
-                            {{ $program->is_active ? 'Active' : 'Inactive' }}
-                        </span>
-                    </p>
-                </div>
+                    @if($program->price)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Price</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->price }}</dd>
+                    </div>
+                    @endif
+
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Status</dt>
+                        <dd class="mt-1">
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' }}">
+                                {{ $program->is_active ? 'Active' : 'Inactive' }}
+                            </span>
+                        </dd>
+                    </div>
+                </dl>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Metadata</h6>
+    <div>
+        <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
+                <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Metadata</h2>
             </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="font-weight-bold">Created:</label>
-                    <p class="mt-1">{{ $program->created_at->format('M d, Y H:i') }}</p>
-                </div>
-
-                <div class="mb-3">
-                    <label class="font-weight-bold">Last Updated:</label>
-                    <p class="mt-1">{{ $program->updated_at->format('M d, Y H:i') }}</p>
-                </div>
-
-                <div class="mb-3">
-                    <label class="font-weight-bold">Actions:</label>
-                    <div class="mt-2">
-                        <a href="{{ route('cms.programs.edit', $program) }}" class="btn btn-sm btn-warning mb-1">
-                            <i class="bi bi-pencil"></i> Edit
-                        </a>
-                        <form action="{{ route('cms.programs.destroy', $program) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger mb-1" onclick="return confirm('Are you sure you want to delete this program?')">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </form>
+            <div class="p-4">
+                <dl class="space-y-4 text-sm">
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Created</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->created_at->format('M d, Y H:i') }}</dd>
                     </div>
-                </div>
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Last Updated</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->updated_at->format('M d, Y H:i') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Actions</dt>
+                        <dd class="mt-2 flex flex-wrap gap-2">
+                            <a href="{{ route('cms.programs.edit', $program) }}" class="inline-flex items-center gap-2 rounded-md bg-amber-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                Edit
+                            </a>
+                            <form action="{{ route('cms.programs.destroy', $program) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this program?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-2 rounded-md bg-rose-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                    Delete
+                                </button>
+                            </form>
+                        </dd>
+                    </div>
+                </dl>
             </div>
         </div>
     </div>

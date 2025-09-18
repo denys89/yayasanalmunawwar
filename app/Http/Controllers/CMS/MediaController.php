@@ -33,21 +33,17 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:10240',
-            'alt_text' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,mp4,avi,mov|max:10240',
+            'type' => 'required|in:image,video,pdf',
         ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '_' . Str::slug($validated['title']) . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('media', $filename, 'public');
             
-            $validated['file_path'] = $path;
             $validated['file_name'] = $filename;
-            $validated['file_size'] = $file->getSize();
-            $validated['mime_type'] = $file->getMimeType();
+            $validated['file_url'] = Storage::url($path);
         }
 
         Media::create($validated);
@@ -78,26 +74,23 @@ class MediaController extends Controller
     public function update(Request $request, Media $medium)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:10240',
-            'alt_text' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,mp4,avi,mov|max:10240',
+            'type' => 'required|in:image,video,pdf',
         ]);
 
         if ($request->hasFile('file')) {
             // Delete old file
-            if ($medium->file_path) {
-                Storage::disk('public')->delete($medium->file_path);
+            if ($medium->file_url) {
+                $oldPath = str_replace('/storage/', '', $medium->file_url);
+                Storage::disk('public')->delete($oldPath);
             }
             
             $file = $request->file('file');
-            $filename = time() . '_' . Str::slug($validated['title']) . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('media', $filename, 'public');
             
-            $validated['file_path'] = $path;
             $validated['file_name'] = $filename;
-            $validated['file_size'] = $file->getSize();
-            $validated['mime_type'] = $file->getMimeType();
+            $validated['file_url'] = Storage::url($path);
         }
 
         $medium->update($validated);
@@ -112,8 +105,9 @@ class MediaController extends Controller
     public function destroy(Media $medium)
     {
         // Delete file from storage
-        if ($medium->file_path) {
-            Storage::disk('public')->delete($medium->file_path);
+        if ($medium->file_url) {
+            $oldPath = str_replace('/storage/', '', $medium->file_url);
+            Storage::disk('public')->delete($oldPath);
         }
         
         $medium->delete();
@@ -128,23 +122,19 @@ class MediaController extends Controller
     public function upload(Request $request)
     {
         $validated = $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,mp4,avi,mov|max:51200', // 50MB max
-            'title' => 'nullable|string|max:255',
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,mp4,avi,mov|max:51200', // 50MB max
+            'type' => 'required|in:image,video,pdf',
         ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $title = $validated['title'] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $filename = time() . '_' . Str::slug($title) . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('media', $filename, 'public');
             
             $media = Media::create([
-                'title' => $title,
-                'file_path' => $path,
                 'file_name' => $filename,
-                'file_size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
-                'alt_text' => $title,
+                'file_url' => Storage::url($path),
+                'type' => $validated['type'],
             ]);
 
             return response()->json([
@@ -152,12 +142,9 @@ class MediaController extends Controller
                 'message' => 'File uploaded successfully',
                 'media' => [
                     'id' => $media->id,
-                    'title' => $media->title,
-                    'file_path' => $media->file_path,
                     'file_name' => $media->file_name,
-                    'file_size' => $media->file_size,
-                    'mime_type' => $media->mime_type,
-                    'url' => asset('storage/' . $media->file_path),
+                    'file_url' => $media->file_url,
+                    'type' => $media->type,
                     'created_at' => $media->created_at->format('Y-m-d H:i:s'),
                 ]
             ]);

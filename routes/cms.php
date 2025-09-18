@@ -26,8 +26,10 @@ use App\Http\Controllers\CMS\UserController;
 // CMS Routes with Admin Middleware
 Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(function () {
     
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Redirect root CMS to pages
+    Route::get('/', function () {
+        return redirect()->route('cms.pages.index');
+    })->name('dashboard');
     
     // Pages Management
     Route::resource('pages', PageController::class);

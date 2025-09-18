@@ -34,7 +34,7 @@ class AdmissionController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'level' => 'required|in:elementary,middle,high',
+            'level' => 'required|in:paud,sd,smp,sma',
             'document_url' => 'nullable|url',
             'status' => 'required|in:pending,verified,rejected',
         ]);
@@ -70,7 +70,7 @@ class AdmissionController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'level' => 'required|in:elementary,middle,high',
+            'level' => 'required|in:paud,sd,smp,sma',
             'document_url' => 'nullable|url',
             'status' => 'required|in:pending,verified,rejected',
         ]);

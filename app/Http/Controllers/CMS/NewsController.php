@@ -34,7 +34,7 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'category' => 'required|in:news,event',
+            'category' => 'required|in:news,event,coverage',
             'image_url' => 'nullable|url',
             'published_at' => 'nullable|date',
             'status' => 'required|in:draft,published',
@@ -72,7 +72,7 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'category' => 'required|in:news,event',
+            'category' => 'required|in:news,event,coverage',
             'image_url' => 'nullable|url',
             'published_at' => 'nullable|date',
             'status' => 'required|in:draft,published',

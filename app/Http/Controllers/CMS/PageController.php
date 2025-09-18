@@ -34,7 +34,7 @@ class PageController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'type' => 'required|in:about,contact,privacy,terms',
+            'type' => 'required|in:about,vision_mission,career,faq',
             'status' => 'required|in:draft,published',
         ]);
 
@@ -70,7 +70,7 @@ class PageController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'type' => 'required|in:about,contact,privacy,terms',
+            'type' => 'required|in:about,vision_mission,career,faq',
             'status' => 'required|in:draft,published',
         ]);
 

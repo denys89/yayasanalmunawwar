@@ -26,6 +26,8 @@ class PageController extends Controller
         return view('cms.pages.create');
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -33,17 +35,47 @@ class PageController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
             'content' => 'required|string',
+            'excerpt' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string|max:255',
+            'featured_image' => 'nullable|url',
+            'show_in_menu' => 'nullable|boolean',
+            'menu_order' => 'nullable|integer|min:0',
             'type' => 'required|in:about,vision_mission,career,faq',
-            'status' => 'required|in:draft,published',
+            'status' => 'nullable|in:draft,published',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
+        // Handle action parameter from form buttons
+        if ($request->has('action')) {
+            if ($request->action === 'save') {
+                $validated['status'] = 'draft';
+                $validated['is_published'] = false;
+            } elseif ($request->action === 'publish') {
+                $validated['status'] = 'published';
+                $validated['is_published'] = true;
+                $validated['published_at'] = now();
+            }
+        }
+
+        // Generate slug if not provided
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']);
+        } else {
+            $validated['slug'] = Str::slug($validated['slug']);
+        }
+
+        // Handle checkbox values
+        $validated['show_in_menu'] = $request->has('show_in_menu');
 
         Page::create($validated);
 
+        $message = $validated['status'] === 'published' ? 'Page created and published successfully.' : 'Page created as draft successfully.';
+
         return redirect()->route('cms.pages.index')
-            ->with('success', 'Page created successfully.');
+            ->with('success', $message);
     }
 
     /**
@@ -69,17 +101,47 @@ class PageController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
             'content' => 'required|string',
+            'excerpt' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string|max:255',
+            'featured_image' => 'nullable|url',
+            'show_in_menu' => 'nullable|boolean',
+            'menu_order' => 'nullable|integer|min:0',
             'type' => 'required|in:about,vision_mission,career,faq',
-            'status' => 'required|in:draft,published',
+            'status' => 'nullable|in:draft,published',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
+        // Handle action parameter from form buttons
+        if ($request->has('action')) {
+            if ($request->action === 'save') {
+                $validated['status'] = 'draft';
+                $validated['is_published'] = false;
+            } elseif ($request->action === 'publish') {
+                $validated['status'] = 'published';
+                $validated['is_published'] = true;
+                $validated['published_at'] = now();
+            }
+        }
+
+        // Generate slug if not provided
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']);
+        } else {
+            $validated['slug'] = Str::slug($validated['slug']);
+        }
+
+        // Handle checkbox values
+        $validated['show_in_menu'] = $request->has('show_in_menu');
 
         $page->update($validated);
 
+        $message = $validated['status'] === 'published' ? 'Page updated and published successfully.' : 'Page updated as draft successfully.';
+
         return redirect()->route('cms.pages.index')
-            ->with('success', 'Page updated successfully.');
+            ->with('success', $message);
     }
 
     /**

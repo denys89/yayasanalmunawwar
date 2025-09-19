@@ -42,7 +42,7 @@
 
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description <span class="text-rose-600">*</span></label>
-                        <textarea id="description" name="description" rows="4" required
+                        <textarea id="description" name="description" required
                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('description') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('description') }}</textarea>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Brief description of the program</p>
                         @error('description')
@@ -52,7 +52,7 @@
 
                     <div>
                         <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Detailed Content</label>
-                        <textarea id="content" name="content" rows="12"
+                        <textarea id="content" name="content"
                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('content') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('content') }}</textarea>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Detailed information about the program</p>
                         @error('content')
@@ -268,14 +268,17 @@
 @endsection
 
 @push('scripts')
+<x-tinymce-scripts selector="#description, #content" config="standard" />
 <script>
+
     // Auto-generate slug from name
     document.getElementById('name').addEventListener('input', function() {
         const slugField = document.getElementById('slug');
+        
         if (!slugField.value) {
-            const name = this.value;
-            const slug = name.toLowerCase()
-                .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
+            const slug = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
                 .replace(/\s+/g, '-') // Replace spaces with -
                 .replace(/-+/g, '-') // Replace multiple - with single -
                 .trim('-'); // Trim - from start and end

@@ -50,13 +50,25 @@
         <!-- Page Information -->
         <div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-800 sm:p-6">
             <h3 class="mb-4 text-base font-semibold text-gray-900 dark:text-gray-100">Page Information</h3>
+            
+            <div class="mb-3">
+                <span class="font-medium text-gray-900 dark:text-gray-100">Page Type:</span>
+                <span class="ms-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                    @if($page->type == 'about') bg-blue-100 text-blue-800 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-950 dark:text-blue-200 dark:ring-blue-900/30
+                    @elseif($page->type == 'vision_mission') bg-purple-100 text-purple-800 ring-1 ring-inset ring-purple-600/20 dark:bg-purple-950 dark:text-purple-200 dark:ring-purple-900/30
+                    @elseif($page->type == 'career') bg-green-100 text-green-800 ring-1 ring-inset ring-green-600/20 dark:bg-green-950 dark:text-green-200 dark:ring-green-900/30
+                    @elseif($page->type == 'faq') bg-yellow-100 text-yellow-800 ring-1 ring-inset ring-yellow-600/20 dark:bg-yellow-950 dark:text-yellow-200 dark:ring-yellow-900/30
+                    @else bg-gray-100 text-gray-800 ring-1 ring-inset ring-gray-600/20 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700
+                    @endif">
+                    {{ ucfirst(str_replace('_', ' ', $page->type)) }}
+                </span>
+            </div>
+
             <div class="mb-3">
                 <span class="font-medium text-gray-900 dark:text-gray-100">Status:</span>
-                @if($page->is_published)
-                    <span class="ms-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-950 dark:text-emerald-200 dark:ring-emerald-900/30">Published</span>
-                @else
-                    <span class="ms-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-gray-100 text-gray-700 ring-gray-600/20 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">Draft</span>
-                @endif
+                <span class="ms-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {{ $page->status == 'published' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-950 dark:text-emerald-200 dark:ring-emerald-900/30' : 'bg-gray-100 text-gray-700 ring-gray-600/20 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700' }}">
+                    {{ ucfirst($page->status) }}
+                </span>
             </div>
 
             <div class="mb-3">

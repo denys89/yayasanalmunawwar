@@ -59,8 +59,10 @@
                             <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Content <span class="text-red-500">*</span>
                             </label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('content') border-red-500 @enderror" 
-                                      id="content" name="content" rows="15" required>{{ old('content', $page->content) }}</textarea>
+                            <textarea name="content" 
+                                      id="content" 
+                                      required
+                                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('content') ring-red-500 @enderror">{{ old('content', $page->content) }}</textarea>
                             @error('content')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -75,6 +77,25 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Page Type <span class="text-red-500">*</span>
+                            </label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('type') border-red-500 @enderror" 
+                                    id="type" name="type" required>
+                                <option value="">Select page type</option>
+                                <option value="about" {{ old('type', $page->type) == 'about' ? 'selected' : '' }}>About</option>
+                                <option value="vision_mission" {{ old('type', $page->type) == 'vision_mission' ? 'selected' : '' }}>Vision & Mission</option>
+                                <option value="career" {{ old('type', $page->type) == 'career' ? 'selected' : '' }}>Career</option>
+                                <option value="faq" {{ old('type', $page->type) == 'faq' ? 'selected' : '' }}>FAQ</option>
+                            </select>
+                            @error('type')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+
 
                         <div class="flex justify-between pt-4">
                             <button type="submit" name="action" value="save" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center">
@@ -203,20 +224,23 @@
 @endsection
 
 @push('scripts')
+<x-tinymce-scripts selector="#content" />
 <script>
-    // Auto-generate slug from title (only if slug is empty)
-    document.getElementById('title').addEventListener('input', function() {
-        const slugField = document.getElementById('slug');
-        if (!slugField.value) {
-            const title = this.value;
-            const slug = title.toLowerCase()
-                .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
-                .replace(/\s+/g, '-') // Replace spaces with -
-                .replace(/-+/g, '-') // Replace multiple - with single -
-                .trim('-'); // Trim - from start and end
-            
-            slugField.value = slug;
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-generate slug from title (only if slug is empty)
+        document.getElementById('title').addEventListener('input', function() {
+            const slugField = document.getElementById('slug');
+            if (!slugField.value) {
+                const title = this.value;
+                const slug = title.toLowerCase()
+                    .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
+                    .replace(/\s+/g, '-') // Replace spaces with -
+                    .replace(/-+/g, '-') // Replace multiple - with single -
+                    .trim('-'); // Trim - from start and end
+                
+                slugField.value = slug;
+            }
+        });
     });
 </script>
 @endpush

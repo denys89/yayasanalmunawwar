@@ -128,7 +128,6 @@
                             <textarea class="form-control @error('description') is-invalid @enderror" 
                                       id="description" 
                                       name="description" 
-                                      rows="3" 
                                       placeholder="Enter media description (optional)">{{ old('description', $media->description) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -386,6 +385,7 @@
 }
 </style>
 
+<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 // Auto-hide alerts after 5 seconds
 setTimeout(function() {
@@ -513,6 +513,25 @@ document.getElementById('mediaForm').addEventListener('submit', function(e) {
         titleInput.focus();
         return false;
     }
+});
+
+// Initialize TinyMCE for description field
+tinymce.init({
+    selector: '#description',
+    height: 300,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | ' +
+        'bold italic forecolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    branding: false,
+    promotion: false
 });
 </script>
 @endsection

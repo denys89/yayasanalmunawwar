@@ -137,6 +137,9 @@
                         <h1 class="text-xl font-semibold leading-6 text-gray-900 dark:text-white">@yield('page-title', 'Dashboard')</h1>
                     </div>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
+                        <!-- Theme Toggle -->
+                        <x-theme-toggle />
+                        
                         <!-- Notifications -->
                         <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400">
                             <span class="sr-only">View notifications</span>

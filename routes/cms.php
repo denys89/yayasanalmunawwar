@@ -63,6 +63,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     Route::resource('users', UserController::class);
     Route::patch('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
     Route::patch('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    Route::patch('users/{user}/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
+    Route::post('users/{user}/login-as', [UserController::class, 'loginAs'])->name('users.login-as');
     Route::post('users/bulk', [UserController::class, 'bulk'])->name('users.bulk');
 });
 

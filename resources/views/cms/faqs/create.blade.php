@@ -39,7 +39,7 @@
                             Answer <span class="text-red-500">*</span>
                         </label>
                         <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('answer') border-red-500 @enderror" 
-                                  id="answer" name="answer" rows="5" required>{{ old('answer') }}</textarea>
+                                  id="answer" name="answer" required>{{ old('answer') }}</textarea>
                         @error('answer')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -85,3 +85,27 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    // Initialize TinyMCE for answer field
+    tinymce.init({
+        selector: '#answer',
+        height: 300,
+        menubar: false,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        branding: false,
+        promotion: false
+    });
+</script>
+@endpush

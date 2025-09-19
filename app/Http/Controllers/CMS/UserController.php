@@ -216,4 +216,54 @@ class UserController extends Controller
 
         return redirect()->route('cms.users.index')->with('error', 'Unknown action.');
     }
+
+    /**
+     * Change user password
+     */
+    public function changePassword(Request $request, User $user)
+    {
+        $rules = [
+            'new_password' => 'required|string|min:8|confirmed',
+        ];
+
+        // If changing own password, require current password
+        if ($user->id === auth()->id()) {
+            $rules['current_password'] = 'required|string';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Verify current password if changing own password
+        if ($user->id === auth()->id()) {
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return back()->withErrors(['current_password' => 'The current password is incorrect.']);
+            }
+        }
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($validated['new_password'])
+        ]);
+
+        $message = $user->id === auth()->id() 
+            ? 'Your password has been changed successfully.' 
+            : "Password for {$user->name} has been changed successfully.";
+
+        return back()->with('success', $message);
+    }
+    public function loginAs(Request $request, User $user)
+    {
+        // Only admins can impersonate and cannot impersonate themselves
+        if (!auth()->user() || auth()->user()->role !== 'admin' || auth()->id() === $user->id) {
+            return back()->with('error', 'You are not authorized to perform this action.');
+        }
+
+        // Store the original admin ID in session to allow return later
+        session(['impersonator_id' => auth()->id()]);
+
+        // Log in as the target user
+        Auth::login($user);
+
+        return redirect('/')->with('success', 'You are now logged in as ' . $user->name . '.');
+    }
 }

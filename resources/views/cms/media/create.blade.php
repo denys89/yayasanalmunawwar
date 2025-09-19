@@ -132,7 +132,6 @@
                             <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('description') border-red-500 @enderror" 
                                       id="description" 
                                       name="description" 
-                                      rows="3" 
                                       placeholder="Enter media description (optional)">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -340,6 +339,7 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 // Auto-hide alerts after 5 seconds
 setTimeout(function() {
@@ -460,6 +460,25 @@ uploadArea.addEventListener('drop', function(e) {
         document.getElementById('file').files = files;
         handleFileSelect(document.getElementById('file'));
     }
+});
+
+// Initialize TinyMCE for description field
+tinymce.init({
+    selector: '#description',
+    height: 300,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | ' +
+        'bold italic forecolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    branding: false,
+    promotion: false
 });
 </script>
 @endpush

@@ -76,7 +76,6 @@
                             <div class="mt-2">
                                 <textarea name="content" 
                                           id="content" 
-                                          rows="15" 
                                           required
                                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('content') ring-red-500 @enderror">{{ old('content', $news->content) }}</textarea>
                             </div>
@@ -91,7 +90,6 @@
                             <div class="mt-2">
                                 <textarea name="excerpt" 
                                           id="excerpt" 
-                                          rows="3"
                                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('excerpt') ring-red-500 @enderror">{{ old('excerpt', $news->excerpt) }}</textarea>
                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Brief summary of the article</p>
                             </div>
@@ -356,20 +354,44 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-    // Auto-generate slug from title (only if slug is empty)
-    document.getElementById('title').addEventListener('input', function() {
-        const slugField = document.getElementById('slug');
-        if (!slugField.value) {
-            const title = this.value;
-            const slug = title.toLowerCase()
-                .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
-                .replace(/\s+/g, '-') // Replace spaces with -
-                .replace(/-+/g, '-') // Replace multiple - with single -
-                .trim('-'); // Trim - from start and end
-            slugField.value = slug;
-        }
-    });
+// Initialize TinyMCE for content and excerpt fields
+tinymce.init({
+    selector: '#content, #excerpt',
+    height: 300,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | ' +
+        'bold italic forecolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    branding: false,
+    promotion: false
+});
+
+// Auto-generate slug from title
+document.addEventListener('DOMContentLoaded', function() {
+    const titleField = document.getElementById('title');
+    const slugField = document.getElementById('slug');
+    
+    if (titleField && slugField) {
+        titleField.addEventListener('input', function() {
+            if (!slugField.value || slugField.value === '') {
+                const slug = this.value.toLowerCase()
+                    .replace(/[^a-z0-9 -]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                slugField.value = slug;
+            }
+        });
+    }
 
     // Character counter for meta description
     const metaDescField = document.getElementById('meta_description');
@@ -387,5 +409,6 @@
         metaDescField.addEventListener('input', updateCounter);
         updateCounter();
     }
+});
 </script>
 @endpush

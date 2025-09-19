@@ -1,3 +1,206 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dark Mode Theme Variables */
+:root {
+    /* Light theme colors */
+    --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-secondary: #6b7280;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    
+    /* Background colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --bg-overlay: rgba(0, 0, 0, 0.5);
+    
+    /* Text colors */
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --text-inverse: #ffffff;
+    
+    /* Border colors */
+    --border-primary: #e5e7eb;
+    --border-secondary: #d1d5db;
+    --border-focus: #3b82f6;
+    
+    /* Shadow colors */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+    /* Dark theme colors */
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+    --color-secondary: #9ca3af;
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-error: #f87171;
+    
+    /* Background colors */
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-tertiary: #374151;
+    --bg-overlay: rgba(0, 0, 0, 0.75);
+    
+    /* Text colors */
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
+    --text-inverse: #111827;
+    
+    /* Border colors */
+    --border-primary: #374151;
+    --border-secondary: #4b5563;
+    --border-focus: #60a5fa;
+    
+    /* Shadow colors */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme Toggle Component Styles */
+.theme-toggle {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out;
+    background-color: var(--border-secondary);
+}
+
+.theme-toggle:focus {
+    @apply outline-none ring-2 ring-offset-2;
+    ring-color: var(--border-focus);
+    ring-offset-color: var(--bg-primary);
+}
+
+.theme-toggle.active {
+    background-color: var(--color-primary);
+}
+
+.theme-toggle-handle {
+    @apply inline-block h-4 w-4 transform rounded-full transition duration-200 ease-in-out;
+    background-color: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle.active .theme-toggle-handle {
+    @apply translate-x-5;
+}
+
+.theme-toggle-icon {
+    @apply absolute inset-0 flex items-center justify-center transition-opacity duration-200;
+}
+
+.theme-toggle-icon.sun {
+    @apply opacity-100;
+    color: var(--color-warning);
+}
+
+.theme-toggle-icon.moon {
+    @apply opacity-0;
+    color: var(--text-inverse);
+}
+
+.theme-toggle.active .theme-toggle-icon.sun {
+    @apply opacity-0;
+}
+
+.theme-toggle.active .theme-toggle-icon.moon {
+    @apply opacity-100;
+}
+
+/* Smooth transitions for theme changes */
+* {
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Enhanced transition for theme switching */
+.theme-transitioning * {
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom utility classes for theme-aware components */
+.bg-theme-primary {
+    background-color: var(--bg-primary);
+}
+
+.bg-theme-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.bg-theme-tertiary {
+    background-color: var(--bg-tertiary);
+}
+
+.text-theme-primary {
+    color: var(--text-primary);
+}
+
+.text-theme-secondary {
+    color: var(--text-secondary);
+}
+
+.text-theme-tertiary {
+    color: var(--text-tertiary);
+}
+
+.border-theme-primary {
+    border-color: var(--border-primary);
+}
+
+.border-theme-secondary {
+    border-color: var(--border-secondary);
+}
+
+.shadow-theme-sm {
+    box-shadow: var(--shadow-sm);
+}
+
+.shadow-theme-md {
+    box-shadow: var(--shadow-md);
+}
+
+.shadow-theme-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Ensure proper contrast for form elements */
+input, textarea, select {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button variants with theme support */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--text-inverse);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-secondary);
+}

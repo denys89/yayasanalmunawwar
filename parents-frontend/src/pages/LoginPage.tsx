@@ -79,32 +79,26 @@ const LoginPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-gray-900">
           Welcome Back
         </h2>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-sm text-gray-600">
           Sign in to access your parent portal
         </p>
       </div>
 
       {/* API Error Alert */}
       {apiError && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <div className="flex">
-            <AlertCircle className="h-5 w-5 text-red-400" />
-            <div className="ml-3">
-              <p className="text-sm text-red-800 dark:text-red-200">
-                {apiError}
-              </p>
-            </div>
-          </div>
+        <div className="alert alert-error flex items-start">
+          <AlertCircle className="h-5 w-5 mr-2 text-red-500" />
+          <p className="text-sm">{apiError}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Field */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className="form-group">
+          <label htmlFor="email" className="form-label">
             Email Address
           </label>
           <div className="relative">
@@ -119,22 +113,22 @@ const LoginPage: React.FC = () => {
               value={formData.email}
               onChange={handleInputChange}
               className={cn(
-                'input pl-10',
-                errors.email && 'border-red-300 dark:border-red-600 focus-visible:ring-red-500'
+                'form-input pl-10',
+                errors.email && 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
               )}
               placeholder="Enter your email"
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+            <p className="form-error">
               {errors.email}
             </p>
           )}
         </div>
 
         {/* Password Field */}
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className="form-group">
+          <label htmlFor="password" className="form-label">
             Password
           </label>
           <div className="relative">
@@ -149,8 +143,8 @@ const LoginPage: React.FC = () => {
               value={formData.password}
               onChange={handleInputChange}
               className={cn(
-                'input pl-10 pr-10',
-                errors.password && 'border-red-300 dark:border-red-600 focus-visible:ring-red-500'
+                'form-input pl-10 pr-10',
+                errors.password && 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
               )}
               placeholder="Enter your password"
             />
@@ -167,7 +161,7 @@ const LoginPage: React.FC = () => {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+            <p className="form-error">
               {errors.password}
             </p>
           )}
@@ -182,16 +176,16 @@ const LoginPage: React.FC = () => {
               type="checkbox"
               checked={formData.remember}
               onChange={handleInputChange}
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500/50 border-gray-300 dark:border-gray-600 rounded"
+              className="form-checkbox"
             />
-            <label htmlFor="remember" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+            <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
               Remember me
             </label>
           </div>
 
           <Link
             to="/forgot-password"
-            className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+            className="text-sm text-primary-600 hover:text-primary-700"
           >
             Forgot password?
           </Link>
@@ -218,11 +212,11 @@ const LoginPage: React.FC = () => {
       </form>
 
       {/* Demo Credentials */}
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-        <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+        <h3 className="text-sm font-medium text-blue-800 mb-2">
           Demo Credentials
         </h3>
-        <div className="text-xs text-blue-600 dark:text-blue-300 space-y-1">
+        <div className="text-xs text-blue-700 space-y-1">
           <p><strong>Email:</strong> parent@almunawwar.sch.id</p>
           <p><strong>Password:</strong> password123</p>
         </div>
@@ -230,9 +224,9 @@ const LoginPage: React.FC = () => {
 
       {/* Footer */}
       <div className="text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600">
           Need help? Contact{' '}
-          <a href="mailto:admin@almunawwar.sch.id" className="text-primary-600 hover:text-primary-500 dark:text-primary-400">
+          <a href="mailto:admin@almunawwar.sch.id" className="text-primary-600 hover:text-primary-700">
             school administration
           </a>
         </p>

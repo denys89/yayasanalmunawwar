@@ -3,6 +3,7 @@ import { User, Calendar, BookOpen, Award, Clock, TrendingUp, AlertTriangle, Eye,
 import { studentsApi } from '../services/api';
 import type { Student, Attendance, Grade } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const StudentsPage: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
@@ -170,14 +171,10 @@ const StudentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Students
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          View your children's academic information, attendance, and grades.
-        </p>
-      </div>
+      <PageHeader
+        title="Students"
+        description="Manage and view your children's academic information, attendance, and grades."
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Students List */}

@@ -68,6 +68,7 @@ export const authApi = {
 
 // Dashboard API
 export const dashboardApi = {
+  getDashboard: () => api.get<ApiResponse<any>>('/dashboard'),
   overview: () => api.get<ApiResponse<any>>('/dashboard/overview'),
   attendanceStats: () => api.get<ApiResponse<any>>('/dashboard/attendance-stats'),
   paymentOverview: () => api.get<ApiResponse<any>>('/dashboard/payment-overview'),
@@ -112,6 +113,8 @@ export const announcementsApi = {
 
 // Settings API
 export const settingsApi = {
+  getSettings: () => api.get<ApiResponse<any>>('/settings/profile'),
+  updateSettings: (data: any) => api.put<ApiResponse<any>>('/settings/profile', data),
   profile: () => api.get<ApiResponse<any>>('/settings/profile'),
   updateProfile: (data: any) => api.put<ApiResponse<any>>('/settings/profile', data),
   changePassword: (data: { current_password: string; password: string; password_confirmation: string }) =>

@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
 import type { Settings, PasswordChangeForm } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -176,14 +177,10 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Settings
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Manage your account settings and preferences.
-        </p>
-      </div>
+      <PageHeader
+      title="Settings"
+      description="Manage your account settings and preferences."
+      />
 
       {/* Success/Error Messages */}
       {successMessage && (

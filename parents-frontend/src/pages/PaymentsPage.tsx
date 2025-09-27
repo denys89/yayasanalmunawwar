@@ -3,6 +3,7 @@ import { CreditCard, Calendar, Download, Eye, AlertTriangle, Filter, Search, Che
 import { paymentsApi } from '../services/api';
 import type { Payment } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const PaymentsPage: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -186,95 +187,12 @@ const PaymentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Payments & Billing
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Manage your payment history and outstanding bills.
-        </p>
-      </div>
+      <PageHeader
+        title="Payments"
+        description="View and manage your payment history and outstanding fees."
+      />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <CreditCard className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total Payments
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.total}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.totalAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Paid
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.paid}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.paidAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Clock className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Pending
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.pending}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.pendingAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <XCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Overdue
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.overdue}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.overdueAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Search */}
+      {/* Filters and Summary */}
       <div className="card p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">

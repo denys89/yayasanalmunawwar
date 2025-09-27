@@ -3,6 +3,7 @@ import { Users, GraduationCap, CreditCard, Bell, Calendar, TrendingUp, Clock, Al
 import { dashboardApi } from '../services/api';
 import type { DashboardData, Student, Payment, Announcement } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const DashboardPage: React.FC = () => {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -123,14 +124,10 @@ const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Dashboard
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Welcome back! Here's an overview of your children's academic progress.
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Welcome back! Here's an overview of your children's academic progress."
+      />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

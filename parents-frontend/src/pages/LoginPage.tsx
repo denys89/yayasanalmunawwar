@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, Home } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import type { LoginForm } from '../types';
 import { cn } from '../utils/cn';
@@ -77,33 +77,35 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Welcome Back
-        </h2>
-        <p className="mt-2 text-sm text-gray-600">
-          Sign in to access your parent portal
+    <div className="w-full">
+      {/* Header Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#333333] mb-4 leading-tight">
+          Parent Login
+        </h1>
+        <p className="text-base text-[#6c757d] leading-relaxed">
+          Access your account using email and password
         </p>
       </div>
 
       {/* API Error Alert */}
       {apiError && (
-        <div className="alert alert-error flex items-start">
-          <AlertCircle className="h-5 w-5 mr-2 text-red-500" />
-          <p className="text-sm">{apiError}</p>
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start shadow-sm">
+          <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-red-700 font-medium">{apiError}</p>
         </div>
       )}
 
+      {/* Login Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Field */}
-        <div className="form-group">
-          <label htmlFor="email" className="form-label">
+        <div className="space-y-2">
+          <label htmlFor="email" className="block text-sm font-semibold text-[#333333]">
             Email Address
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-gray-400" />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-[#6c757d]" />
             </div>
             <input
               id="email"
@@ -113,27 +115,30 @@ const LoginPage: React.FC = () => {
               value={formData.email}
               onChange={handleInputChange}
               className={cn(
-                'form-input pl-10',
-                errors.email && 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                'w-full pl-12 pr-4 py-3 border border-[#dee2e6] rounded-xl focus:ring-2 focus:ring-[#28a745] focus:border-[#28a745] transition-all duration-200',
+                'placeholder-[#6c757d] text-[#333333] bg-[#f8f9fa] font-medium',
+                'shadow-sm hover:shadow-md focus:shadow-md',
+                errors.email && 'border-red-300 focus:border-red-500 focus:ring-red-500/20 bg-red-50'
               )}
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
             />
           </div>
           {errors.email && (
-            <p className="form-error">
+            <p className="text-sm text-red-600 flex items-center font-medium">
+              <AlertCircle className="h-4 w-4 mr-1" />
               {errors.email}
             </p>
           )}
         </div>
 
         {/* Password Field */}
-        <div className="form-group">
-          <label htmlFor="password" className="form-label">
+        <div className="space-y-2">
+          <label htmlFor="password" className="block text-sm font-semibold text-[#333333]">
             Password
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-5 w-5 text-gray-400" />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-[#6c757d]" />
             </div>
             <input
               id="password"
@@ -143,90 +148,118 @@ const LoginPage: React.FC = () => {
               value={formData.password}
               onChange={handleInputChange}
               className={cn(
-                'form-input pl-10 pr-10',
-                errors.password && 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                'w-full pl-12 pr-12 py-3 border border-[#dee2e6] rounded-xl focus:ring-2 focus:ring-[#28a745] focus:border-[#28a745] transition-all duration-200',
+                'placeholder-[#6c757d] text-[#333333] bg-[#f8f9fa] font-medium',
+                'shadow-sm hover:shadow-md focus:shadow-md',
+                errors.password && 'border-red-300 focus:border-red-500 focus:ring-red-500/20 bg-red-50'
               )}
               placeholder="Enter your password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 pr-4 flex items-center hover:text-[#28a745] transition-colors duration-200"
             >
               {showPassword ? (
-                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+                <EyeOff className="h-5 w-5 text-[#6c757d]" />
               ) : (
-                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+                <Eye className="h-5 w-5 text-[#6c757d]" />
               )}
             </button>
           </div>
           {errors.password && (
-            <p className="form-error">
+            <p className="text-sm text-red-600 flex items-center font-medium">
+              <AlertCircle className="h-4 w-4 mr-1" />
               {errors.password}
             </p>
           )}
         </div>
 
-        {/* Remember Me & Forgot Password */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              id="remember"
-              name="remember"
-              type="checkbox"
-              checked={formData.remember}
-              onChange={handleInputChange}
-              className="form-checkbox"
-            />
-            <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
-              Remember me
-            </label>
-          </div>
-
-          <Link
-            to="/forgot-password"
-            className="text-sm text-primary-600 hover:text-primary-700"
-          >
-            Forgot password?
-          </Link>
+        {/* Remember Me Checkbox */}
+        <div className="flex items-center">
+          <input
+            id="remember"
+            name="remember"
+            type="checkbox"
+            checked={formData.remember}
+            onChange={handleInputChange}
+            className="h-4 w-4 text-[#28a745] focus:ring-[#28a745] border-[#dee2e6] rounded"
+          />
+          <label htmlFor="remember" className="ml-3 block text-sm text-[#333333] font-medium">
+            Remember me
+          </label>
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={cn(
-            'btn btn-primary w-full py-3 text-base font-medium',
-            isLoading && 'opacity-50 cursor-not-allowed'
-          )}
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-              Signing in...
-            </div>
-          ) : (
-            'Sign In'
-          )}
-        </button>
+        {/* Action Buttons */}
+        <div className="space-y-4 pt-2">
+          {/* Login Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={cn(
+              'w-full flex justify-center items-center py-3 px-6 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white',
+              'bg-[#28a745] hover:bg-[#218838] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#28a745]',
+              'transition-all duration-200 hover:shadow-xl transform hover:-translate-y-0.5',
+              isLoading && 'opacity-50 cursor-not-allowed transform-none'
+            )}
+          >
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Signing in...
+              </div>
+            ) : (
+              'Login'
+            )}
+          </button>
+
+          {/* Register Button */}
+          <Link
+            to="/register"
+            className="w-full flex justify-center items-center py-3 px-6 border border-[#dee2e6] rounded-xl shadow-sm text-base font-semibold text-[#333333] bg-white hover:bg-[#f8f9fa] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6c757d] transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5"
+          >
+            Register
+          </Link>
+        </div>
       </form>
 
-      {/* Demo Credentials */}
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <h3 className="text-sm font-medium text-blue-800 mb-2">
+      {/* Navigation Links */}
+      <div className="mt-8 flex items-center justify-between text-sm">
+        <Link
+          to="/"
+          className="flex items-center text-[#6c757d] hover:text-[#28a745] transition-colors duration-200 font-medium"
+        >
+          <Home className="h-4 w-4 mr-1" />
+          Back to Home
+        </Link>
+        
+        <Link
+          to="/forgot-password"
+          className="text-[#6c757d] hover:text-[#28a745] transition-colors duration-200 font-medium"
+        >
+          Forgot Password?
+        </Link>
+      </div>
+
+      {/* Demo Credentials - Repositioned and Styled */}
+      <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl shadow-sm">
+        <h3 className="text-sm font-semibold text-blue-800 mb-2">
           Demo Credentials
         </h3>
-        <div className="text-xs text-blue-700 space-y-1">
+        <div className="text-xs text-blue-700 space-y-1 font-medium">
           <p><strong>Email:</strong> parent@almunawwar.sch.id</p>
           <p><strong>Password:</strong> password123</p>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="text-center">
-        <p className="text-sm text-gray-600">
+      <div className="text-center mt-6">
+        <p className="text-sm text-[#6c757d]">
           Need help? Contact{' '}
-          <a href="mailto:admin@almunawwar.sch.id" className="text-primary-600 hover:text-primary-700">
+          <a 
+            href="mailto:admin@almunawwar.sch.id" 
+            className="text-[#28a745] hover:text-[#218838] transition-colors duration-200 font-medium"
+          >
             school administration
           </a>
         </p>

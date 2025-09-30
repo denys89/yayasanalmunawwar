@@ -73,7 +73,6 @@ export interface Grade {
   percentage: number;
   grade_letter: string;
   semester: string;
-  academic_year: string;
   date_recorded: string;
   teacher_notes?: string;
 }
@@ -84,7 +83,6 @@ export interface GradeSummary {
   grade_letter: string;
   total_assignments: number;
   semester: string;
-  academic_year: string;
 }
 
 // Payment Types

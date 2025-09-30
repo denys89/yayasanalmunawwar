@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeftIcon, 
@@ -11,6 +11,7 @@ import {
 
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const PARENT_API_BASE_URL = import.meta.env.VITE_PARENT_API_URL || 'http://127.0.0.1:8000/api/parent';
 
 interface StudentData {
   fullName: string;
@@ -24,7 +25,7 @@ interface StudentData {
   siblingClass: string;
   schoolChoice: string;
   registrationType: string;
-  academicYear: string;
+  admissionWaveId: string;
   selectedClass: string;
   track: string;
   selectionMethod: string;
@@ -67,12 +68,28 @@ interface ValidationResult {
   errors: ValidationErrors;
 }
 
+interface AdmissionWave {
+  id: number;
+  name: string;
+  level: string;
+  registration_fee: number;
+  final_payment_fee: number;
+  start_date: number;
+  end_date: number;
+  formatted_start_date: string;
+  formatted_end_date: string;
+  is_open: boolean;
+  status_label: string;
+}
+
 const RegistrationPage: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isValidating, setIsValidating] = useState(false);
+  const [admissionWaves, setAdmissionWaves] = useState<AdmissionWave[]>([]);
+  const [loadingAdmissionWaves, setLoadingAdmissionWaves] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     student: {
       fullName: '',
@@ -86,7 +103,7 @@ const RegistrationPage: React.FC = () => {
       siblingClass: '',
       schoolChoice: '',
       registrationType: '',
-      academicYear: '2024/2025',
+      admissionWaveId: '',
       selectedClass: '',
       track: '',
       selectionMethod: '',
@@ -191,15 +208,6 @@ const RegistrationPage: React.FC = () => {
     return '';
   };
 
-  const validateAcademicYear = (academicYear: string): string => {
-    if (!academicYear) return 'Tahun ajaran wajib diisi';
-    const yearRegex = /^[0-9]{4}\/[0-9]{4}$/;
-    if (!yearRegex.test(academicYear)) {
-      return 'Format tahun ajaran harus YYYY/YYYY (contoh: 2024/2025)';
-    }
-    return '';
-  };
-
   const validateSiblingClass = (siblingClass: string): string => {
     if (!siblingClass) return '';
     const classRegex = /^[a-zA-Z0-9\s-]+$/;
@@ -248,9 +256,6 @@ const RegistrationPage: React.FC = () => {
 
     const registrationTypeError = validateRequired(studentData.registrationType, 'Jenis pendaftaran');
     if (registrationTypeError) errors.registrationType = registrationTypeError;
-
-    const academicYearError = validateAcademicYear(studentData.academicYear);
-    if (academicYearError) errors.academicYear = academicYearError;
 
     const selectedClassError = validateRequired(studentData.selectedClass, 'Kelas yang dipilih');
     if (selectedClassError) errors.selectedClass = selectedClassError;
@@ -335,6 +340,58 @@ const RegistrationPage: React.FC = () => {
     };
   };
 
+  // Fetch admission waves when school choice changes
+  const fetchAdmissionWaves = async (level: string) => {
+    if (!level) {
+      setAdmissionWaves([]);
+      return;
+    }
+
+    setLoadingAdmissionWaves(true);
+    try {
+      const response = await fetch(`${PARENT_API_BASE_URL}/admission-waves/by-level?level=${level}`);
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        setAdmissionWaves(result.data);
+      } else {
+        console.error('Failed to fetch admission waves:', result);
+        setAdmissionWaves([]);
+      }
+    } catch (error) {
+      console.error('Error fetching admission waves:', error);
+      setAdmissionWaves([]);
+    } finally {
+      setLoadingAdmissionWaves(false);
+    }
+  };
+
+  // Function to get available class options based on school choice
+  const getClassOptions = (schoolChoice: string) => {
+    switch (schoolChoice) {
+      case 'kb':
+        return [
+          { value: 'kb', label: 'KB' }
+        ];
+      case 'tk':
+        return [
+          { value: 'tk_a', label: 'TK A' },
+          { value: 'tk_b', label: 'TK B' }
+        ];
+      case 'sd':
+        return [
+          { value: '1', label: 'Kelas 1' },
+          { value: '2', label: 'Kelas 2' },
+          { value: '3', label: 'Kelas 3' },
+          { value: '4', label: 'Kelas 4' },
+          { value: '5', label: 'Kelas 5' },
+          { value: '6', label: 'Kelas 6' }
+        ];
+      default:
+        return [];
+    }
+  };
+
   // Enhanced input change handlers with real-time validation for student fields
   const handleStudentInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -347,6 +404,21 @@ const RegistrationPage: React.FC = () => {
         [name]: value,
       },
     }));
+
+    // Fetch admission waves when school choice changes
+    if (name === 'schoolChoice') {
+      fetchAdmissionWaves(value);
+      // Reset admission wave selection and selected class when school choice changes
+      setFormData(prev => ({
+        ...prev,
+        student: {
+          ...prev.student,
+          schoolChoice: value,
+          admissionWaveId: '',
+          selectedClass: '' // Reset selected class when school choice changes
+        }
+      }));
+    }
 
     let fieldError = '';
     switch (name) {
@@ -382,9 +454,6 @@ const RegistrationPage: React.FC = () => {
         break;
       case 'registrationType':
         fieldError = validateRequired(value, 'Jenis pendaftaran');
-        break;
-      case 'academicYear':
-        fieldError = validateAcademicYear(value);
         break;
       case 'selectedClass':
         fieldError = validateRequired(value, 'Kelas yang dipilih');
@@ -481,7 +550,6 @@ const RegistrationPage: React.FC = () => {
           sibling_class: formData.student.siblingClass,
           school_choice: formData.student.schoolChoice,
           registration_type: formData.student.registrationType,
-          academic_year: formData.student.academicYear,
           selected_class: formData.student.selectedClass,
           track: formData.student.track,
           selection_method: formData.student.selectionMethod,
@@ -568,12 +636,46 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
+  // Helper function to scroll to and focus on the first invalid field
+  const scrollToFirstError = (errors: ValidationErrors) => {
+    const errorKeys = Object.keys(errors);
+    if (errorKeys.length === 0) return;
+
+    const firstErrorField = errorKeys[0];
+    
+    // Try to find the input element by name attribute
+    const inputElement = document.querySelector(`input[name="${firstErrorField}"], select[name="${firstErrorField}"], textarea[name="${firstErrorField}"]`) as HTMLElement;
+    
+    if (inputElement) {
+      // Scroll to the element with smooth behavior
+      inputElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center',
+        inline: 'nearest'
+      });
+      
+      // Focus on the element after a short delay to ensure scroll completes
+      setTimeout(() => {
+        inputElement.focus();
+        
+        // Add a subtle highlight effect by temporarily adding a class
+        inputElement.classList.add('ring-2', 'ring-red-500', 'ring-opacity-50');
+        setTimeout(() => {
+          inputElement.classList.remove('ring-2', 'ring-red-500', 'ring-opacity-50');
+        }, 2000);
+      }, 300);
+    }
+  };
+
   const nextStep = async () => {
     if (currentStep < 3) {
       setIsValidating(true);
       const isValid = await validateStep(currentStep);
       if (isValid) {
         setCurrentStep(currentStep + 1);
+      } else {
+        // Scroll to and focus on the first invalid field
+        scrollToFirstError(errors);
       }
       setIsValidating(false);
     }
@@ -645,7 +747,6 @@ const RegistrationPage: React.FC = () => {
         sibling_class: formData.student.siblingClass,
         school_choice: formData.student.schoolChoice,
         registration_type: formData.student.registrationType,
-        academic_year: formData.student.academicYear,
         selected_class: formData.student.selectedClass,
         track: formData.student.track,
         selection_method: formData.student.selectionMethod,
@@ -653,6 +754,7 @@ const RegistrationPage: React.FC = () => {
         previous_school_name: formData.student.previousSchoolName,
         registration_info_source: formData.student.registrationInfoSource,
         registration_reason: formData.student.registrationReason,
+        admission_wave_id: formData.student.admissionWaveId,
         guardians: guardians
       };
 
@@ -685,7 +787,7 @@ const RegistrationPage: React.FC = () => {
         // If there are validation errors, go back to the appropriate step
         if (result.errors) {
           const hasStudentErrors = Object.keys(result.errors).some(key => 
-            ['full_name', 'nickname', 'family_card_number', 'national_id_number', 'birthplace', 'birthdate', 'gender', 'sibling_name', 'sibling_class', 'school_choice', 'registration_type', 'academic_year', 'selected_class', 'track', 'selection_method', 'previous_school_type', 'previous_school_name', 'registration_info_source', 'registration_reason'].includes(key)
+            ['full_name', 'nickname', 'family_card_number', 'national_id_number', 'birthplace', 'birthdate', 'gender', 'sibling_name', 'sibling_class', 'school_choice', 'registration_type', 'selected_class', 'track', 'selection_method', 'previous_school_type', 'previous_school_name', 'registration_info_source', 'registration_reason'].includes(key)
           );
           if (hasStudentErrors) {
             setCurrentStep(1);
@@ -884,11 +986,31 @@ const RegistrationPage: React.FC = () => {
                     required
                   >
                     <option value="">Pilih sekolah</option>
-                    <option value="SD ICM">SD ICM</option>
-                    <option value="SMP ICM">SMP ICM</option>
-                    <option value="SMA ICM">SMA ICM</option>
+                    <option value="kb">KB (Kelompok Bermain)</option>
+                    <option value="tk">TK (Tingkat Kelas)</option>
+                    <option value="sd">SD (Sekolah Dasar)</option>
                   </select>
                   {errors.schoolChoice && <div className="form-error">{errors.schoolChoice}</div>}
+                </div>
+
+                {/* Selected Class */}
+                <div className="form-group">
+                  <label className="form-label">Kelas yang Dipilih *</label>
+                  <select
+                    name="selectedClass"
+                    value={formData.student.selectedClass}
+                    onChange={handleStudentInputChange}
+                    className="form-select"
+                    required
+                  >
+                    <option value="">Pilih kelas</option>
+                    {getClassOptions(formData.student.schoolChoice).map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.selectedClass && <div className="form-error">{errors.selectedClass}</div>}
                 </div>
 
                 {/* Registration Type */}
@@ -909,48 +1031,37 @@ const RegistrationPage: React.FC = () => {
                   {errors.registrationType && <div className="form-error">{errors.registrationType}</div>}
                 </div>
 
-                {/* Academic Year */}
-                <div className="form-group">
-                  <label className="form-label">Tahun Ajaran *</label>
-                  <select
-                    name="academicYear"
-                    value={formData.student.academicYear}
-                    onChange={handleStudentInputChange}
-                    className="form-select"
-                    required
-                  >
-                    <option value="2024/2025">2024/2025</option>
-                    <option value="2025/2026">2025/2026</option>
-                  </select>
-                  {errors.academicYear && <div className="form-error">{errors.academicYear}</div>}
-                </div>
 
-                {/* Selected Class */}
-                <div className="form-group">
-                  <label className="form-label">Kelas yang Dipilih *</label>
-                  <select
-                    name="selectedClass"
-                    value={formData.student.selectedClass}
-                    onChange={handleStudentInputChange}
-                    className="form-select"
-                    required
-                  >
-                    <option value="">Pilih kelas</option>
-                    <option value="1">Kelas 1</option>
-                    <option value="2">Kelas 2</option>
-                    <option value="3">Kelas 3</option>
-                    <option value="4">Kelas 4</option>
-                    <option value="5">Kelas 5</option>
-                    <option value="6">Kelas 6</option>
-                    <option value="7">Kelas 7</option>
-                    <option value="8">Kelas 8</option>
-                    <option value="9">Kelas 9</option>
-                    <option value="10">Kelas 10</option>
-                    <option value="11">Kelas 11</option>
-                    <option value="12">Kelas 12</option>
-                  </select>
-                  {errors.selectedClass && <div className="form-error">{errors.selectedClass}</div>}
-                </div>
+
+                {/* Admission Wave */}
+                {formData.student.schoolChoice && (
+                  <div className="form-group">
+                    <label className="form-label">Gelombang Pendaftaran *</label>
+                    <select
+                      name="admissionWaveId"
+                      value={formData.student.admissionWaveId}
+                      onChange={handleStudentInputChange}
+                      className="form-select"
+                      required
+                      disabled={loadingAdmissionWaves}
+                    >
+                      <option value="">
+                        {loadingAdmissionWaves 
+                          ? 'Memuat gelombang...' 
+                          : admissionWaves.length === 0 
+                            ? 'Tidak ada gelombang tersedia' 
+                            : 'Pilih gelombang pendaftaran'
+                        }
+                      </option>
+                      {admissionWaves.map((wave) => (
+                        <option key={wave.id} value={wave.id}>
+                          {wave.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.admissionWaveId && <div className="form-error">{errors.admissionWaveId}</div>}
+                  </div>
+                )}
 
                 {/* Track */}
                 <div className="form-group">
@@ -1332,7 +1443,6 @@ const RegistrationPage: React.FC = () => {
                   <div><strong>Jenis Kelamin:</strong> {formData.student.gender}</div>
                   <div><strong>Pilihan Sekolah:</strong> {formData.student.schoolChoice}</div>
                   <div><strong>Kelas:</strong> {formData.student.selectedClass}</div>
-                  <div><strong>Tahun Ajaran:</strong> {formData.student.academicYear}</div>
                 </div>
               </div>
             </div>

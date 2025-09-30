@@ -77,7 +77,7 @@ class AnnouncementController extends Controller
         }
         
         // Mark as read for this parent (in real app, track read status)
-        $this->markAsRead($id, $request->user()->id);
+        $this->markAnnouncementAsRead($id, $request->user()->id);
         
         // Get related announcements
         $relatedAnnouncements = $this->getRelatedAnnouncements($announcement, 3);
@@ -373,7 +373,7 @@ class AnnouncementController extends Controller
     /**
      * Helper: Mark announcement as read (internal)
      */
-    private function markAsRead($announcementId, $parentId)
+    private function markAnnouncementAsRead($announcementId, $parentId)
     {
         // In real app, insert into read_announcements table
         // For now, just log or do nothing

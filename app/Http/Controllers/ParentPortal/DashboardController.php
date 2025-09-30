@@ -93,13 +93,13 @@ class DashboardController extends Controller
      */
     public function getAnnouncements(Request $request)
     {
-        $announcements = News::where('is_published', true)
-                            ->where('category', 'announcement')
+        $announcements = News::where('status', 'published')
+                            ->where('category', 'news')
                             ->orderBy('created_at', 'desc')
                             ->limit(5)
                             ->get([
-                                'id', 'title', 'excerpt', 'category', 
-                                'is_urgent', 'created_at', 'featured_image'
+                                'id', 'title', 'content', 'category', 
+                                'created_at', 'image_url'
                             ]);
 
         return response()->json([
@@ -181,10 +181,10 @@ class DashboardController extends Controller
      */
     private function getRecentAnnouncements()
     {
-        return News::where('is_published', true)
+        return News::where('status', 'published')
                   ->orderBy('created_at', 'desc')
                   ->limit(3)
-                  ->get(['id', 'title', 'excerpt', 'created_at', 'is_urgent']);
+                  ->get(['id', 'title', 'content', 'created_at', 'category']);
     }
 
     /**

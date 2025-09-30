@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/parent';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/parent';
 
 // Create axios instance
 const api = axios.create({
@@ -53,17 +53,17 @@ export interface ApiResponse<T = any> {
 // Auth API
 export const authApi = {
   login: (credentials: { email: string; password: string }) =>
-    api.post<ApiResponse<{ user: any; token: string }>>('/auth/login', credentials),
+    api.post<ApiResponse<{ user: any; token: string }>>('/parent/auth/login', credentials),
   
-  logout: () => api.post<ApiResponse>('/auth/logout'),
+  logout: () => api.post<ApiResponse>('/parent/auth/logout'),
   
-  user: () => api.get<ApiResponse<any>>('/auth/user'),
+  user: () => api.get<ApiResponse<any>>('/parent/auth/user'),
   
   forgotPassword: (email: string) =>
-    api.post<ApiResponse>('/auth/forgot-password', { email }),
+    api.post<ApiResponse>('/parent/auth/forgot-password', { email }),
   
   resetPassword: (data: { token: string; email: string; password: string; password_confirmation: string }) =>
-    api.post<ApiResponse>('/auth/reset-password', data),
+    api.post<ApiResponse>('/parent/auth/reset-password', data),
 };
 
 // Dashboard API

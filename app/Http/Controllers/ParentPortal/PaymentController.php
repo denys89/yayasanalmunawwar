@@ -21,7 +21,7 @@ class PaymentController extends Controller
             'summary' => $this->getPaymentSummary($students),
             'recent_payments' => $this->getRecentPayments($students),
             'upcoming_payments' => $this->getUpcomingPayments($students),
-            'payment_history' => $this->getPaymentHistory($students, 5)
+            'payment_history' => $this->getPaymentHistoryData($students, 5)
         ];
 
         return response()->json($paymentOverview);
@@ -268,9 +268,9 @@ class PaymentController extends Controller
     }
 
     /**
-     * Helper: Get payment history
+     * Helper: Get payment history data
      */
-    private function getPaymentHistory($students, $limit = null)
+    private function getPaymentHistoryData($students, $limit = null)
     {
         $payments = [
             ['id' => 1, 'student_name' => 'Ahmad Rizki', 'amount' => 750000, 'description' => 'Tuition - Jan 2024', 'date' => '2024-01-15', 'status' => 'paid'],
@@ -288,7 +288,7 @@ class PaymentController extends Controller
      */
     private function getFilteredPayments($students, $filters, $page, $perPage)
     {
-        $allPayments = $this->getPaymentHistory($students);
+        $allPayments = $this->getPaymentHistoryData($students);
         
         // Apply filters (simplified for demo)
         $filteredPayments = $allPayments;

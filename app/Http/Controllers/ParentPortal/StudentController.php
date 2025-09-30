@@ -78,11 +78,10 @@ class StudentController extends Controller
         }
 
         $semester = $request->get('semester', 'current');
-        $academicYear = $request->get('academic_year', '2023-2024');
 
         $gradesData = [
             'current_grades' => $this->getCurrentGrades($studentId),
-            'grade_history' => $this->getGradeHistory($studentId, $academicYear),
+            'grade_history' => $this->getGradeHistory($studentId),
             'subject_performance' => $this->getSubjectPerformance($studentId),
             'grade_trends' => $this->getGradeTrends($studentId)
         ];
@@ -308,7 +307,7 @@ class StudentController extends Controller
     /**
      * Helper: Get grade history
      */
-    private function getGradeHistory($studentId, $academicYear)
+    private function getGradeHistory($studentId)
     {
         return [
             'semester_1' => [

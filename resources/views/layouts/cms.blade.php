@@ -18,8 +18,8 @@
     
     @stack('styles')
 </head>
-<body class="h-full font-inter antialiased">
-    <div class="min-h-full">
+<body class="h-full font-inter antialiased bg-gray-50 dark:bg-gray-900">
+    <div class="min-h-full bg-gray-50 dark:bg-gray-900">
         <!-- Mobile header -->
         <div class="lg:hidden">
             <div class="flex items-center justify-between bg-white dark:bg-gray-800 px-4 py-3 shadow-sm border-b border-gray-200 dark:border-gray-700">

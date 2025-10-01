@@ -13,6 +13,7 @@ use App\Http\Controllers\CMS\MediaController;
 use App\Http\Controllers\CMS\FaqController;
 use App\Http\Controllers\CMS\SettingController;
 use App\Http\Controllers\CMS\UserController;
+use App\Http\Controllers\CMS\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +60,15 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // Student Registrations Management
     Route::resource('student-registrations', StudentRegistrationController::class)->parameters([
         'student-registrations' => 'student_registration'
-    ])->only(['index', 'show']);
+    ])->only(['index', 'show', 'update']);
+    
+    // Payment Management Routes
+    Route::post('student-registrations/{payment}/upload-transfer-proof', [StudentRegistrationController::class, 'uploadTransferProof'])
+        ->name('student-registrations.upload-transfer-proof');
+    Route::put('student-registrations/{payment}/update-payment-status', [StudentRegistrationController::class, 'updatePaymentStatus'])
+        ->name('student-registrations.update-payment-status');
+    Route::get('student-registrations/{payment}/view-transfer-proof', [StudentRegistrationController::class, 'viewTransferProof'])
+        ->name('student-registrations.view-transfer-proof');
     
     // Media Management
     Route::resource('media', MediaController::class);
@@ -67,6 +76,9 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // FAQs Management
     Route::resource('faqs', FaqController::class);
+    
+    // Discounts Management
+    Route::resource('discounts', DiscountController::class);
     
     // Settings Management
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

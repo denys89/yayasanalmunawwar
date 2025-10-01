@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AdmissionWave extends Model
 {
@@ -26,8 +27,8 @@ class AdmissionWave extends Model
     protected $casts = [
         'registration_fee' => 'integer',
         'final_payment_fee' => 'integer',
-        'start_date' => 'integer',
-        'end_date' => 'integer',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
         'capacity' => 'integer',
         'is_active' => 'boolean',
         'created_by' => 'integer',
@@ -50,6 +51,14 @@ class AdmissionWave extends Model
     public function updater(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Get the payments associated with this admission wave.
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**

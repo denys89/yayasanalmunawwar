@@ -79,6 +79,14 @@
                         FAQs
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('cms.discounts.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.discounts*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.discounts*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                        </svg>
+                        Discounts
+                    </a>
+                </li>
                 @endif
                 
                 @if(Auth::user()->role === 'admin')

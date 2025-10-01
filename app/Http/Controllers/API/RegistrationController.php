@@ -47,6 +47,10 @@ class RegistrationController extends Controller
                 'registration_info_source' => 'required|string|max:255',
                 'registration_reason' => 'nullable|string|max:1000',
 
+                // Registration Flow Fields
+                'registration_step' => 'nullable|in:' . implode(',', StudentRegistration::getRegistrationSteps()),
+                'registration_status' => 'nullable|in:' . implode(',', StudentRegistration::getRegistrationStatuses()),
+
                 // Guardian Information
                 'guardians' => 'required|array|min:1|max:3',
                 'guardians.*.type' => 'required|in:father,mother,guardian',
@@ -109,6 +113,8 @@ class RegistrationController extends Controller
                     'previous_school_name' => $validatedData['previous_school_name'],
                     'registration_info_source' => $validatedData['registration_info_source'],
                     'registration_reason' => $validatedData['registration_reason'],
+                    'registration_step' => $validatedData['registration_step'] ?? 'waiting_registration_fee',
+                    'registration_status' => $validatedData['registration_status'] ?? 'pending',
                 ]);
 
                 // Create guardians
@@ -275,6 +281,12 @@ class RegistrationController extends Controller
                     'selectedClass' => $registration->selected_class,
                     'track' => $registration->track,
                     'registrationType' => $registration->registration_type,
+                ],
+                'registration' => [
+                    'step' => $registration->registration_step,
+                    'stepLabel' => StudentRegistration::getRegistrationSteps()[$registration->registration_step] ?? 'Unknown',
+                    'status' => $registration->registration_status,
+                    'statusLabel' => StudentRegistration::getRegistrationStatuses()[$registration->registration_status] ?? 'Unknown',
                 ],
                 'guardians' => [
                     'fatherName' => $registration->guardians->where('type', 'father')->first()->name ?? '-',

@@ -67,7 +67,7 @@ class AdmissionWave extends Model
     public function isActive(): bool
     {
         $now = time();
-        return $this->is_active && $now >= $this->start_date && $now <= $this->end_date;
+        return $this->is_active && $now >= $this->start_date->timestamp && $now <= $this->end_date->timestamp;
     }
 
     /**

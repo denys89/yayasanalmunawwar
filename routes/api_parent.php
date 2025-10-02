@@ -45,10 +45,11 @@ Route::middleware(['auth:sanctum', 'parent.access'])->group(function () {
     // Dashboard
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index']);
-        Route::get('overview', [DashboardController::class, 'overview']);
-        Route::get('attendance-stats', [DashboardController::class, 'attendanceStats']);
-        Route::get('payment-overview', [DashboardController::class, 'paymentOverview']);
-        Route::get('announcements', [DashboardController::class, 'announcements']);
+        // Map overview to index for aggregated data
+        Route::get('overview', [DashboardController::class, 'index']);
+        Route::get('attendance-stats', [DashboardController::class, 'getAttendanceStats']);
+        Route::get('payment-overview', [DashboardController::class, 'getPaymentOverview']);
+        Route::get('announcements', [DashboardController::class, 'getAnnouncements']);
     });
 
     // Students
@@ -63,20 +64,24 @@ Route::middleware(['auth:sanctum', 'parent.access'])->group(function () {
 
     // Payments
     Route::prefix('payments')->group(function () {
-        Route::get('overview', [PaymentController::class, 'overview']);
-        Route::get('history', [PaymentController::class, 'history']);
+        Route::get('overview', [PaymentController::class, 'index']);
+        Route::get('history', [PaymentController::class, 'getPaymentHistory']);
         Route::get('{id}', [PaymentController::class, 'show']);
-        Route::get('{id}/invoice', [PaymentController::class, 'invoice']);
-        Route::get('stats', [PaymentController::class, 'stats']);
+        Route::get('{id}/invoice', [PaymentController::class, 'downloadInvoice']);
+        // Transfer proof upload and viewing
+        Route::post('{id}/upload-transfer-proof', [PaymentController::class, 'uploadTransferProof']);
+        Route::get('{id}/view-transfer-proof', [PaymentController::class, 'viewTransferProof']);
+        Route::get('stats', [PaymentController::class, 'getPaymentStats']);
+        Route::post('process', [PaymentController::class, 'processPayment']);
     });
 
     // Announcements
     Route::prefix('announcements')->group(function () {
         Route::get('/', [AnnouncementController::class, 'index']);
         Route::get('{id}', [AnnouncementController::class, 'show']);
-        Route::get('urgent', [AnnouncementController::class, 'urgent']);
-        Route::get('categories', [AnnouncementController::class, 'categories']);
-        Route::get('unread-count', [AnnouncementController::class, 'unreadCount']);
+        Route::get('urgent', [AnnouncementController::class, 'getUrgent']);
+        Route::get('categories', [AnnouncementController::class, 'getCategories']);
+        Route::get('unread-count', [AnnouncementController::class, 'getUnreadCount']);
         Route::post('{id}/mark-read', [AnnouncementController::class, 'markAsRead']);
         Route::get('{id}/attachments/{attachmentId}', [AnnouncementController::class, 'downloadAttachment']);
     });

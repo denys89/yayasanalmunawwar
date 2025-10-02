@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/parent';
+const API_BASE_URL =
+  import.meta.env.VITE_PARENT_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://127.0.0.1:8000/api/parent';
 
 // Create axios instance
 const api = axios.create({
@@ -53,17 +56,17 @@ export interface ApiResponse<T = any> {
 // Auth API
 export const authApi = {
   login: (credentials: { email: string; password: string }) =>
-    api.post<ApiResponse<{ user: any; token: string }>>('/parent/auth/login', credentials),
+    api.post<ApiResponse<{ user: any; token: string }>>('/auth/login', credentials),
   
-  logout: () => api.post<ApiResponse>('/parent/auth/logout'),
+  logout: () => api.post<ApiResponse>('/auth/logout'),
   
-  user: () => api.get<ApiResponse<any>>('/parent/auth/user'),
+  user: () => api.get<ApiResponse<any>>('/auth/user'),
   
   forgotPassword: (email: string) =>
-    api.post<ApiResponse>('/parent/auth/forgot-password', { email }),
+    api.post<ApiResponse>('/auth/forgot-password', { email }),
   
   resetPassword: (data: { token: string; email: string; password: string; password_confirmation: string }) =>
-    api.post<ApiResponse>('/parent/auth/reset-password', data),
+    api.post<ApiResponse>('/auth/reset-password', data),
 };
 
 // Dashboard API
@@ -91,11 +94,21 @@ export const studentsApi = {
 // Payments API
 export const paymentsApi = {
   overview: () => api.get<ApiResponse<any>>('/payments/overview'),
-  history: (params?: { page?: number; per_page?: number; status?: string; month?: string; year?: string }) =>
+  getPayments: (params?: { page?: number; per_page?: number; status?: string; student_id?: number; payment_type?: string; date_from?: string; date_to?: string }) =>
     api.get<ApiResponse<any>>('/payments/history', { params }),
   show: (id: number) => api.get<ApiResponse<any>>(`/payments/${id}`),
   invoice: (id: number) => api.get(`/payments/${id}/invoice`, { responseType: 'blob' }),
   stats: () => api.get<ApiResponse<any>>('/payments/stats'),
+  processPayment: (paymentId: number, payload?: { payment_method?: string; amount?: number }) =>
+    api.post<ApiResponse<any>>('/payments/process', { payment_id: paymentId, payment_method: payload?.payment_method || 'bank_transfer', amount: payload?.amount ?? undefined }),
+  uploadProof: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('proof_url', file);
+    return api.post<ApiResponse<{ proof_url: string; payment_status: string }>>(`/payments/${id}/upload-transfer-proof`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  viewProof: (id: number) => api.get(`/payments/${id}/view-transfer-proof`, { responseType: 'blob' }),
 };
 
 // Announcements API

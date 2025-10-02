@@ -27,23 +27,14 @@ class UpdateStudentRegistrationRequest extends FormRequest
                 'sometimes',
                 'string',
                 'in:' . implode(',', StudentRegistration::getRegistrationSteps()),
-                function ($attribute, $value, $fail) use ($studentRegistration) {
-                    if ($value && !$studentRegistration->isValidStepTransition($value)) {
-                        $fail($studentRegistration->getStepTransitionError($value));
-                    }
-                },
             ],
             'registration_status' => [
                 'sometimes',
                 'string',
                 'in:' . implode(',', StudentRegistration::getRegistrationStatuses()),
-                function ($attribute, $value, $fail) use ($studentRegistration) {
-                    if ($value && !$studentRegistration->canUpdateRegistrationStatus()) {
-                        $fail('Registration status can only be updated after final payment is confirmed.');
-                    }
-                },
             ],
-            'updated_by' => 'sometimes|integer|exists:users,id',
+            // Store the updater's name (string)
+            'updated_by' => 'sometimes|string|max:255',
         ];
     }
 
@@ -55,7 +46,7 @@ class UpdateStudentRegistrationRequest extends FormRequest
         return [
             'registration_step.in' => 'The selected registration step is invalid.',
             'registration_status.in' => 'The selected registration status is invalid.',
-            'updated_by.exists' => 'The specified user does not exist.',
+            'updated_by.string' => 'Updated by must be a valid string.',
         ];
     }
 
@@ -79,7 +70,7 @@ class UpdateStudentRegistrationRequest extends FormRequest
         // Automatically set updated_by to current authenticated user
         if (auth()->check()) {
             $this->merge([
-                'updated_by' => auth()->id(),
+                'updated_by' => auth()->user()->name,
             ]);
         }
     }

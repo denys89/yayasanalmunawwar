@@ -6,7 +6,6 @@ use App\Http\Controllers\CMS\PageController;
 use App\Http\Controllers\CMS\ProgramController;
 use App\Http\Controllers\CMS\ExploreController;
 use App\Http\Controllers\CMS\NewsController;
-use App\Http\Controllers\CMS\AdmissionController;
 use App\Http\Controllers\CMS\AdmissionWaveController;
 use App\Http\Controllers\CMS\StudentRegistrationController;
 use App\Http\Controllers\CMS\MediaController;
@@ -14,6 +13,7 @@ use App\Http\Controllers\CMS\FaqController;
 use App\Http\Controllers\CMS\SettingController;
 use App\Http\Controllers\CMS\UserController;
 use App\Http\Controllers\CMS\DiscountController;
+use App\Http\Controllers\CMS\ContactUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +46,7 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // News Management
     Route::resource('news', NewsController::class);
     
-    // Admissions Management
-    Route::resource('admissions', AdmissionController::class);
-    Route::patch('admissions/{admission}/verify', [AdmissionController::class, 'verify'])->name('admissions.verify');
-    Route::patch('admissions/{admission}/reject', [AdmissionController::class, 'reject'])->name('admissions.reject');
+    // Admissions module removed
     
     // Admission Waves Management
     Route::resource('admission-waves', AdmissionWaveController::class)->parameters([
@@ -76,6 +73,12 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // FAQs Management
     Route::resource('faqs', FaqController::class);
+
+    // Contact Us Management (read-only)
+    Route::resource('contact-us', ContactUsController::class)->only(['index', 'show'])->parameters([
+        'contact-us' => 'contactUs'
+    ]);
+    Route::get('contact-us/export/csv', [ContactUsController::class, 'export'])->name('contact-us.export');
     
     // Discounts Management
     Route::resource('discounts', DiscountController::class);

@@ -10,7 +10,6 @@ use App\Models\Page;
 use App\Models\Program;
 use App\Models\Explore;
 use App\Models\News;
-use App\Models\Admission;
 use App\Models\Media;
 use App\Models\Faq;
 use App\Models\Setting;
@@ -222,41 +221,6 @@ class CMSCrudTest extends TestCase
         echo "✓ News CRUD operations tested successfully\n";
     }
 
-    /** @test */
-    public function test_admissions_crud_operations()
-    {
-        $this->actingAs($this->adminUser);
-
-        // Test READ (Index)
-        $response = $this->get(route('cms.admissions.index'));
-        $response->assertStatus(200);
-
-        // Create admission record for testing
-        $admission = Admission::create([
-            'student_name' => 'Test Student',
-            'parent_name' => 'Test Parent',
-            'email' => 'test@example.com',
-            'phone' => '1234567890',
-            'grade_level' => 'grade_1',
-            'status' => 'pending'
-        ]);
-
-        // Test READ (Show)
-        $response = $this->get(route('cms.admissions.show', $admission));
-        $response->assertStatus(200);
-
-        // Test UPDATE (Verify)
-        $response = $this->patch(route('cms.admissions.verify', $admission));
-        $response->assertRedirect();
-        $this->assertDatabaseHas('admissions', ['id' => $admission->id, 'status' => 'verified']);
-
-        // Test UPDATE (Reject)
-        $response = $this->patch(route('cms.admissions.reject', $admission));
-        $response->assertRedirect();
-        $this->assertDatabaseHas('admissions', ['id' => $admission->id, 'status' => 'rejected']);
-
-        echo "✓ Admissions CRUD operations tested successfully\n";
-    }
 
     /** @test */
     public function test_media_crud_operations()

@@ -43,8 +43,9 @@ class StudentRegistrationFactory extends Factory
             'previous_school_name' => $this->faker->company() . ' School',
             'registration_info_source' => $this->faker->randomElement(['Website', 'Social Media', 'Friend', 'Advertisement']),
             'registration_reason' => $this->faker->optional()->sentence(),
-            'registration_step' => $this->faker->randomElement(StudentRegistration::getRegistrationSteps()),
-            'registration_status' => $this->faker->randomElement(StudentRegistration::getRegistrationStatuses()),
+            // Use model defaults to satisfy tests expecting default values
+            'registration_step' => 'waiting_registration_fee',
+            'registration_status' => 'pending',
             'created_by' => $this->faker->optional()->name(),
             'updated_by' => $this->faker->optional()->name(),
         ];

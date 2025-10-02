@@ -27,8 +27,8 @@ class AdmissionWave extends Model
     protected $casts = [
         'registration_fee' => 'integer',
         'final_payment_fee' => 'integer',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'start_date' => 'integer',
+        'end_date' => 'integer',
         'capacity' => 'integer',
         'is_active' => 'boolean',
         'created_by' => 'integer',
@@ -67,7 +67,7 @@ class AdmissionWave extends Model
     public function isActive(): bool
     {
         $now = time();
-        return $this->is_active && $now >= $this->start_date->timestamp && $now <= $this->end_date->timestamp;
+        return $this->is_active && $now >= $this->start_date && $now <= $this->end_date;
     }
 
     /**

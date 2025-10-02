@@ -14,7 +14,7 @@ class Payment extends Model
         'amount',
         'type',
         'status',
-        'foto_bukti_transfer',
+        'proof_url',
         'discount_id',
         'confirmed_by',
     ];

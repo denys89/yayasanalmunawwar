@@ -58,12 +58,19 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
+  // Unified display name and initial to avoid duplication across UI
+  const displayName = user?.name?.trim() ? user.name.trim() : 'User';
+  const displayInitial = displayName.charAt(0).toUpperCase();
+
   const handleLogout = () => {
+    // Immediately close any open UI elements for a clean exit
+    setUserMenuOpen(false);
+    setSidebarOpen(false);
     logout();
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -139,32 +146,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         </nav>
 
-        {/* User Profile Section */}
-        <div className="flex-shrink-0 px-4 py-4 border-t border-gray-200">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-green-600 flex items-center justify-center shadow-md">
-                <span className="text-sm font-medium text-white">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </span>
-              </div>
-            </div>
-            <div className="ml-3 flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {user?.name || 'User'}
-              </p>
-              <p className="text-xs text-gray-500 truncate">
-                Parent
-              </p>
-            </div>
-            <button
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <ChevronDown className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Main content */}
@@ -200,11 +181,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 >
                   <div className="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center">
                     <span className="text-sm font-medium text-white">
-                      {user?.name?.charAt(0).toUpperCase() || 'U'}
+                      {displayInitial}
                     </span>
                   </div>
                   <span className="hidden ml-3 text-gray-700 text-sm font-medium lg:block">
-                    {user?.name || 'User'}
+                    {displayName}
                   </span>
                   <ChevronDown className="hidden flex-shrink-0 ml-1 h-4 w-4 text-gray-400 lg:block" />
                 </button>
@@ -233,7 +214,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </div>
 
         {/* Page content */}
-        <main className="flex-1 pt-16 lg:px-6 px-4 pb-10">
+        <main className="flex-1 pt-16 lg:px-8 px-6 pb-12">
           <div className="py-6">
             <div className="max-w-7xl mx-auto">
               {children}

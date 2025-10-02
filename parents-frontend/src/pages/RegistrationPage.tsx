@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeftIcon, 
@@ -6,7 +6,9 @@ import {
   UserIcon, 
   UsersIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  HomeIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
 // API Configuration
@@ -131,8 +133,6 @@ const RegistrationPage: React.FC = () => {
       guardianAddress: ''
     }
   });
-
-  const totalSteps = 3;
 
   // Validation functions
   const validateRequired = (value: string, fieldName: string): string => {
@@ -1483,6 +1483,25 @@ const RegistrationPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container">
+        {/* Top Navigation */}
+        <div className="max-w-4xl mx-auto mb-4">
+          <div className="flex justify-end space-x-3">
+            <Link
+              to="/"
+              className="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <HomeIcon className="w-5 h-5 mr-2" />
+              Beranda
+            </Link>
+            <Link
+              to="/login"
+              className="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
+              Masuk
+            </Link>
+          </div>
+        </div>
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="page-title">Pendaftaran Siswa Baru</h1>

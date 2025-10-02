@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Student Registration API Routes (Public)
+Route::get('registrations', [RegistrationController::class, 'index'])->name('api.registrations.index');
+Route::post('registrations', [RegistrationController::class, 'store'])->name('api.registrations.store');
 Route::prefix('registration')->group(function () {
     Route::post('/', [RegistrationController::class, 'store'])->name('api.registration.store');
     Route::get('success', [RegistrationController::class, 'success'])->name('api.registration.success');

@@ -241,16 +241,7 @@ const LoginPage: React.FC = () => {
         </Link>
       </div>
 
-      {/* Demo Credentials - Repositioned and Styled */}
-      <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl shadow-sm">
-        <h3 className="text-sm font-semibold text-blue-800 mb-2">
-          Demo Credentials
-        </h3>
-        <div className="text-xs text-blue-700 space-y-1 font-medium">
-          <p><strong>Email:</strong> parent@almunawwar.sch.id</p>
-          <p><strong>Password:</strong> password123</p>
-        </div>
-      </div>
+      
 
       {/* Footer */}
       <div className="text-center mt-6">

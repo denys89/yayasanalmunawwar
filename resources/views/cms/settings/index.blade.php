@@ -124,6 +124,37 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="mt-6">
+                            <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">WhatsApp Contacts per Education Level</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Enter WhatsApp numbers in international format beginning with <span class="font-medium">+62</span>. Only digits allowed after country code.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label for="whatsapp_kb" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">KB WhatsApp</label>
+                                    <input type="tel" pattern="^\+62\d{9,13}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('whatsapp_kb') border-red-500 @enderror" id="whatsapp_kb" name="whatsapp_kb" value="{{ old('whatsapp_kb', $settings['whatsapp_kb'] ?? '') }}" placeholder="+62xxxxxxxxxxx">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Example: +6281234567890</p>
+                                    @error('whatsapp_kb')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="whatsapp_tk" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">TK WhatsApp</label>
+                                    <input type="tel" pattern="^\+62\d{9,13}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('whatsapp_tk') border-red-500 @enderror" id="whatsapp_tk" name="whatsapp_tk" value="{{ old('whatsapp_tk', $settings['whatsapp_tk'] ?? '') }}" placeholder="+62xxxxxxxxxxx">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Example: +6281234567890</p>
+                                    @error('whatsapp_tk')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="whatsapp_sd" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">SD WhatsApp</label>
+                                    <input type="tel" pattern="^\+62\d{9,13}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('whatsapp_sd') border-red-500 @enderror" id="whatsapp_sd" name="whatsapp_sd" value="{{ old('whatsapp_sd', $settings['whatsapp_sd'] ?? '') }}" placeholder="+62xxxxxxxxxxx">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Example: +6281234567890</p>
+                                    @error('whatsapp_sd')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

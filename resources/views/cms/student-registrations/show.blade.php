@@ -327,13 +327,13 @@
                     @if($studentRegistration->admissionWave->start_date)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Start Date</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $studentRegistration->admissionWave->start_date->format('F j, Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ date('F j, Y', $studentRegistration->admissionWave->start_date) }}</td>
                     </tr>
                     @endif
                     @if($studentRegistration->admissionWave->end_date)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">End Date</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $studentRegistration->admissionWave->end_date->format('F j, Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ date('F j, Y', $studentRegistration->admissionWave->end_date) }}</td>
                     </tr>
                     @endif
                     @if($studentRegistration->admissionWave->status)
@@ -501,7 +501,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                            @if($payment->foto_bukti_transfer)
+                            @if($payment->proof_url)
                                 <a href="{{ route('cms.student-registrations.view-transfer-proof', $payment->id) }}" 
                                    target="_blank"
                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
@@ -725,12 +725,12 @@
             <form id="uploadForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                    <label for="foto_bukti_transfer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label for="proof_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Transfer Proof Image
                     </label>
                     <input type="file" 
-                           name="foto_bukti_transfer" 
-                           id="foto_bukti_transfer" 
+                           name="proof_url" 
+                           id="proof_url" 
                            accept="image/*"
                            required
                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">

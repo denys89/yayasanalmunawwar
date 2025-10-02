@@ -8,6 +8,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Web Dashboard route (for default Laravel UI components)
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
 // Public News Routes
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('news.show');
 

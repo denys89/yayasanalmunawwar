@@ -38,6 +38,14 @@ class SettingController extends Controller
             'favicon' => 'nullable|image|mimes:ico,png|max:1024',
             'meta_keywords' => 'nullable|string',
             'meta_description' => 'nullable|string|max:160',
+            // WhatsApp per education level (KB, TK, SD) in +62 format
+            'whatsapp_kb' => ['nullable', 'regex:/^\+62\d{9,13}$/'],
+            'whatsapp_tk' => ['nullable', 'regex:/^\+62\d{9,13}$/'],
+            'whatsapp_sd' => ['nullable', 'regex:/^\+62\d{9,13}$/'],
+        ], [
+            'whatsapp_kb.regex' => 'WhatsApp KB must be in +62 format with digits only.',
+            'whatsapp_tk.regex' => 'WhatsApp TK must be in +62 format with digits only.',
+            'whatsapp_sd.regex' => 'WhatsApp SD must be in +62 format with digits only.',
         ]);
 
         // Handle logo upload

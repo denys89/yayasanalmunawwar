@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('amount', 12, 2);
             $table->enum('type', ['registration_fee', 'final_payment_fee']);
             $table->enum('status', ['unpaid', 'pending', 'paid'])->default('unpaid');
-            $table->string('foto_bukti_transfer')->nullable();
+            $table->string('proof_url')->nullable();
             $table->foreignId('discount_id')->nullable()->constrained('discounts')->onDelete('set null');
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();

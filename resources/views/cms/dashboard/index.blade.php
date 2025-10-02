@@ -131,34 +131,7 @@
                 </div>
             </div>
 
-            <!-- Admissions Card -->
-            <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-md bg-purple-500">
-                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4 flex-1">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Admissions</p>
-                                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $totalAdmissions ?? 0 }}</p>
-                                </div>
-                                <div class="flex items-center text-sm text-red-600">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.511l-5.511-3.182" />
-                                    </svg>
-                                    <span class="ml-1">-3%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Admissions module removed -->
         </div>
     </div>
 
@@ -369,26 +342,7 @@
                 </div>
             </div>
 
-            <!-- Pending Admissions Card -->
-            <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-md bg-yellow-500">
-                                <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-3.25-5.25a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Pending Admissions</dt>
-                                <dd class="text-lg font-medium text-gray-900 dark:text-white">{{ $stats['admissions'] ?? 0 }}</dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Pending admissions card removed -->
 
             <!-- Total Media Card -->
             <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
@@ -528,39 +482,7 @@
     <!-- Admin Only Section -->
     <div class="mt-8">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <!-- Recent Admissions -->
-            <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent Admissions</h3>
-                        <a href="{{ route('cms.admissions.index') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800">
-                            View All
-                        </a>
-                    </div>
-                    <div class="space-y-3">
-                        @if(isset($recent_admissions) && $recent_admissions->count() > 0)
-                            @foreach($recent_admissions as $admission)
-                                <div class="flex items-center justify-between py-2">
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $admission->name }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $admission->email }} • {{ $admission->created_at->diffForHumans() }}</p>
-                                    </div>
-                                    <div class="ml-4 flex-shrink-0">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $admission->status === 'verified' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
-                                               ($admission->status === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 
-                                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200') }}">
-                                            {{ ucfirst($admission->status) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @else
-                            <p class="text-sm text-gray-500 dark:text-gray-400">No admissions found.</p>
-                        @endif
-                    </div>
-                </div>
-            </div>
+            <!-- Recent admissions section removed -->
 
             <!-- User Management -->
             <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">

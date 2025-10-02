@@ -20,6 +20,32 @@ use Illuminate\Support\Facades\Cache;
 class RegistrationController extends Controller
 {
     /**
+     * List registrations with step/status labels
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $registrations = StudentRegistration::select([
+            'id',
+            'full_name',
+            'registration_step',
+            'registration_status'
+        ])->get()->map(function ($reg) {
+            return [
+                'id' => $reg->id,
+                'full_name' => $reg->full_name,
+                'registration_step' => $reg->registration_step,
+                'registration_step_label' => StudentRegistration::getRegistrationStepLabel($reg->registration_step),
+                'registration_status' => $reg->registration_status,
+                'registration_status_label' => StudentRegistration::getRegistrationStatusLabel($reg->registration_status),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $registrations,
+        ]);
+    }
+    /**
      * Store a new student registration
      */
     public function store(Request $request): JsonResponse
@@ -46,6 +72,9 @@ class RegistrationController extends Controller
                 'previous_school_name' => 'required|string|max:255',
                 'registration_info_source' => 'required|string|max:255',
                 'registration_reason' => 'nullable|string|max:1000',
+
+                // Admission Wave
+                'admission_wave_id' => 'nullable|integer|exists:admission_waves,id',
 
                 // Registration Flow Fields
                 'registration_step' => 'nullable|in:' . implode(',', StudentRegistration::getRegistrationSteps()),
@@ -96,14 +125,14 @@ class RegistrationController extends Controller
                 // Create student registration
                 $studentRegistration = StudentRegistration::create([
                     'full_name' => $validatedData['full_name'],
-                    'nickname' => $validatedData['nickname'],
+                    'nickname' => $validatedData['nickname'] ?? null,
                     'family_card_number' => $validatedData['family_card_number'],
                     'national_id_number' => $validatedData['national_id_number'],
                     'birthplace' => $validatedData['birthplace'],
                     'birthdate' => $validatedData['birthdate'],
                     'gender' => $validatedData['gender'],
-                    'sibling_name' => $validatedData['sibling_name'],
-                    'sibling_class' => $validatedData['sibling_class'],
+                    'sibling_name' => $validatedData['sibling_name'] ?? null,
+                    'sibling_class' => $validatedData['sibling_class'] ?? null,
                     'school_choice' => $validatedData['school_choice'],
                     'registration_type' => $validatedData['registration_type'],
                     'selected_class' => $validatedData['selected_class'],
@@ -112,9 +141,10 @@ class RegistrationController extends Controller
                     'previous_school_type' => $validatedData['previous_school_type'],
                     'previous_school_name' => $validatedData['previous_school_name'],
                     'registration_info_source' => $validatedData['registration_info_source'],
-                    'registration_reason' => $validatedData['registration_reason'],
+                    'registration_reason' => $validatedData['registration_reason'] ?? null,
                     'registration_step' => $validatedData['registration_step'] ?? 'waiting_registration_fee',
                     'registration_status' => $validatedData['registration_status'] ?? 'pending',
+                    'admission_wave_id' => $validatedData['admission_wave_id'] ?? null,
                 ]);
 
                 // Create guardians
@@ -123,11 +153,11 @@ class RegistrationController extends Controller
                         'student_registration_id' => $studentRegistration->id,
                         'type' => $guardianData['type'],
                         'name' => $guardianData['name'],
-                        'job' => $guardianData['job'],
-                        'company' => $guardianData['company'],
-                        'email' => $guardianData['email'],
-                        'phone' => $guardianData['phone'],
-                        'address' => $guardianData['address'],
+                        'job' => $guardianData['job'] ?? null,
+                        'company' => $guardianData['company'] ?? null,
+                        'email' => $guardianData['email'] ?? null,
+                        'phone' => $guardianData['phone'] ?? null,
+                        'address' => $guardianData['address'] ?? null,
                     ]);
                 }
 
@@ -206,7 +236,7 @@ class RegistrationController extends Controller
                         'school_choice' => $validatedData['school_choice'],
                         'selected_class' => $validatedData['selected_class'],
                         'status' => 'pending_review',
-                        'submitted_at' => $studentRegistration->created_at->toISOString(),
+                        'submitted_at' => $studentRegistration->created_at ? $studentRegistration->created_at->toIso8601String() : now()->toIso8601String(),
                         'parent_account' => [
                             'email' => $parentUser->email,
                             'username' => $generatedUsername,
@@ -214,7 +244,7 @@ class RegistrationController extends Controller
                         ],
                         'success_token' => $successToken
                     ]
-                ], 201);
+                ], 200);
 
             } catch (\Exception $e) {
                 DB::rollBack();

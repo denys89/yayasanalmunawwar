@@ -179,19 +179,19 @@ class StudentRegistrationController extends Controller
     public function uploadTransferProof(Request $request, Payment $payment)
     {
         $request->validate([
-            'foto_bukti_transfer' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'proof_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Delete old transfer proof if exists
-        if ($payment->foto_bukti_transfer) {
-            Storage::disk('public')->delete($payment->foto_bukti_transfer);
+        if ($payment->proof_url) {
+            Storage::disk('public')->delete($payment->proof_url);
         }
 
         // Store new transfer proof
-        $path = $request->file('foto_bukti_transfer')->store('transfer-proofs', 'public');
+        $path = $request->file('proof_url')->store('transfer-proofs', 'public');
 
         $payment->update([
-            'foto_bukti_transfer' => $path,
+            'proof_url' => $path,
         ]);
 
         return redirect()->back()->with('success', 'Transfer proof uploaded successfully.');
@@ -202,10 +202,10 @@ class StudentRegistrationController extends Controller
      */
     public function viewTransferProof(Payment $payment)
     {
-        if (!$payment->foto_bukti_transfer || !Storage::disk('public')->exists($payment->foto_bukti_transfer)) {
+        if (!$payment->proof_url || !Storage::disk('public')->exists($payment->proof_url)) {
             abort(404, 'Transfer proof not found.');
         }
 
-        return response()->file(Storage::disk('public')->path($payment->foto_bukti_transfer));
+        return response()->file(Storage::disk('public')->path($payment->proof_url));
     }
 }

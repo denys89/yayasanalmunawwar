@@ -33,6 +33,17 @@ Route::prefix('admission-waves')->group(function () {
     Route::get('by-level', [\App\Http\Controllers\CMS\AdmissionWaveController::class, 'getByLevel']);
 });
 
+// Registration validation routes (Public)
+Route::prefix('registration')->group(function () {
+    // Expose registration endpoints under parent namespace for the public registration flow
+    Route::post('/', [\App\Http\Controllers\API\RegistrationController::class, 'store'])
+        ->name('parent.registration.store');
+    Route::get('success', [\App\Http\Controllers\API\RegistrationController::class, 'success'])
+        ->name('parent.registration.success');
+    Route::post('validate-step', [\App\Http\Controllers\API\RegistrationController::class, 'validateStep'])
+        ->name('parent.registration.validate-step');
+});
+
 // Protected Routes (Require Authentication)
 Route::middleware(['auth:sanctum', 'parent.access'])->group(function () {
     

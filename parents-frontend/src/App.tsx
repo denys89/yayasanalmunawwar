@@ -8,7 +8,10 @@ import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 
 // Pages
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+import RegistrationSuccessPage from './pages/RegistrationSuccessPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import DashboardPage from './pages/DashboardPage';
@@ -24,6 +27,9 @@ function App() {
         <Router>
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/registration/success" element={<RegistrationSuccessPage />} />
             <Route path="/login" element={
               <AuthLayout>
                 <LoginPage />
@@ -41,13 +47,6 @@ function App() {
             } />
             
             {/* Protected Routes */}
-            <Route path="/" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <DashboardPage />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <MainLayout>

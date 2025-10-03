@@ -73,7 +73,6 @@ export interface Grade {
   percentage: number;
   grade_letter: string;
   semester: string;
-  academic_year: string;
   date_recorded: string;
   teacher_notes?: string;
 }
@@ -84,24 +83,35 @@ export interface GradeSummary {
   grade_letter: string;
   total_assignments: number;
   semester: string;
-  academic_year: string;
 }
 
 // Payment Types
 export interface Payment {
   id: number;
   student_id: number;
+  student_name?: string;
   type: 'tuition' | 'registration' | 'activity' | 'transport' | 'meal' | 'other';
+  original_type?: string;
   description: string;
   amount: number;
   due_date: string;
-  paid_date?: string;
+  paid_at?: string;
   status: 'pending' | 'paid' | 'overdue' | 'cancelled';
   payment_method?: 'cash' | 'transfer' | 'card' | 'online';
   reference_number?: string;
   notes?: string;
   created_at: string;
   updated_at: string;
+  proof_url?: string | null;
+  proof_uploaded?: boolean;
+  can_upload_proof?: boolean;
+}
+
+export interface BankTransferInfo {
+  bank_name: string;
+  account_number: string;
+  account_holder: string;
+  instructions: string;
 }
 
 export interface PaymentSummary {

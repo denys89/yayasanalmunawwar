@@ -3,184 +3,119 @@
 @section('title', 'Programs Management')
 @section('page-title', 'Programs')
 
-@section('page-actions')
-<a href="{{ route('cms.programs.create') }}" class="btn btn-primary">
-    <i class="bi bi-plus-circle me-2"></i>
-    Add New Program
-</a>
-@endsection
-
 @section('content')
-<div class="card shadow">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-        <h6 class="m-0 font-weight-bold text-primary">All Programs</h6>
-        <div class="d-flex gap-2">
-            <select class="form-select form-select-sm" id="statusFilter">
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-            <select class="form-select form-select-sm" id="typeFilter">
-                <option value="">All Types</option>
-                <option value="education">Education</option>
-                <option value="health">Health</option>
-                <option value="social">Social</option>
-                <option value="economic">Economic</option>
-                <option value="religious">Religious</option>
-            </select>
-        </div>
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 sm:mb-0">Programs</h1>
+    <a href="{{ route('cms.programs.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg shadow-sm transition-colors duration-200">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Add New Program
+    </a>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">All Programs</h3>
     </div>
-    <div class="card-body">
-        @if($programs->count() > 0)
-        <div class="table-responsive">
-            <table class="table table-bordered" id="programsTable">
-                <thead>
+    <div class="overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th width="5%">#</th>
-                        <th width="15%">Image</th>
-                        <th width="25%">Name</th>
-                        <th width="10%">Type</th>
-                        <th width="10%">Status</th>
-                        <th width="10%">Duration</th>
-                        <th width="10%">Date</th>
-                        <th width="15%">Actions</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Program</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach($programs as $program)
-                    <tr>
-                        <td>{{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}</td>
-                        <td>
-                            @if($program->featured_image)
-                                <img src="{{ $program->featured_image }}" alt="{{ $program->name }}" 
-                                     class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
-                            @else
-                                <div class="bg-light d-flex align-items-center justify-content-center" 
-                                     style="width: 60px; height: 60px; border-radius: 0.375rem;">
-                                    <i class="bi bi-image text-muted"></i>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @forelse($programs as $program)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    @if($program->featured_image)
+                                        <img class="h-10 w-10 rounded-lg object-cover" src="{{ $program->featured_image }}" alt="{{ $program->name }}">
+                                    @else
+                                        <div class="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center dark:bg-gray-600">
+                                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                                            </svg>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        {{ Str::limit($program->name, 50) }}
+                                    </div>
+                                    @if($program->description)
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ Str::limit($program->description, 60) }}</div>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
-                        <td>
-                            <div class="fw-bold">{{ Str::limit($program->name, 40) }}</div>
-                            @if($program->description)
-                                <small class="text-muted">{{ Str::limit($program->description, 60) }}</small>
-                            @endif
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                {{ ucfirst($program->type ?? 'General') }}
+                            </span>
                         </td>
-                        <td>
-                            <span class="badge bg-info">{{ ucfirst($program->type) }}</span>
-                        </td>
-                        <td>
-                            <span class="badge bg-{{ $program->is_active ? 'success' : 'secondary' }}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
                                 {{ $program->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td>
-                            @if($program->start_date && $program->end_date)
-                                <small>
-                                    {{ $program->start_date->format('M d') }} - 
-                                    {{ $program->end_date->format('M d, Y') }}
-                                </small>
-                            @elseif($program->start_date)
-                                <small>From {{ $program->start_date->format('M d, Y') }}</small>
-                            @else
-                                <small class="text-muted">Ongoing</small>
-                            @endif
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            {{ $program->created_at->format('M d, Y') }}
                         </td>
-                        <td>
-                            <small>{{ $program->created_at->format('M d, Y') }}</small>
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="{{ route('cms.programs.show', $program) }}" 
-                                   class="btn btn-sm btn-outline-info" title="View">
-                                    <i class="bi bi-eye"></i>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ route('cms.programs.show', $program) }}" class="inline-flex items-center p-2 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200" title="View">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
                                 </a>
-                                <a href="{{ route('cms.programs.edit', $program) }}" 
-                                   class="btn btn-sm btn-outline-primary" title="Edit">
-                                    <i class="bi bi-pencil"></i>
+                                <a href="{{ route('cms.programs.edit', $program) }}" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" title="Edit">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
                                 </a>
-                                <form action="{{ route('cms.programs.destroy', $program) }}" method="POST" 
-                                      class="d-inline" onsubmit="return confirm('Are you sure you want to delete this program?')">
+                                <form action="{{ route('cms.programs.destroy', $program) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                        <i class="bi bi-trash"></i>
+                                    <button type="submit" class="inline-flex items-center p-2 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this program?')" title="Delete">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
                                     </button>
                                 </form>
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                                </svg>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No programs found</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mb-4">Get started by creating your first program.</p>
+                                <a href="{{ route('cms.programs.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg shadow-sm transition-colors duration-200">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Add New Program
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination -->
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div class="text-muted">
-                Showing {{ $programs->firstItem() }} to {{ $programs->lastItem() }} of {{ $programs->total() }} results
-            </div>
-            {{ $programs->links() }}
-        </div>
-        @else
-        <div class="text-center py-5">
-            <i class="bi bi-collection display-1 text-muted mb-3"></i>
-            <h5 class="text-muted">No programs found</h5>
-            <p class="text-muted">Start by creating your first program.</p>
-            <a href="{{ route('cms.programs.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i>
-                Add New Program
-            </a>
-        </div>
-        @endif
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    // Auto-hide alerts after 5 seconds
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        });
-    }, 5000);
-
-    // Filter functionality
-    document.getElementById('statusFilter').addEventListener('change', function() {
-        filterTable();
-    });
-
-    document.getElementById('typeFilter').addEventListener('change', function() {
-        filterTable();
-    });
-
-    function filterTable() {
-        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-        const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
-        const table = document.getElementById('programsTable');
-        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-            const statusCell = row.cells[4].textContent.toLowerCase();
-            const typeCell = row.cells[3].textContent.toLowerCase();
-            
-            let showRow = true;
-            
-            if (statusFilter && !statusCell.includes(statusFilter)) {
-                showRow = false;
-            }
-            
-            if (typeFilter && !typeCell.includes(typeFilter)) {
-                showRow = false;
-            }
-            
-            row.style.display = showRow ? '' : 'none';
-        }
-    }
-</script>
-@endpush

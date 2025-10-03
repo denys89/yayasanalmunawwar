@@ -24,6 +24,13 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    // Add email existence check endpoint
+    Route::post('check-email', [AuthController::class, 'checkEmail']);
+});
+
+// Public Routes for Registration
+Route::prefix('admission-waves')->group(function () {
+    Route::get('by-level', [\App\Http\Controllers\CMS\AdmissionWaveController::class, 'getByLevel']);
 });
 
 // Protected Routes (Require Authentication)
@@ -38,79 +45,60 @@ Route::middleware(['auth:sanctum', 'parent.access'])->group(function () {
     // Dashboard
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index']);
+        // Map overview to index for aggregated data
+        Route::get('overview', [DashboardController::class, 'index']);
         Route::get('attendance-stats', [DashboardController::class, 'getAttendanceStats']);
         Route::get('payment-overview', [DashboardController::class, 'getPaymentOverview']);
         Route::get('announcements', [DashboardController::class, 'getAnnouncements']);
     });
-    
+
     // Students
     Route::prefix('students')->group(function () {
         Route::get('/', [StudentController::class, 'index']);
-        Route::get('{student}', [StudentController::class, 'show']);
-        Route::get('{student}/attendance', [StudentController::class, 'getAttendance']);
-        Route::get('{student}/grades', [StudentController::class, 'getGrades']);
-        Route::get('{student}/schedule', [StudentController::class, 'getSchedule']);
-        Route::get('{student}/report-card', [StudentController::class, 'downloadReportCard']);
+        Route::get('{id}', [StudentController::class, 'show']);
+        Route::get('{id}/attendance', [StudentController::class, 'attendance']);
+        Route::get('{id}/grades', [StudentController::class, 'grades']);
+        Route::get('{id}/report-card', [StudentController::class, 'reportCard']);
+        Route::get('{id}/schedule', [StudentController::class, 'schedule']);
     });
-    
+
     // Payments
     Route::prefix('payments')->group(function () {
-        Route::get('/', [PaymentController::class, 'index']);
+        Route::get('overview', [PaymentController::class, 'index']);
         Route::get('history', [PaymentController::class, 'getPaymentHistory']);
+        Route::get('{id}', [PaymentController::class, 'show']);
+        Route::get('{id}/invoice', [PaymentController::class, 'downloadInvoice']);
+        // Transfer proof upload and viewing
+        Route::post('{id}/upload-transfer-proof', [PaymentController::class, 'uploadTransferProof']);
+        Route::get('{id}/view-transfer-proof', [PaymentController::class, 'viewTransferProof']);
         Route::get('stats', [PaymentController::class, 'getPaymentStats']);
-        Route::get('reminders', [PaymentController::class, 'getReminders']);
-        Route::get('{payment}', [PaymentController::class, 'show']);
-        Route::get('{payment}/invoice', [PaymentController::class, 'downloadInvoice']);
         Route::post('process', [PaymentController::class, 'processPayment']);
     });
-    
+
     // Announcements
     Route::prefix('announcements')->group(function () {
         Route::get('/', [AnnouncementController::class, 'index']);
+        Route::get('{id}', [AnnouncementController::class, 'show']);
         Route::get('urgent', [AnnouncementController::class, 'getUrgent']);
         Route::get('categories', [AnnouncementController::class, 'getCategories']);
         Route::get('unread-count', [AnnouncementController::class, 'getUnreadCount']);
-        Route::get('stats', [AnnouncementController::class, 'getStats']);
-        Route::get('{announcement}', [AnnouncementController::class, 'show']);
-        Route::post('{announcement}/mark-read', [AnnouncementController::class, 'markAsRead']);
-        Route::post('mark-multiple-read', [AnnouncementController::class, 'markMultipleAsRead']);
-        Route::get('{announcement}/attachments/{attachment}', [AnnouncementController::class, 'downloadAttachment']);
-        
-        // Notification preferences
-        Route::get('notification-preferences', [AnnouncementController::class, 'getNotificationPreferences']);
-        Route::put('notification-preferences', [AnnouncementController::class, 'updateNotificationPreferences']);
+        Route::post('{id}/mark-read', [AnnouncementController::class, 'markAsRead']);
+        Route::get('{id}/attachments/{attachmentId}', [AnnouncementController::class, 'downloadAttachment']);
     });
-    
-    // Settings & Profile
+
+    // Settings
     Route::prefix('settings')->group(function () {
-        // Profile Management
-        Route::get('profile', [SettingsController::class, 'getProfile']);
+        Route::get('profile', [SettingsController::class, 'profile']);
         Route::put('profile', [SettingsController::class, 'updateProfile']);
-        Route::post('change-password', [SettingsController::class, 'changePassword']);
-        
-        // Notification Preferences
-        Route::get('notifications', [SettingsController::class, 'getNotificationPreferences']);
-        Route::put('notifications', [SettingsController::class, 'updateNotificationPreferences']);
-        
-        // Privacy Settings
-        Route::get('privacy', [SettingsController::class, 'getPrivacySettings']);
-        Route::put('privacy', [SettingsController::class, 'updatePrivacySettings']);
-        
-        // Security
-        Route::get('security', [SettingsController::class, 'getSecurityInfo']);
-        Route::post('two-factor', [SettingsController::class, 'toggleTwoFactor']);
-        
-        // Students Management
-        Route::get('students', [SettingsController::class, 'getConnectedStudents']);
-        Route::post('students/add-request', [SettingsController::class, 'requestAddStudent']);
-        
-        // App Preferences
-        Route::get('preferences', [SettingsController::class, 'getAppPreferences']);
-        Route::put('preferences', [SettingsController::class, 'updateAppPreferences']);
-        
-        // Account Management
-        Route::post('delete-account', [SettingsController::class, 'deleteAccount']);
-        Route::get('export-data', [SettingsController::class, 'exportData']);
+        Route::get('notifications', [SettingsController::class, 'notifications']);
+        Route::put('notifications', [SettingsController::class, 'updateNotifications']);
+        Route::get('privacy', [SettingsController::class, 'privacy']);
+        Route::put('privacy', [SettingsController::class, 'updatePrivacy']);
+        Route::get('security', [SettingsController::class, 'security']);
+        Route::get('students', [SettingsController::class, 'students']);
+        Route::put('change-password', [SettingsController::class, 'changePassword']);
+        Route::get('preferences', [SettingsController::class, 'preferences']);
+        Route::put('preferences', [SettingsController::class, 'updatePreferences']);
     });
 });
 

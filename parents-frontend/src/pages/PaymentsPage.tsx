@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { CreditCard, Calendar, Download, Eye, AlertTriangle, Filter, Search, CheckCircle, Clock, XCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { CreditCard, Calendar, Download, Eye, AlertTriangle, Filter, Search, CheckCircle, Clock, XCircle, UploadCloud, Image as ImageIcon, Info } from 'lucide-react';
 import { paymentsApi } from '../services/api';
-import type { Payment } from '../types';
+import type { Payment, BankTransferInfo } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const PaymentsPage: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -13,6 +14,11 @@ const PaymentsPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [uploadingProof, setUploadingProof] = useState(false);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [proofBlobUrl, setProofBlobUrl] = useState<string | null>(null);
+  const [bankInfo, setBankInfo] = useState<BankTransferInfo | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     fetchPayments();
@@ -122,25 +128,84 @@ const PaymentsPage: React.FC = () => {
   const handlePaymentClick = (payment: Payment) => {
     setSelectedPayment(payment);
     setShowPaymentModal(true);
+    // Fetch full details to load bank info and latest fields
+    paymentsApi.show(payment.id)
+      .then((res) => {
+        const info = (res.data as any)?.bank_transfer;
+        if (info) setBankInfo(info as BankTransferInfo);
+        const pay = (res.data as any)?.payment as Payment;
+        if (pay) setSelectedPayment(pay);
+      })
+      .catch(() => {});
   };
 
   const handlePayNow = async (paymentId: number) => {
     try {
-      // In a real app, this would integrate with a payment gateway
-      const response = await paymentsApi.processPayment(paymentId);
+      const payment = payments.find(p => p.id === paymentId);
+      if (!payment) {
+        alert('Payment not found.');
+        return;
+      }
+
+      const response = await paymentsApi.processPayment(paymentId, {
+        payment_method: 'bank_transfer',
+        amount: payment.amount,
+      });
       
       if (response.data.success) {
         // Refresh payments after successful payment
         fetchPayments();
         setShowPaymentModal(false);
-        // Show success message
         alert('Payment processed successfully!');
       } else {
-        alert('Payment failed. Please try again.');
+        alert(response.data.message || 'Payment failed. Please try again.');
       }
     } catch (error: any) {
       alert('Payment failed. Please try again.');
       console.error('Payment error:', error);
+    }
+  };
+
+  const handleUploadProof = async (fileParam?: File) => {
+    const fileToUpload = fileParam ?? proofFile;
+    if (!selectedPayment || !fileToUpload) return;
+    try {
+      setUploadingProof(true);
+      const res = await paymentsApi.uploadProof(selectedPayment.id, fileToUpload);
+      if (res.data?.success) {
+        alert('Transfer proof uploaded successfully.');
+        await fetchPayments();
+        const detail = await paymentsApi.show(selectedPayment.id);
+        const pay = (detail.data as any)?.payment as Payment;
+        if (pay) setSelectedPayment(pay);
+        const info = (detail.data as any)?.bank_transfer;
+        if (info) setBankInfo(info as BankTransferInfo);
+        setProofFile(null);
+      } else {
+        alert(res.data?.message || 'Upload failed.');
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || 'Upload failed. Please try again.';
+      alert(msg);
+    } finally {
+      setUploadingProof(false);
+    }
+  };
+
+  const openFileDialog = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleViewProof = async () => {
+    if (!selectedPayment) return;
+    try {
+      const res = await paymentsApi.viewProof(selectedPayment.id);
+      const blob = new Blob([res.data], { type: res.headers['content-type'] || 'image/*' });
+      const url = URL.createObjectURL(blob);
+      setProofBlobUrl(url);
+      window.open(url, '_blank');
+    } catch (err) {
+      alert('Unable to load transfer proof.');
     }
   };
 
@@ -186,95 +251,12 @@ const PaymentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Payments & Billing
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Manage your payment history and outstanding bills.
-        </p>
-      </div>
+      <PageHeader
+        title="Payments"
+        description="View and manage your payment history and outstanding fees."
+      />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <CreditCard className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total Payments
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.total}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.totalAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Paid
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.paid}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.paidAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Clock className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Pending
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.pending}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.pendingAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <XCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Overdue
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.overdue}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatCurrency(stats.overdueAmount)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Search */}
+      {/* Filters and Summary */}
       <div className="card p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
@@ -435,6 +417,18 @@ const PaymentsPage: React.FC = () => {
                 </label>
                 <div>{getPaymentStatusBadge(selectedPayment.status)}</div>
               </div>
+
+              {bankInfo && (
+                <div className="border border-gray-200 dark:border-gray-700 rounded-md p-3">
+                  <div className="flex items-center mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <Info className="h-4 w-4 mr-2 text-green-600" /> Bank Transfer Information
+                  </div>
+                  <div className="text-sm text-gray-900 dark:text-white">Bank: {bankInfo.bank_name}</div>
+                  <div className="text-sm text-gray-900 dark:text-white">Account: {bankInfo.account_number}</div>
+                  <div className="text-sm text-gray-900 dark:text-white">Holder: {bankInfo.account_holder}</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">{bankInfo.instructions}</p>
+                </div>
+              )}
               
               {selectedPayment.paid_at && (
                 <div>
@@ -446,21 +440,55 @@ const PaymentsPage: React.FC = () => {
               )}
             </div>
             
-            <div className="flex justify-end space-x-3 mt-6">
+            <div className="flex items-center justify-between mt-6">
               <button
                 onClick={() => setShowPaymentModal(false)}
                 className="btn btn-secondary"
               >
                 Close
               </button>
-              {selectedPayment.status === 'pending' && (
-                <button
-                  onClick={() => handlePayNow(selectedPayment.id)}
-                  className="btn btn-primary"
-                >
-                  Pay Now
-                </button>
-              )}
+
+              <div className="flex items-center space-x-3">
+                {selectedPayment?.can_upload_proof && !selectedPayment?.proof_uploaded && (
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0] ?? null;
+                        setProofFile(f);
+                        if (f) {
+                          // Auto upload after selecting file
+                          handleUploadProof(f);
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={openFileDialog}
+                      disabled={uploadingProof}
+                      className={cn('btn btn-primary', uploadingProof && 'opacity-70 cursor-not-allowed')}
+                    >
+                      <UploadCloud className="h-4 w-4 mr-1" />
+                      {uploadingProof ? 'Uploading...' : 'Upload Proof'}
+                    </button>
+                  </>
+                )}
+                {selectedPayment?.proof_uploaded && (
+                  <button onClick={handleViewProof} className="btn btn-secondary">
+                    <ImageIcon className="h-4 w-4 mr-1" /> View Proof
+                  </button>
+                )}
+                {selectedPayment.status === 'pending' && (
+                  <button
+                    onClick={() => handlePayNow(selectedPayment.id)}
+                    className="btn btn-primary"
+                  >
+                    Pay Now
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

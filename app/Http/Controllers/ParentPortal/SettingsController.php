@@ -27,7 +27,7 @@ class SettingsController extends Controller
             'address' => $parent->address ?? '',
             'emergency_contact' => $parent->emergency_contact ?? '',
             'profile_photo' => $parent->profile_photo ?? null,
-            'notification_preferences' => $this->getNotificationPreferences($parent->id),
+            'notification_preferences' => $this->getNotificationPreferencesData($parent->id),
             'students' => $this->getParentStudents($parent->id),
             'account_info' => [
                 'created_at' => $parent->created_at,
@@ -116,7 +116,7 @@ class SettingsController extends Controller
     public function getNotificationPreferences(Request $request)
     {
         $parent = $request->user();
-        $preferences = $this->getNotificationPreferences($parent->id);
+        $preferences = $this->getNotificationPreferencesData($parent->id);
         
         return response()->json([
             'preferences' => $preferences
@@ -377,7 +377,7 @@ class SettingsController extends Controller
         $data = [
             'profile' => $parent->toArray(),
             'students' => $this->getParentStudents($parent->id),
-            'notification_preferences' => $this->getNotificationPreferences($parent->id),
+            'notification_preferences' => $this->getNotificationPreferencesData($parent->id),
             'login_history' => $this->getLoginHistory($parent->id),
             'export_date' => now()->toISOString()
         ];
@@ -389,9 +389,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * Helper: Get notification preferences
+     * Helper: Get notification preferences data
      */
-    private function getNotificationPreferences($parentId)
+    private function getNotificationPreferencesData($parentId)
     {
         // In real app, get from user_notification_preferences table
         return [

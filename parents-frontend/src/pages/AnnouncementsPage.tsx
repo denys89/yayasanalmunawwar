@@ -3,6 +3,7 @@ import { Bell, Calendar, Search, Filter, Eye, AlertTriangle, Clock, Star, Messag
 import { announcementsApi } from '../services/api';
 import type { Announcement } from '../types';
 import { cn } from '../utils/cn';
+import { PageHeader } from '../components';
 
 const AnnouncementsPage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -188,14 +189,10 @@ const AnnouncementsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Announcements
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Stay updated with the latest school news and important information.
-        </p>
-      </div>
+      <PageHeader
+        title="Announcements"
+        description="Stay updated with the latest information from the school."
+      />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

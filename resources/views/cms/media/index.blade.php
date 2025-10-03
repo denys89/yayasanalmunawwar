@@ -3,211 +3,151 @@
 @section('title', 'Media Library')
 
 @section('content')
-<div class="container-fluid">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="h3 mb-0 text-gray-800">Media Library</h1>
-            <p class="mb-0 text-muted">Manage your uploaded files and media</p>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Media Library</h1>
         </div>
-        <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <i class="fas fa-upload me-2"></i>Upload Files
-            </button>
-            <a href="{{ route('cms.media.create') }}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i>Add Media
+        <div class="mt-4 sm:mt-0">
+            <a href="{{ route('cms.media.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add New Media
             </a>
         </div>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
             {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
-    <!-- Media Grid -->
-    @if($media->count() > 0)
-        <div class="row">
-            @foreach($media as $item)
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100 shadow-sm media-card" data-media-id="{{ $item->id }}">
-                        <div class="card-img-top media-preview" style="height: 150px; overflow: hidden; position: relative;">
-                            @if(str_starts_with($item->mime_type, 'image/'))
-                                <img src="{{ asset('storage/' . $item->file_path) }}" 
-                                     alt="{{ $item->alt_text }}" 
-                                     class="img-fluid w-100 h-100" 
-                                     style="object-fit: cover; cursor: pointer;"
-                                     onclick="previewMedia('{{ asset('storage/' . $item->file_path) }}', '{{ $item->title }}', 'image')">
-                            @elseif(str_starts_with($item->mime_type, 'video/'))
-                                <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted" 
-                                     style="cursor: pointer;"
-                                     onclick="previewMedia('{{ asset('storage/' . $item->file_path) }}', '{{ $item->title }}', 'video')">
-                                    <i class="fas fa-play-circle fa-3x"></i>
+    <!-- Table Container -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        @if($media->count() > 0)
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Preview</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Size</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach($media as $item)
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                    @if(str_starts_with($item->mime_type, 'image/'))
+                                        <img src="{{ asset('storage/' . $item->file_path) }}" alt="{{ $item->alt_text }}" class="w-full h-full object-cover">
+                                    @elseif(str_starts_with($item->mime_type, 'video/'))
+                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    @elseif($item->mime_type === 'application/pdf')
+                                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    @else
+                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    @endif
                                 </div>
-                            @elseif($item->mime_type === 'application/pdf')
-                                <div class="d-flex align-items-center justify-content-center h-100 bg-danger text-white">
-                                    <i class="fas fa-file-pdf fa-3x"></i>
-                                </div>
-                            @elseif(str_contains($item->mime_type, 'document') || str_contains($item->mime_type, 'word'))
-                                <div class="d-flex align-items-center justify-content-center h-100 bg-primary text-white">
-                                    <i class="fas fa-file-word fa-3x"></i>
-                                </div>
-                            @else
-                                <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
-                                    <i class="fas fa-file fa-3x"></i>
-                                </div>
-                            @endif
-                            
-                            <!-- File size badge -->
-                            <span class="badge bg-dark position-absolute" style="top: 5px; right: 5px; font-size: 0.7rem;">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $item->title }}</div>
+                                @if($item->alt_text)
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ Str::limit($item->alt_text, 50) }}</div>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                    {{ strtoupper(pathinfo($item->file_path, PATHINFO_EXTENSION)) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                 {{ number_format($item->file_size / 1024, 1) }} KB
-                            </span>
-                        </div>
-                        
-                        <div class="card-body p-2">
-                            <h6 class="card-title mb-1 text-truncate" title="{{ $item->title }}">
-                                {{ $item->title }}
-                            </h6>
-                            <p class="card-text small text-muted mb-2">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                 {{ $item->created_at->format('M d, Y') }}
-                            </p>
-                            <div class="btn-group w-100" role="group">
-                                <button type="button" class="btn btn-sm btn-outline-primary" 
-                                        onclick="copyToClipboard('{{ asset('storage/' . $item->file_path) }}')"
-                                        title="Copy URL">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                                <a href="{{ route('cms.media.show', $item) }}" 
-                                   class="btn btn-sm btn-outline-info" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('cms.media.edit', $item) }}" 
-                                   class="btn btn-sm btn-outline-warning" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" class="btn btn-sm btn-outline-danger" 
-                                        onclick="deleteMedia({{ $item->id }})" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex items-center space-x-2">
+                                    <a href="{{ route('cms.media.show', $item) }}" class="inline-flex items-center p-2 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200" title="View">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </a>
+                                    <a href="{{ route('cms.media.edit', $item) }}" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" title="Edit">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </a>
+                                    <form action="{{ route('cms.media.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this media file?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="inline-flex items-center p-2 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200" title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <!-- Empty State -->
+            <div class="text-center py-12">
+                <div class="mb-6">
+                    <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
                 </div>
-            @endforeach
-        </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No media files found</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-6">Get started by uploading your first media file.</p>
+                <a href="{{ route('cms.media.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add New Media
+                </a>
+            </div>
+        @endif
+    </div>
 
-        <!-- Pagination -->
-        <div class="d-flex justify-content-center mt-4">
+    <!-- Pagination -->
+    @if($media->hasPages())
+        <div class="flex justify-center mt-6">
             {{ $media->links() }}
         </div>
-    @else
-        <!-- Empty State -->
-        <div class="text-center py-5">
-            <div class="mb-4">
-                <i class="fas fa-images fa-4x text-muted"></i>
-            </div>
-            <h4 class="text-muted mb-3">No Media Files</h4>
-            <p class="text-muted mb-4">Upload your first media file to get started.</p>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <i class="fas fa-upload me-2"></i>Upload Files
-            </button>
-        </div>
     @endif
 </div>
+@endsection
 
-<!-- Upload Modal -->
-<div class="modal fade" id="uploadModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-upload me-2"></i>Upload Files
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div id="upload-area" class="border-2 border-dashed border-primary rounded p-4 text-center mb-3" 
-                     style="min-height: 200px; cursor: pointer;">
-                    <div class="upload-content">
-                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
-                        <h5>Drag & Drop Files Here</h5>
-                        <p class="text-muted">or click to browse files</p>
-                        <input type="file" id="file-input" multiple accept="image/*,video/*,.pdf,.doc,.docx" style="display: none;">
-                    </div>
-                </div>
-                
-                <div id="upload-progress" style="display: none;">
-                    <div class="progress mb-3">
-                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                    </div>
-                    <div id="upload-status"></div>
-                </div>
-                
-                <div id="upload-results"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="upload-btn" onclick="triggerFileInput()">
-                    <i class="fas fa-plus me-2"></i>Select Files
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Media Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="previewTitle">Media Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center">
-                <div id="previewContent"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirm Delete
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this media file? This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash me-2"></i>Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+@push('styles')
 <style>
 .media-card {
     transition: transform 0.2s, box-shadow 0.2s;
@@ -215,201 +155,59 @@
 
 .media-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-}
-
-#upload-area {
-    transition: all 0.3s ease;
-}
-
-#upload-area:hover {
-    border-color: #0d6efd;
-    background-color: #f8f9ff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
 }
 
 #upload-area.dragover {
-    border-color: #0d6efd;
-    background-color: #e7f1ff;
+    border-color: #3b82f6;
+    background-color: #eff6ff;
     transform: scale(1.02);
+}
+
+.dark #upload-area.dragover {
+    background-color: #1e3a8a;
 }
 
 .upload-content {
     pointer-events: none;
 }
-
-.progress {
-    height: 20px;
-}
-
-.btn-group .btn {
-    flex: 1;
-}
 </style>
+@endpush
 
+@push('scripts')
 <script>
 // Auto-hide alerts after 5 seconds
 setTimeout(function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(function(alert) {
-        const bsAlert = new bootstrap.Alert(alert);
-        bsAlert.close();
-    });
+    const successAlert = document.getElementById('success-alert');
+    const errorAlert = document.getElementById('error-alert');
+    if (successAlert) successAlert.style.display = 'none';
+    if (errorAlert) errorAlert.style.display = 'none';
 }, 5000);
-
-// File upload functionality
-const uploadArea = document.getElementById('upload-area');
-const fileInput = document.getElementById('file-input');
-const uploadProgress = document.getElementById('upload-progress');
-const uploadResults = document.getElementById('upload-results');
-const progressBar = document.querySelector('.progress-bar');
-const uploadStatus = document.getElementById('upload-status');
-
-// Drag and drop functionality
-uploadArea.addEventListener('click', () => fileInput.click());
-uploadArea.addEventListener('dragover', handleDragOver);
-uploadArea.addEventListener('dragleave', handleDragLeave);
-uploadArea.addEventListener('drop', handleDrop);
-
-function handleDragOver(e) {
-    e.preventDefault();
-    uploadArea.classList.add('dragover');
-}
-
-function handleDragLeave(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-    const files = e.dataTransfer.files;
-    handleFiles(files);
-}
-
-fileInput.addEventListener('change', (e) => {
-    handleFiles(e.target.files);
-});
-
-function triggerFileInput() {
-    fileInput.click();
-}
-
-function handleFiles(files) {
-    if (files.length === 0) return;
-    
-    uploadProgress.style.display = 'block';
-    uploadResults.innerHTML = '';
-    
-    let completed = 0;
-    const total = files.length;
-    
-    Array.from(files).forEach((file, index) => {
-        uploadFile(file, index, () => {
-            completed++;
-            const progress = (completed / total) * 100;
-            progressBar.style.width = progress + '%';
-            uploadStatus.textContent = `Uploaded ${completed} of ${total} files`;
-            
-            if (completed === total) {
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            }
-        });
-    });
-}
-
-function uploadFile(file, index, callback) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('_token', '{{ csrf_token() }}');
-    
-    fetch('{{ route("cms.media.upload") }}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            uploadResults.innerHTML += `
-                <div class="alert alert-success alert-sm mb-2">
-                    <i class="fas fa-check me-2"></i>${file.name} uploaded successfully
-                </div>
-            `;
-        } else {
-            uploadResults.innerHTML += `
-                <div class="alert alert-danger alert-sm mb-2">
-                    <i class="fas fa-times me-2"></i>Failed to upload ${file.name}: ${data.message}
-                </div>
-            `;
-        }
-        callback();
-    })
-    .catch(error => {
-        uploadResults.innerHTML += `
-            <div class="alert alert-danger alert-sm mb-2">
-                <i class="fas fa-times me-2"></i>Error uploading ${file.name}
-            </div>
-        `;
-        callback();
-    });
-}
-
-// Media preview functionality
-function previewMedia(url, title, type) {
-    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-    const previewTitle = document.getElementById('previewTitle');
-    const previewContent = document.getElementById('previewContent');
-    
-    previewTitle.textContent = title;
-    
-    if (type === 'image') {
-        previewContent.innerHTML = `<img src="${url}" class="img-fluid" alt="${title}">`;
-    } else if (type === 'video') {
-        previewContent.innerHTML = `
-            <video controls class="w-100" style="max-height: 70vh;">
-                <source src="${url}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        `;
-    }
-    
-    previewModal.show();
-}
 
 // Copy to clipboard functionality
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         // Show toast notification
         const toast = document.createElement('div');
-        toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed';
-        toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+        toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center';
         toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="fas fa-check me-2"></i>URL copied to clipboard!
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            URL copied to clipboard!
         `;
         document.body.appendChild(toast);
         
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-        
-        toast.addEventListener('hidden.bs.toast', () => {
-            document.body.removeChild(toast);
-        });
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
     });
 }
-
-// Delete media functionality
-function deleteMedia(mediaId) {
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    const deleteForm = document.getElementById('deleteForm');
-    deleteForm.action = `/cms/media/${mediaId}`;
-    deleteModal.show();
-}
 </script>
-@endsection
+@endpush

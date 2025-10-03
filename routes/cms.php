@@ -6,11 +6,14 @@ use App\Http\Controllers\CMS\PageController;
 use App\Http\Controllers\CMS\ProgramController;
 use App\Http\Controllers\CMS\ExploreController;
 use App\Http\Controllers\CMS\NewsController;
-use App\Http\Controllers\CMS\AdmissionController;
+use App\Http\Controllers\CMS\AdmissionWaveController;
+use App\Http\Controllers\CMS\StudentRegistrationController;
 use App\Http\Controllers\CMS\MediaController;
 use App\Http\Controllers\CMS\FaqController;
 use App\Http\Controllers\CMS\SettingController;
 use App\Http\Controllers\CMS\UserController;
+use App\Http\Controllers\CMS\DiscountController;
+use App\Http\Controllers\CMS\ContactUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +29,10 @@ use App\Http\Controllers\CMS\UserController;
 // CMS Routes with Admin Middleware
 Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(function () {
     
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Redirect root CMS to pages
+    Route::get('/', function () {
+        return redirect()->route('cms.pages.index');
+    })->name('dashboard');
     
     // Pages Management
     Route::resource('pages', PageController::class);
@@ -41,10 +46,26 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // News Management
     Route::resource('news', NewsController::class);
     
-    // Admissions Management
-    Route::resource('admissions', AdmissionController::class);
-    Route::patch('admissions/{admission}/verify', [AdmissionController::class, 'verify'])->name('admissions.verify');
-    Route::patch('admissions/{admission}/reject', [AdmissionController::class, 'reject'])->name('admissions.reject');
+    // Admissions module removed
+    
+    // Admission Waves Management
+    Route::resource('admission-waves', AdmissionWaveController::class)->parameters([
+        'admission-waves' => 'admission_wave'
+    ]);
+    Route::post('admission-waves/check-overlap', [AdmissionWaveController::class, 'checkOverlap'])->name('admission-waves.check-overlap');
+    
+    // Student Registrations Management
+    Route::resource('student-registrations', StudentRegistrationController::class)->parameters([
+        'student-registrations' => 'student_registration'
+    ])->only(['index', 'show', 'update']);
+    
+    // Payment Management Routes
+    Route::post('student-registrations/{payment}/upload-transfer-proof', [StudentRegistrationController::class, 'uploadTransferProof'])
+        ->name('student-registrations.upload-transfer-proof');
+    Route::put('student-registrations/{payment}/update-payment-status', [StudentRegistrationController::class, 'updatePaymentStatus'])
+        ->name('student-registrations.update-payment-status');
+    Route::get('student-registrations/{payment}/view-transfer-proof', [StudentRegistrationController::class, 'viewTransferProof'])
+        ->name('student-registrations.view-transfer-proof');
     
     // Media Management
     Route::resource('media', MediaController::class);
@@ -52,6 +73,15 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // FAQs Management
     Route::resource('faqs', FaqController::class);
+
+    // Contact Us Management (read-only)
+    Route::resource('contact-us', ContactUsController::class)->only(['index', 'show'])->parameters([
+        'contact-us' => 'contactUs'
+    ]);
+    Route::get('contact-us/export/csv', [ContactUsController::class, 'export'])->name('contact-us.export');
+    
+    // Discounts Management
+    Route::resource('discounts', DiscountController::class);
     
     // Settings Management
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -61,6 +91,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     Route::resource('users', UserController::class);
     Route::patch('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
     Route::patch('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    Route::patch('users/{user}/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
+    Route::post('users/{user}/login-as', [UserController::class, 'loginAs'])->name('users.login-as');
     Route::post('users/bulk', [UserController::class, 'bulk'])->name('users.bulk');
 });
 
@@ -74,6 +106,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'editor'])->group(functi
     Route::prefix('editor')->group(function () {
         // Pages Management (Editor access)
         Route::get('pages', [PageController::class, 'index'])->name('pages.editor.index');
+        Route::get('pages/create', [PageController::class, 'create'])->name('pages.editor.create');
+        Route::post('pages', [PageController::class, 'store'])->name('pages.editor.store');
         Route::get('pages/{page}/edit', [PageController::class, 'edit'])->name('pages.editor.edit');
         Route::patch('pages/{page}', [PageController::class, 'update'])->name('pages.editor.update');
         

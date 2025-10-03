@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/parent';
+const API_BASE_URL =
+  import.meta.env.VITE_PARENT_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://127.0.0.1:8000/api/parent';
 
 // Create axios instance
 const api = axios.create({
@@ -68,6 +71,7 @@ export const authApi = {
 
 // Dashboard API
 export const dashboardApi = {
+  getDashboard: () => api.get<ApiResponse<any>>('/dashboard'),
   overview: () => api.get<ApiResponse<any>>('/dashboard/overview'),
   attendanceStats: () => api.get<ApiResponse<any>>('/dashboard/attendance-stats'),
   paymentOverview: () => api.get<ApiResponse<any>>('/dashboard/payment-overview'),
@@ -90,11 +94,21 @@ export const studentsApi = {
 // Payments API
 export const paymentsApi = {
   overview: () => api.get<ApiResponse<any>>('/payments/overview'),
-  history: (params?: { page?: number; per_page?: number; status?: string; month?: string; year?: string }) =>
+  getPayments: (params?: { page?: number; per_page?: number; status?: string; student_id?: number; payment_type?: string; date_from?: string; date_to?: string }) =>
     api.get<ApiResponse<any>>('/payments/history', { params }),
   show: (id: number) => api.get<ApiResponse<any>>(`/payments/${id}`),
   invoice: (id: number) => api.get(`/payments/${id}/invoice`, { responseType: 'blob' }),
   stats: () => api.get<ApiResponse<any>>('/payments/stats'),
+  processPayment: (paymentId: number, payload?: { payment_method?: string; amount?: number }) =>
+    api.post<ApiResponse<any>>('/payments/process', { payment_id: paymentId, payment_method: payload?.payment_method || 'bank_transfer', amount: payload?.amount ?? undefined }),
+  uploadProof: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('proof_url', file);
+    return api.post<ApiResponse<{ proof_url: string; payment_status: string }>>(`/payments/${id}/upload-transfer-proof`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  viewProof: (id: number) => api.get(`/payments/${id}/view-transfer-proof`, { responseType: 'blob' }),
 };
 
 // Announcements API
@@ -112,6 +126,8 @@ export const announcementsApi = {
 
 // Settings API
 export const settingsApi = {
+  getSettings: () => api.get<ApiResponse<any>>('/settings/profile'),
+  updateSettings: (data: any) => api.put<ApiResponse<any>>('/settings/profile', data),
   profile: () => api.get<ApiResponse<any>>('/settings/profile'),
   updateProfile: (data: any) => api.put<ApiResponse<any>>('/settings/profile', data),
   changePassword: (data: { current_password: string; password: string; password_confirmation: string }) =>

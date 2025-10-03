@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -72,6 +73,14 @@ class User extends Authenticatable
     public function isParent(): bool
     {
         return $this->role === 'parent';
+    }
+
+    /**
+     * Get the payments confirmed by this user.
+     */
+    public function confirmedPayments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'confirmed_by');
     }
 
     /**

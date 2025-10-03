@@ -13,11 +13,23 @@ class Page extends Model
         'title',
         'slug',
         'content',
+        'excerpt',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'featured_image',
+        'show_in_menu',
+        'menu_order',
+        'is_published',
+        'published_at',
         'type',
         'status',
     ];
 
     protected $casts = [
+        'show_in_menu' => 'boolean',
+        'is_published' => 'boolean',
+        'published_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

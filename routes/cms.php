@@ -14,6 +14,7 @@ use App\Http\Controllers\CMS\SettingController;
 use App\Http\Controllers\CMS\UserController;
 use App\Http\Controllers\CMS\DiscountController;
 use App\Http\Controllers\CMS\ContactUsController;
+use App\Http\Controllers\CMS\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,9 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // News Management
     Route::resource('news', NewsController::class);
+    
+    // Events Management
+    Route::resource('events', EventController::class);
     
     // Admissions module removed
     

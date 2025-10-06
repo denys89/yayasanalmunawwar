@@ -245,13 +245,15 @@
     <!-- JavaScript for mobile menu -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenuButtons = document.querySelectorAll('.mobile-menu-button');
             const mobileSidebar = document.querySelector('.mobile-sidebar');
             const mobileCloseButton = document.querySelector('.mobile-close-button');
             
-            if (mobileMenuButton && mobileSidebar) {
-                mobileMenuButton.addEventListener('click', function() {
-                    mobileSidebar.classList.remove('hidden');
+            if (mobileMenuButtons && mobileSidebar) {
+                mobileMenuButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        mobileSidebar.classList.remove('hidden');
+                    });
                 });
             }
             
@@ -264,7 +266,20 @@
             // Close mobile menu when clicking outside
             if (mobileSidebar) {
                 mobileSidebar.addEventListener('click', function(e) {
-                    if (e.target === mobileSidebar) {
+                    if (e.target === mobileSidebar || (e.target.classList && e.target.classList.contains('bg-gray-900/80'))) {
+                        mobileSidebar.classList.add('hidden');
+                    }
+                });
+                // Close mobile menu when clicking any sidebar link
+                mobileSidebar.addEventListener('click', function(e) {
+                    const link = e.target.closest('a[href]');
+                    if (link) {
+                        mobileSidebar.classList.add('hidden');
+                    }
+                });
+                // Close on ESC key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
                         mobileSidebar.classList.add('hidden');
                     }
                 });

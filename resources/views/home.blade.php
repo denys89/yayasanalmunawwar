@@ -14,9 +14,21 @@
 			<div class="swiper-slide">
 				<div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/1.jpg)"></div>
 				<div class="auto-container">
-					
-					
-					
+					<!-- Content Column -->
+					<div class="slider-one_content">
+						<div class="slider-one_content-inner">
+							<h1 class="slider-one_heading">Yayasan Al-Munawwar</h1>
+							<div class="slider-one_text">Pendaftaran gelombang kedua di buka pada 15 Maret 2024 sampai 30 Maret 2024</div>
+							<div class="slider-one_button">
+								<a href="course-detail.html" class="theme-btn btn-style-two">
+									<span class="btn-wrap">
+										<span class="text-one">Daftar Sekarang</span>
+										<span class="text-two">Daftar Sekarang</span>
+									</span>
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -299,6 +311,7 @@
 		</div>
 	</section>
 	<!-- End News One -->
+
 
 	<!-- CTA One -->
 	<section class="cta-two">

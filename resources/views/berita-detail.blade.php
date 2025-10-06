@@ -60,30 +60,14 @@
                                     @endif
                                 </div>
                                 
-                                <!-- Tags -->
-                                @if($news->tags ?? null)
-                                <div class="blog-detail_tags">
-                                    <span>Tags:</span>
-                                    @foreach(explode(',', $news->tags) as $tag)
-                                        <a href="#">{{ trim($tag) }}</a>
-                                    @endforeach
-                                </div>
-                                @else
-                                <div class="blog-detail_tags">
-                                    <span>Tags:</span>
-                                    <a href="#">Pendidikan</a>
-                                    <a href="#">Al-Quran</a>
-                                    <a href="#">Anak-anak</a>
-                                    <a href="#">Program</a>
-                                </div>
-                                @endif
+                               
+                                
                                 
                                 <!-- Share -->
-                                <div class="blog-detail_share">
-                                    <span>Bagikan:</span>
+                                <div class="event-detail_share">
+                                    <span>Bagikan Berita:</span>
                                     <a href="#" class="fa-brands fa-facebook-f fa-fw"></a>
                                     <a href="#" class="fa-brands fa-twitter fa-fw"></a>
-                                    <a href="#" class="fa-brands fa-instagram fa-fw"></a>
                                     <a href="#" class="fa-brands fa-whatsapp fa-fw"></a>
                                 </div>
                             </div>
@@ -115,8 +99,8 @@
                             
                             @if(isset($latestNews) && $latestNews->count() > 0)
                                 @foreach($latestNews as $latest)
-                                <article class="post">
-                                    <figure class="post-thumb">
+                                <article class="post d-flex">
+                                    <figure class="post-thumb" style="flex:0 0 75px;">
                                         <a href="{{ route('berita.detail', $latest->slug) }}">
                                             <img src="{{ $latest->featured_image ? asset('storage/' . $latest->featured_image) : asset('images/resource/post-thumb-1.png') }}" alt="{{ $latest->title }}">
                                         </a>
@@ -128,28 +112,34 @@
                                 </article>
                                 @endforeach
                             @else
-                            <article class="post">
-                                <figure class="post-thumb">
+                            <article class="post d-flex">
+                                <figure class="post-thumb" style="flex:0 0 75px;">
                                     <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
                                 </figure>
-                                <div class="text"><a href="#">Kegiatan Bakti Sosial di Bulan Ramadan</a></div>
-                                <div class="post-info">{{ date('d M Y') }}</div>
+                                <div class="post-content ml-3">
+                                    <div class="text"><a href="#">Kegiatan Bakti Sosial di Bulan Ramadan</a></div>
+                                    <div class="post-info">{{ date('d M Y') }}</div>
+                                </div>
                             </article>
                             
-                            <article class="post">
-                                <figure class="post-thumb">
-                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-2.png') }}" alt="Berita"></a>
+                            <article class="post d-flex">
+                                <figure class="post-thumb" style="flex:0 0 75px;">
+                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
                                 </figure>
-                                <div class="text"><a href="#">Seminar Parenting Islami untuk Orang Tua</a></div>
-                                <div class="post-info">{{ date('d M Y', strtotime('-1 day')) }}</div>
+                                <div class="post-content ml-3">
+                                    <div class="text"><a href="#">Seminar Parenting Islami untuk Orang Tua</a></div>
+                                    <div class="post-info">{{ date('d M Y', strtotime('-1 day')) }}</div>
+                                </div>
                             </article>
                             
-                            <article class="post">
-                                <figure class="post-thumb">
-                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-3.png') }}" alt="Berita"></a>
+                            <article class="post d-flex">
+                                <figure class="post-thumb" style="flex:0 0 75px;">
+                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
                                 </figure>
-                                <div class="text"><a href="#">Pembangunan Masjid Baru di Kompleks Yayasan</a></div>
-                                <div class="post-info">{{ date('d M Y', strtotime('-2 days')) }}</div>
+                                <div class="post-content ml-3">
+                                    <div class="text"><a href="#">Pembangunan Masjid Baru di Kompleks Yayasan</a></div>
+                                    <div class="post-info">{{ date('d M Y', strtotime('-2 days')) }}</div>
+                                </div>
                             </article>
                             @endif
                             
@@ -179,4 +169,34 @@
     </div>
 
 </div>
+<style>
+    .event-detail_share {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+.event-detail_share span {
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.event-detail_share a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #f8f9fa;
+    color: #666;
+    margin-right: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.event-detail_share a:hover {
+    background: #2e8b57;
+    color: #ffffff;
+}
+</style>
 @endsection

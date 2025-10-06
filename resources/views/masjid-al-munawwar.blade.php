@@ -38,10 +38,6 @@
                     <div class="welcome-two_image">
                         <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Panti Al Munawwar" />
                     </div>
-                    <!-- Ameen -->
-                    <div class="welcome-two_ameen">
-                        <img src="{{ asset('assets/images/icons/ameen-1.png') }}" alt="" />
-                    </div>
                 </div>
             </div>
             
@@ -54,59 +50,11 @@
                         <h2 class="sec-title_heading">Pusat Ibadah & Dakwah <br> Umat Islam</h2>
                         <div class="sec-title_text">Masjid Al Munawwar adalah pusat kegiatan ibadah dan dakwah yang melayani masyarakat dengan berbagai program keagamaan, sosial, dan pendidikan untuk memperkuat ukhuwah Islamiyah dan membangun generasi yang beriman dan bertakwa.</div>
                     </div>
-                    
-                    <!-- Welcome Two Blocks -->
-                    <div class="welcome-two_blocks">
-                        
-                        <!-- Welcome Block Two -->
-                        <div class="welcome-block_two">
-                            <div class="welcome-block_two-inner">
-                                <div class="welcome-block_two-icon"><i class="fas fa-mosque" style="font-size: 24px; color: #28a745;"></i></div>
-                                <h5 class="welcome-block_two-heading">Pusat Ibadah</h5>
-                                <div class="welcome-block_two-text">Menyediakan tempat ibadah yang nyaman dan khusyuk untuk sholat lima waktu, sholat Jumat, dan berbagai kegiatan keagamaan lainnya.</div>
-                            </div>
-                        </div><br />
-                        
-                        <!-- Welcome Block Two -->
-                        <div class="welcome-block_two">
-                            <div class="welcome-block_two-inner">
-                                <div class="welcome-block_two-icon"><i class="fas fa-quran" style="font-size: 24px; color: #28a745;"></i></div>
-                                <h5 class="welcome-block_two-heading">Pusat Dakwah</h5>
-                                <div class="welcome-block_two-text">Menyelenggarakan kajian Islam, ceramah agama, dan program dakwah untuk masyarakat sekitar dalam rangka menyebarkan nilai-nilai Islam.</div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
         </div>
         
-        <!-- Komitmen Section -->
-        <div class="row clearfix" style="margin-top: 80px;">
-            
-            <!-- Content Column -->
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="welcome-two_content-outer">
-                    <div class="sec-title">
-                        <div class="sec-title_title">KOMITMEN KAMI</div>
-                        <h3 class="sec-title_heading">Membangun Generasi <br> Rabbani</h3>
-                        <div class="sec-title_text">Kami berkomitmen untuk menjadi pusat spiritual yang memberikan pencerahan rohani, pendidikan agama yang berkualitas, dan pelayanan sosial yang bermanfaat bagi umat Islam dan masyarakat sekitar.</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Image Column -->
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="welcome-two_image-outer">
-                    <div class="welcome-two_image">
-                        <img src="{{ asset('images/resource/welcome-2.jpg') }}" alt="Interior Masjid Al Munawwar" />
-                    </div>
-                </div>
-            </div>
-            
-        </div>
     </div>
 </section>
 
@@ -128,12 +76,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-praying-hands" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">Sholat Berjamaah</h5>
                     <div class="service-block_one-text">Sholat lima waktu berjamaah dengan imam yang berpengalaman dan suara yang merdu dalam suasana yang khusyuk.</div>
-                    <ul class="service-block_one-list">
-                        <li>Sholat 5 waktu berjamaah</li>
-                        <li>Sholat Jumat dengan khutbah</li>
-                        <li>Sholat Tarawih & Witir</li>
-                        <li>Sholat Ied & hari besar Islam</li>
-                    </ul>
+                   
                 </div>
             </div>
             
@@ -143,12 +86,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-quran" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">Kajian Al-Quran</h5>
                     <div class="service-block_one-text">Kajian tafsir Al-Quran dan hadits yang diselenggarakan rutin untuk memperdalam pemahaman agama.</div>
-                    <ul class="service-block_one-list">
-                        <li>Tafsir Al-Quran mingguan</li>
-                        <li>Kajian hadits Nabi SAW</li>
-                        <li>Diskusi fiqh kontemporer</li>
-                        <li>Halaqah tahfidz Al-Quran</li>
-                    </ul>
+                    
                 </div>
             </div>
             
@@ -158,12 +96,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-moon" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">Program Ramadhan</h5>
                     <div class="service-block_one-text">Kegiatan khusus bulan Ramadhan untuk meningkatkan ketakwaan dan kebersamaan umat.</div>
-                    <ul class="service-block_one-list">
-                        <li>Sholat Tarawih & Tahajud</li>
-                        <li>Tadarus Al-Quran bersama</li>
-                        <li>Buka puasa bersama</li>
-                        <li>Kajian khusus Ramadhan</li>
-                    </ul>
+                   
                 </div>
             </div>
             
@@ -173,12 +106,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-graduation-cap" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">TPA/TPQ</h5>
                     <div class="service-block_one-text">Taman Pendidikan Al-Quran untuk anak-anak belajar membaca Al-Quran dengan metode yang menyenangkan.</div>
-                    <ul class="service-block_one-list">
-                        <li>Belajar baca tulis Al-Quran</li>
-                        <li>Hafalan surat-surat pendek</li>
-                        <li>Pendidikan akhlak Islami</li>
-                        <li>Kegiatan kreatif Islami</li>
-                    </ul>
+                    
                 </div>
             </div>
             
@@ -188,12 +116,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-ring" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">Akad Nikah</h5>
                     <div class="service-block_one-text">Pelayanan akad nikah dengan prosedur yang sesuai syariat Islam dalam suasana yang sakral.</div>
-                    <ul class="service-block_one-list">
-                        <li>Konsultasi pra nikah</li>
-                        <li>Akad nikah sesuai syariat</li>
-                        <li>Bimbingan keluarga sakinah</li>
-                        <li>Sertifikat nikah resmi</li>
-                    </ul>
+                    
                 </div>
             </div>
             
@@ -203,12 +126,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-hand-holding-heart" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading">Zakat & Infaq</h5>
                     <div class="service-block_one-text">Pengelolaan zakat, infaq, dan sedekah untuk disalurkan kepada yang berhak dengan transparan.</div>
-                    <ul class="service-block_one-list">
-                        <li>Penerimaan zakat fitrah & mal</li>
-                        <li>Distribusi kepada mustahiq</li>
-                        <li>Program bantuan sosial</li>
-                        <li>Laporan keuangan transparan</li>
-                    </ul>
+                    
                 </div>
             </div>
             
@@ -234,11 +152,7 @@
                     <div class="institute-block_one-icon"><i class="fas fa-praying-hands" style="font-size: 24px; color: #28a745;"></i></div>
                     <h4 class="institute-block_one-heading">Jadwal Sholat Harian</h4>
                     <div class="institute-block_one-text">
-                        <strong>Subuh:</strong> 04:30 WIB<br>
-                        <strong>Dzuhur:</strong> 12:00 WIB<br>
-                        <strong>Ashar:</strong> 15:30 WIB<br>
-                        <strong>Maghrib:</strong> 18:00 WIB<br>
-                        <strong>Isya:</strong> 19:30 WIB
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </div>
                 </div>
             </div>
@@ -249,54 +163,7 @@
                     <div class="institute-block_one-icon"><i class="fas fa-calendar-alt" style="font-size: 24px; color: #28a745;"></i></div>
                     <h4 class="institute-block_one-heading">Kegiatan Mingguan</h4>
                     <div class="institute-block_one-text">
-                        <strong>Senin:</strong> Kajian Tafsir (19:30)<br>
-                        <strong>Rabu:</strong> TPA/TPQ (16:00)<br>
-                        <strong>Jumat:</strong> Sholat Jumat (12:00)<br>
-                        <strong>Sabtu:</strong> Kajian Hadits (19:30)<br>
-                        <strong>Minggu:</strong> Pengajian Umum (08:00)
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</section>
-
-<!-- Facilities Section -->
-<section class="about-one" style="padding: 120px 0;">
-    <div class="auto-container">
-        <div class="row clearfix">
-            
-            <!-- Content Column -->
-            <div class="about-one_content-column col-lg-6 col-md-12 col-sm-12">
-                <div class="about-one_content-outer">
-                    <!-- Sec Title -->
-                    <div class="sec-title">
-                        <div class="sec-title_title">FASILITAS MASJID</div>
-                        <h2 class="sec-title_heading">Fasilitas Lengkap <br> untuk Kenyamanan Jamaah</h2>
-                        <div class="sec-title_text">Masjid Al Munawwar dilengkapi dengan fasilitas yang lengkap dan nyaman untuk mendukung kegiatan ibadah, dakwah, dan sosial kemasyarakatan.</div>
-                    </div>
-                    
-                    <!-- About List -->
-                    <ul class="about-one_list">
-                        <li><i class="fa fa-check"></i>Ruang sholat utama berkapasitas 500 jamaah</li>
-                        <li><i class="fa fa-check"></i>Ruang sholat wanita yang terpisah</li>
-                        <li><i class="fa fa-check"></i>Tempat wudhu pria dan wanita</li>
-                        <li><i class="fa fa-check"></i>Perpustakaan Islam dengan koleksi lengkap</li>
-                        <li><i class="fa fa-check"></i>Ruang kajian dan seminar</li>
-                        <li><i class="fa fa-check"></i>Aula serbaguna untuk acara besar</li>
-                        <li><i class="fa fa-check"></i>Tempat parkir yang luas</li>
-                        <li><i class="fa fa-check"></i>Sound system dan AC</li>
-                    </ul>
-                    
-                </div>
-            </div>
-            
-            <!-- Image Column -->
-            <div class="about-one_image-column col-lg-6 col-md-12 col-sm-12">
-                <div class="about-one_image-outer">
-                    <div class="about-one_image">
-                        <img src="{{ asset('images/resource/welcome-2.jpg') }}" alt="Fasilitas Masjid Al Munawwar" />
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </div>
                 </div>
             </div>
@@ -310,19 +177,21 @@
     <div class="auto-container">
         <!-- Sec Title -->
         <div class="sec-title centered">
-            <div class="sec-title_title">INFAQ & SEDEKAH</div>
-            <h2 class="sec-title_heading">Mari Berpartisipasi <br> Membangun Masjid</h2>
-            <div class="sec-title_text">Berpartisipasi dalam pembangunan, operasional, dan program dakwah Masjid Al Munawwar untuk kemajuan umat Islam.</div>
+            <div class="sec-title_title">CARA BERDONASI</div>
+            <h2 class="sec-title_heading">Masjid Al Munawwar</h2>
+            <div class="sec-title_text">Berbagai cara mudah untuk berdonasi ke Masjid Al Munawwar.</div>
         </div>
         <div class="row clearfix">
 
             <!-- Featured Block One -->
             <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
                 <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-mosque" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">Pembangunan Masjid</h5>
+                    <div class="featured-block_one-icon"><i class="fas fa-university" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">Transfer Bank</h5>
                     <div class="featured-block_one-text">
-                        Berpartisipasi dalam pembangunan dan renovasi fasilitas masjid untuk kenyamanan jamaah dalam beribadah.
+                        Bank Mandiri<br>
+                        No. Rek: 123-456-789<br>
+                        a.n. Yayasan Al-Munawwar
                     </div>
                 </div>
             </div>
@@ -330,10 +199,12 @@
             <!-- Featured Block One -->
             <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
                 <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-bolt" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">Operasional Masjid</h5>
+                    <div class="featured-block_one-icon"><i class="fas fa-wallet" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">E-Wallet Digital</h5>
                     <div class="featured-block_one-text">
-                        Membantu biaya operasional harian seperti listrik, air, kebersihan, dan pemeliharaan fasilitas masjid.
+                        GoPay: 0812-3456-7890<br>
+                        OVO: 0812-3456-7890<br>
+                        DANA: 0812-3456-7890
                     </div>
                 </div>
             </div>
@@ -341,31 +212,16 @@
             <!-- Featured Block One -->
             <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
                 <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-book-open" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">Program Dakwah</h5>
+                    <div class="featured-block_one-icon"><i class="fas fa-hand-holding-heart" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">Donasi Langsung</h5>
                     <div class="featured-block_one-text">
-                        Mendukung program dakwah, kajian, dan kegiatan pendidikan Islam untuk kemajuan umat.
+                        Kunjungi langsung kantor<br>
+                        Yayasan Al-Munawwar<br>
+                        Setiap hari kerja 08:00-16:00
                     </div>
                 </div>
             </div>
 
-        </div>
-        
-        <!-- Donation Info -->
-        <div class="donation-info" style="text-align: center; margin-top: 60px; padding: 40px; background: #f8f9fa; border-radius: 10px;">
-            <h4 style="color: #2c5aa0; margin-bottom: 20px;">Rekening Infaq Masjid</h4>
-            <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
-                <div>
-                    <strong>Bank Mandiri:</strong><br>
-                    987-654-321<br>
-                    a.n. Masjid Al Munawwar
-                </div>
-                <div>
-                    <strong>Bank BRI:</strong><br>
-                    123-987-456<br>
-                    a.n. Takmir Masjid Al Munawwar
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -420,6 +276,46 @@
             </div>
             
         </div>
+        <!-- Contact Form Box -->
+        <div class="contact-form_box">
+            <div class="auto-container">
+                <h4>Hubungi Kami untuk Konsultasi dan Pendaftaran</h4>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <form method="post" action="sendemail.php" id="contact-form">
+                        
+                        <div class="form-group">
+                            <input type="text" name="username" placeholder="Nama Lengkap" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" name="email" placeholder="Alamat Email" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea class="" name="message" placeholder="Ketik pesanmu di sini"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <!-- Button Box -->
+                            <div class="button-box">
+                                <button type="submit" class="theme-btn btn-style-four">
+                                    <span class="btn-wrap">
+                                        <span class="text-one">Kirim Pesan</span>
+                                        <span class="text-two">Kirim Pesan</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <!-- End Comment Form -->
+
+            </div>
+        </div>
+        <!-- End Contact Form Box -->
     </div>
 </section>
 </div>

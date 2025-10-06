@@ -65,22 +65,33 @@
         <div class="contact-form">
             <form method="post" action="sendemail.php" id="contact-form">
                 
+                <!-- Destination Selection -->
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Nama Lengkap" required="">
+                    <select name="tujuan" id="tujuan" required="" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                        <option value="">Pilih Tujuan Konsultasi/Pendaftaran</option>
+                        <option value="KB-TK Al Munawwar">KB-TK Al Munawwar</option>
+                        <option value="SD Al Munawwar">SD Al Munawwar</option>
+                        <option value="Panti Al Munawwar">Panti Al Munawwar</option>
+                        <option value="Masjid Al Munawwar">Masjid Al Munawwar</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
-                    <input type="text" name="email" placeholder="Alamat Email" required="">
+                    <input type="text" name="username" placeholder="Nama Lengkap" required="" id="username" disabled>
                 </div>
                 
                 <div class="form-group">
-                    <textarea class="" name="message" placeholder="Ketik pesanmu di sini"></textarea>
+                    <input type="text" name="email" placeholder="Alamat Email" required="" id="email" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <textarea class="" name="message" placeholder="Ketik pesanmu di sini" id="message" disabled></textarea>
                 </div>
                 
                 <div class="form-group">
                     <!-- Button Box -->
                     <div class="button-box">
-                        <button type="submit" class="theme-btn btn-style-four">
+                        <button type="submit" class="theme-btn btn-style-four" id="submit-btn" disabled style="opacity: 0.5; cursor: not-allowed;">
                             <span class="btn-wrap">
                                 <span class="text-one">Kirim Pesan</span>
                                 <span class="text-two">Kirim Pesan</span>
@@ -91,6 +102,55 @@
                 
             </form>
         </div>
+
+        <!-- JavaScript for form control -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tujuanSelect = document.getElementById('tujuan');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const messageTextarea = document.getElementById('message');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            // Function to enable/disable form fields
+            function toggleFormFields(enable) {
+                usernameInput.disabled = !enable;
+                emailInput.disabled = !enable;
+                messageTextarea.disabled = !enable;
+                submitBtn.disabled = !enable;
+                
+                if (enable) {
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                    usernameInput.style.backgroundColor = '#fff';
+                    emailInput.style.backgroundColor = '#fff';
+                    messageTextarea.style.backgroundColor = '#fff';
+                } else {
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                    usernameInput.style.backgroundColor = '#f5f5f5';
+                    emailInput.style.backgroundColor = '#f5f5f5';
+                    messageTextarea.style.backgroundColor = '#f5f5f5';
+                }
+            }
+            
+            // Listen for changes in destination selection
+            tujuanSelect.addEventListener('change', function() {
+                if (this.value !== '') {
+                    toggleFormFields(true);
+                } else {
+                    toggleFormFields(false);
+                    // Clear other fields when destination is deselected
+                    usernameInput.value = '';
+                    emailInput.value = '';
+                    messageTextarea.value = '';
+                }
+            });
+            
+            // Initialize form with disabled fields
+            toggleFormFields(false);
+        });
+        </script>
         <!-- End Comment Form -->
 
     </div>

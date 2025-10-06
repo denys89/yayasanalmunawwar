@@ -12,6 +12,8 @@
     </a>
 @endsection
 
+ 
+
 @section('content')
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
     <!-- Main Content -->
@@ -308,27 +310,10 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+{{-- Initialize TinyMCE separately for content and excerpt using appropriate configs --}}
+<x-tinymce-scripts selector="#content" config="standard" />
+<x-tinymce-scripts selector="#excerpt" config="minimal" />
 <script>
-// Initialize TinyMCE for content and excerpt fields
-tinymce.init({
-    selector: '#content, #excerpt',
-    height: 300,
-    menubar: false,
-    plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount'
-    ],
-    toolbar: 'undo redo | blocks | ' +
-        'bold italic forecolor | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-    branding: false,
-    promotion: false
-});
-
 // Auto-generate slug from title
 window.addEventListener('DOMContentLoaded', function() {
     const titleEl = document.getElementById('title');

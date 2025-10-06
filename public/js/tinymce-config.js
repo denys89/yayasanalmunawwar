@@ -1,8 +1,12 @@
 /**
  * Copied TinyMCE configuration for public asset loading
+ * Idempotent: safe to execute multiple times without redeclaration errors
  */
 // Reuse the same configuration from resources/js but ensure it works standalone
-const TINYMCE_CONFIG = {
+// Use existing global if present to avoid redeclaration
+var TINYMCE_CONFIG = (function(existing){
+    if (existing && typeof existing === 'object') return existing;
+    return {
     apiKey: '6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d',
     cdnUrl: 'https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/7/tinymce.min.js',
     baseConfig: {
@@ -75,7 +79,8 @@ const TINYMCE_CONFIG = {
             toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | code codesample | preview fullscreen | help'
         }
     }
-};
+    };
+})(typeof window !== 'undefined' && window.TinyMCEConfig && window.TinyMCEConfig.config);
 
 function initTinyMCE(selector, configType = 'standard', customOptions = {}) {
     const baseConfig = { ...TINYMCE_CONFIG.baseConfig };
@@ -88,4 +93,11 @@ function initTinyMCE(selector, configType = 'standard', customOptions = {}) {
 function getTinyMCECDN() { return TINYMCE_CONFIG.cdnUrl; }
 function removeTinyMCE(selector) { if (typeof tinymce !== 'undefined') { tinymce.remove(selector); } }
 
-window.TinyMCEConfig = { init: initTinyMCE, getCDN: getTinyMCECDN, remove: removeTinyMCE, config: TINYMCE_CONFIG };
+// Avoid clobbering if already defined
+if (typeof window !== 'undefined') {
+    window.TinyMCEConfig = window.TinyMCEConfig || {};
+    window.TinyMCEConfig.init = initTinyMCE;
+    window.TinyMCEConfig.getCDN = getTinyMCECDN;
+    window.TinyMCEConfig.remove = removeTinyMCE;
+    window.TinyMCEConfig.config = TINYMCE_CONFIG;
+}

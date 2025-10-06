@@ -287,54 +287,35 @@
  </div>
  @endsection
  
- @push('scripts')
- <script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
- <script>
-     document.addEventListener('DOMContentLoaded', function() {
-         // Initialize TinyMCE for description and content fields
-         tinymce.init({
-             selector: '#description, #content',
-             height: 300,
-             menubar: false,
-             plugins: [
-                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-             ],
-             toolbar: 'undo redo | blocks | ' +
-                 'bold italic forecolor | alignleft aligncenter ' +
-                 'alignright alignjustify | bullist numlist outdent indent | ' +
-                 'removeformat | help',
-             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-             branding: false,
-             promotion: false
-         });
-         
-         const nameInput = document.getElementById('name');
-         const slugInput = document.getElementById('slug');
-         
-         if (nameInput && slugInput) {
-             nameInput.addEventListener('input', function() {
-                 if (!slugInput.value.trim()) {
-                     const slug = this.value
-                         .toLowerCase()
-                         .replace(/[^a-z0-9\s-]/g, '')
-                         .replace(/\s+/g, '-')
-                         .replace(/-+/g, '-')
-                         .trim('-');
-                     slugInput.value = slug;
-                 }
-             });
-         }
-         
-         // Add form attribute to all form elements
-         const form = document.getElementById('program-form');
-         if (form) {
-             const formElements = document.querySelectorAll('input[form="program-form"], select[form="program-form"], textarea[form="program-form"]');
-             formElements.forEach(element => {
-                 element.setAttribute('form', 'program-form');
-             });
-         }
-     });
- </script>
- @endpush
+@push('scripts')
+<x-tinymce-scripts selector="#description, #content" config="standard" />
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('name');
+        const slugInput = document.getElementById('slug');
+        
+        if (nameInput && slugInput) {
+            nameInput.addEventListener('input', function() {
+                if (!slugInput.value.trim()) {
+                    const slug = this.value
+                        .toLowerCase()
+                        .replace(/[^a-z0-9\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-')
+                        .trim('-');
+                    slugInput.value = slug;
+                }
+            });
+        }
+        
+        // Add form attribute to all form elements
+        const form = document.getElementById('program-form');
+        if (form) {
+            const formElements = document.querySelectorAll('input[form="program-form"], select[form="program-form"], textarea[form="program-form"]');
+            formElements.forEach(element => {
+                element.setAttribute('form', 'program-form');
+            });
+        }
+    });
+</script>
+@endpush

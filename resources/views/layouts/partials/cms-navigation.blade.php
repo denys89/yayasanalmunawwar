@@ -48,6 +48,14 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ Auth::user()->role === 'editor' ? route('cms.banners.editor.index') : route('cms.banners.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.banners*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.banners*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5h16.5A1.5 1.5 0 0121.75 6v12a1.5 1.5 0 01-1.5 1.5H3.75A1.5 1.5 0 012.25 18V6A1.5 1.5 0 013.75 4.5zm4.5 3h7.5v6h-7.5V7.5zm0 7.5h4.5v3h-4.5v-3z" />
+                        </svg>
+                        Banners
+                    </a>
+                </li>
+                <li>
                     <!-- Admissions menu removed -->
                 </li>
                 <li>

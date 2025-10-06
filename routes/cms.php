@@ -15,6 +15,7 @@ use App\Http\Controllers\CMS\UserController;
 use App\Http\Controllers\CMS\DiscountController;
 use App\Http\Controllers\CMS\ContactUsController;
 use App\Http\Controllers\CMS\EventController;
+use App\Http\Controllers\CMS\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,9 +47,14 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // News Management
     Route::resource('news', NewsController::class);
-    
+
     // Events Management
     Route::resource('events', EventController::class);
+
+    // Banners Management
+    Route::resource('banners', BannerController::class)->except(['show']);
+    Route::delete('banners/{banner}/force', [BannerController::class, 'forceDelete'])->name('banners.force-delete');
+    Route::patch('banners/{banner}/restore', [BannerController::class, 'restore'])->name('banners.restore');
     
     // Admissions module removed
     
@@ -125,5 +131,12 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'editor'])->group(functi
         // Media Management (Editor access)
         Route::get('media', [MediaController::class, 'index'])->name('media.editor.index');
         Route::post('media/upload', [MediaController::class, 'upload'])->name('media.editor.upload');
+
+        // Banners (Editor access limited to index/create/store/edit/update)
+        Route::get('banners', [BannerController::class, 'index'])->name('banners.editor.index');
+        Route::get('banners/create', [BannerController::class, 'create'])->name('banners.editor.create');
+        Route::post('banners', [BannerController::class, 'store'])->name('banners.editor.store');
+        Route::get('banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.editor.edit');
+        Route::patch('banners/{banner}', [BannerController::class, 'update'])->name('banners.editor.update');
     });
 });

@@ -385,7 +385,7 @@
 }
 </style>
 
-<script src="https://cdn.tiny.cloud/1/6iqsp9pxkhzmdl5fslkc2ep9atliav4f3evs1jh81q99u33d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<x-tinymce-scripts selector="#description" config="standard" />
 <script>
 // Auto-hide alerts after 5 seconds
 setTimeout(function() {
@@ -515,23 +515,6 @@ document.getElementById('mediaForm').addEventListener('submit', function(e) {
     }
 });
 
-// Initialize TinyMCE for description field
-tinymce.init({
-    selector: '#description',
-    height: 300,
-    menubar: false,
-    plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount'
-    ],
-    toolbar: 'undo redo | blocks | ' +
-        'bold italic forecolor | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-    branding: false,
-    promotion: false
-});
+// TinyMCE initialization is handled by tinymce-scripts component above
 </script>
 @endsection

@@ -13,8 +13,8 @@
     
     <!-- Icons are inlined as SVG; removed external Heroicons CDN scripts -->
     
-    <!-- Tailwind CSS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Tailwind CSS built asset to avoid Vite dev client in CMS -->
+    <link rel="stylesheet" href="{{ asset('build/assets/app-DKmDYDTJ.css') }}">
     
     @stack('styles')
 </head>
@@ -51,7 +51,7 @@
                     </button>
                     <!-- Mobile user avatar -->
                     <div class="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
-                        <span class="text-sm font-medium text-white">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        <span class="text-sm font-medium text-white">{{ substr(optional(Auth::user())->name ?? 'U', 0, 1) }}</span>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="ml-3">
                             <h1 class="text-lg font-semibold text-gray-900 dark:text-white">CMS Panel</h1>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->name }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ optional(Auth::user())->name ?? 'User' }}</p>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="ml-3">
                                     <h1 class="text-lg font-semibold text-gray-900 dark:text-white">CMS Panel</h1>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->name }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ optional(Auth::user())->name ?? 'User' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -157,10 +157,10 @@
                             <button type="button" class="user-menu-button -m-1.5 flex items-center p-1.5" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Open user menu</span>
                                 <div class="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-white">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                    <span class="text-sm font-medium text-white">{{ substr(optional(Auth::user())->name ?? 'U', 0, 1) }}</span>
                                 </div>
                                 <span class="hidden lg:flex lg:items-center">
-                                    <span class="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-white" aria-hidden="true">{{ Auth::user()->name }}</span>
+                                    <span class="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-white" aria-hidden="true">{{ optional(Auth::user())->name ?? 'User' }}</span>
                                     <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                     </svg>
@@ -288,5 +288,6 @@
     </script>
     
     @stack('scripts')
+    <!-- Built JS bundle removed temporarily to test overlay duplication -->
 </body>
 </html>

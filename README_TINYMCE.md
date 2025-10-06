@@ -200,6 +200,16 @@ Prefer the Blade component over inline scripts for consistency and maintainabili
 - Use `standard` for most content
 - Use `advanced` for rich content creation
 
+### Initialize Separately Per Field
+Avoid combining selectors with different intended behaviors. Initialize each field with its appropriate configuration:
+
+```blade
+<x-tinymce-scripts selector="#content" config="standard" />
+<x-tinymce-scripts selector="#excerpt" config="minimal" />
+```
+
+This prevents unintended configuration leakage and ensures predictable editor behavior.
+
 ### 3. Sanitize User Input
 Always sanitize content from TinyMCE before storing in database:
 
@@ -231,6 +241,8 @@ Keep sensitive settings in environment variables:
    - Check API key in `.env`
    - Verify CDN accessibility
    - Check browser console for errors
+   - Ensure you are not initializing multiple editors with a combined selector
+   - Verify that `@stack('scripts')` exists in your layout and components are pushed correctly
 
 2. **Content not saving**
    - Ensure form submission includes TinyMCE content

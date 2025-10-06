@@ -99,7 +99,6 @@
                                     <span>Bagikan Acara:</span>
                                     <a href="#" class="fa-brands fa-facebook-f fa-fw"></a>
                                     <a href="#" class="fa-brands fa-twitter fa-fw"></a>
-                                    <a href="#" class="fa-brands fa-instagram fa-fw"></a>
                                     <a href="#" class="fa-brands fa-whatsapp fa-fw"></a>
                                 </div>
                             </div>
@@ -344,34 +343,6 @@
 .event-detail_button .theme-btn {
     margin-right: 15px;
     margin-bottom: 10px;
-}
-
-.event-detail_share {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-}
-
-.event-detail_share span {
-    font-weight: 600;
-    margin-right: 15px;
-}
-
-.event-detail_share a {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background: #f8f9fa;
-    color: #666;
-    margin-right: 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.event-detail_share a:hover {
-    background: #2e8b57;
-    color: #ffffff;
 }
 
 .sidebar-widget {

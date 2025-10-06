@@ -34,10 +34,6 @@
                     <div class="welcome-two_image">
                         <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Panti Al Munawwar" />
                     </div>
-                    <!-- Ameen -->
-                    <div class="welcome-two_ameen">
-                        <img src="{{ asset('assets/images/icons/ameen-1.png') }}" alt="" />
-                    </div>
                 </div>
             </div>
             
@@ -50,54 +46,12 @@
                         <h2 class="sec-title_heading">Rumah Kasih Sayang <br> untuk Anak Yatim</h2>
                         <div class="sec-title_text">Panti Al Munawwar adalah lembaga sosial yang memberikan pelayanan dan pendampingan kepada anak-anak yatim piatu dan dhuafa dengan kasih sayang, pendidikan, dan pembinaan karakter yang Islami.</div>
                     </div>
-                    <!-- Welcome Two Blocks -->
-                    <div class="welcome-two_blocks">
-                        
-                        <!-- Welcome Two Block -->
-                        <div class="welcome-two_block">
-                            <div class="welcome-two_block-inner">
-                                <div class="welcome-two_block-icon"><i class="fas fa-heart" style="font-size: 24px; color: #28a745;"></i></div>
-                                <h5 class="welcome-two_block-heading">Kasih Sayang Keluarga</h5>
-                                <div class="welcome-two_block-text">Memberikan kasih sayang dan perhatian seperti keluarga kepada setiap anak asuh dengan penuh cinta dan kelembutan.</div>
-                            </div>
-                        </div>
-                    <br />
-                        
-                        <!-- Welcome Two Block -->
-                        <div class="welcome-two_block">
-                            <div class="welcome-two_block-inner">
-                                <div class="welcome-two_block-icon"><i class="fas fa-graduation-cap" style="font-size: 24px; color: #28a745;"></i></div>
-                                <h5 class="welcome-two_block-heading">Pendidikan Berkualitas</h5>
-                                <div class="welcome-two_block-text">Menyediakan pendidikan formal dan non-formal yang berkualitas untuk mempersiapkan masa depan cerah anak asuh.</div>
-                            </div>
-                        </div>
-                        
-                    </div>
                     
                 </div>
             </div>
             
         </div>
-        
-        <!-- Komitmen Section -->
-        <div class="row clearfix" style="margin-top: 80px;">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="welcome-two_content-outer">
-                    <div class="sec-title">
-                        <div class="sec-title_title">KOMITMEN KAMI</div>
-                        <h3 class="sec-title_heading">Membangun Generasi <br> Berakhlak Mulia</h3>
-                        <div class="sec-title_text">Kami berkomitmen untuk memberikan yang terbaik bagi setiap anak asuh, mulai dari kebutuhan dasar hingga pendidikan dan pembinaan karakter yang akan membentuk mereka menjadi generasi yang berakhlak mulia dan bermanfaat bagi masyarakat.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="welcome-two_image-outer">
-                    <div class="welcome-two_image">
-                        <img src="{{ asset('images/resource/welcome-2.jpg') }}" alt="Komitmen Panti Al Munawwar" />
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </section>
 
@@ -118,12 +72,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-home" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Tempat Tinggal<br /> Nyaman</a></h5>
                     <div class="service-block_one-text">Menyediakan tempat tinggal yang nyaman, aman, dan layak dengan fasilitas lengkap untuk kehidupan sehari-hari anak asuh.</div>
-                    <ul class="service-block_one-list">
-                        <li>Kamar tidur yang nyaman dan bersih</li>
-                        <li>Ruang belajar dan bermain</li>
-                        <li>Fasilitas mandi dan cuci yang memadai</li>
-                        <li>Keamanan 24 jam</li>
-                    </ul>
+                    
                 </div>
             </div>
 
@@ -133,12 +82,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-book" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Pendidikan<br/>Formal</a></h5>
                     <div class="service-block_one-text">Memfasilitasi pendidikan formal dari SD hingga SMA serta pendidikan agama dan tahfidz Al-Quran untuk masa depan cerah.</div>
-                    <ul class="service-block_one-list">
-                        <li>Biaya sekolah dan perlengkapan</li>
-                        <li>Bimbingan belajar tambahan</li>
-                        <li>Pendidikan agama dan tahfidz</li>
-                        <li>Program beasiswa lanjutan</li>
-                    </ul>
+                    
                 </div>
             </div>
 
@@ -148,12 +92,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-stethoscope" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Layanan<br/>Kesehatan</a></h5>
                     <div class="service-block_one-text">Pelayanan kesehatan rutin dan pengobatan komprehensif untuk menjaga kesehatan fisik dan mental anak asuh.</div>
-                    <ul class="service-block_one-list">
-                        <li>Pemeriksaan kesehatan berkala</li>
-                        <li>Pengobatan dan perawatan medis</li>
-                        <li>Imunisasi dan vaksinasi</li>
-                        <li>Konsultasi psikologi</li>
-                    </ul>
+                    
                 </div>
             </div>
 
@@ -163,12 +102,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-utensils" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Gizi & Makanan</a></h5>
                     <div class="service-block_one-text">Menyediakan makanan bergizi seimbang dan halal untuk mendukung tumbuh kembang optimal anak asuh.</div>
-                    <ul class="service-block_one-list">
-                        <li>Menu makanan bergizi seimbang</li>
-                        <li>Makanan halal dan higienis</li>
-                        <li>Susu dan vitamin tambahan</li>
-                        <li>Diet khusus sesuai kebutuhan</li>
-                    </ul>
+                    
                 </div>
             </div>
 
@@ -178,12 +112,7 @@
                     <div class="service-block_one-icon"><i class="fas fa-tools" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Pelatihan<br /> Keterampilan</a></h5>
                     <div class="service-block_one-text">Pelatihan keterampilan hidup dan vokasional untuk mempersiapkan kemandirian dan masa depan anak asuh.</div>
-                    <ul class="service-block_one-list">
-                        <li>Keterampilan hidup sehari-hari</li>
-                        <li>Pelatihan vokasional</li>
-                        <li>Kewirausahaan dan bisnis</li>
-                        <li>Soft skills dan leadership</li>
-                    </ul>
+                    
                 </div>
             </div>
 
@@ -193,64 +122,16 @@
                     <div class="service-block_one-icon"><i class="fas fa-comments" style="font-size: 24px; color: #28a745;"></i></div>
                     <h5 class="service-block_one-heading"><a href="#">Bimbingan<br />Konseling</a></h5>
                     <div class="service-block_one-text">Bimbingan konseling profesional untuk perkembangan psikologis, emosional, dan spiritual anak asuh.</div>
-                    <ul class="service-block_one-list">
-                        <li>Konseling individual dan kelompok</li>
-                        <li>Terapi trauma dan healing</li>
-                        <li>Pengembangan karakter</li>
-                        <li>Bimbingan spiritual</li>
-                    </ul>
+                    
                 </div>
             </div>
 
         </div>
     </div>
 </section>
-
-<!-- Programs Section -->
-<section class="about-one" style="padding: 120px 0;">
-    <div class="auto-container">
-        <div class="row clearfix">
-            
-            <!-- Content Column -->
-            <div class="about-one_content-column col-lg-6 col-md-12 col-sm-12">
-                <div class="about-one_content-outer">
-                    <!-- Sec Title -->
-                    <div class="sec-title">
-                        <div class="sec-title_title">PROGRAM PEMBINAAN</div>
-                        <h2 class="sec-title_heading">Mengembangkan Potensi <br> dan Karakter Anak</h2>
-                        <div class="sec-title_text">Program-program pembinaan yang dirancang khusus untuk mengembangkan potensi, karakter, dan kemandirian anak asuh dengan pendekatan holistik dan Islami.</div>
-                    </div>
-                    
-                    <!-- About List -->
-                    <ul class="about-one_list">
-                        <li><i class="fa fa-check"></i>Pembinaan akhlak dan karakter Islami</li>
-                        <li><i class="fa fa-check"></i>Tahfidz Al-Quran dan kajian agama</li>
-                        <li><i class="fa fa-check"></i>Bimbingan belajar dan les tambahan</li>
-                        <li><i class="fa fa-check"></i>Pelatihan keterampilan dan life skill</li>
-                        <li><i class="fa fa-check"></i>Kegiatan olahraga dan seni budaya</li>
-                        <li><i class="fa fa-check"></i>Program beasiswa pendidikan tinggi</li>
-                        <li><i class="fa fa-check"></i>Pendampingan hingga mandiri</li>
-                    </ul>
-                    
-                </div>
-            </div>
-            
-            <!-- Image Column -->
-            <div class="about-one_image-column col-lg-6 col-md-12 col-sm-12">
-                <div class="about-one_image-outer">
-                    <div class="about-one_image">
-                        <img src="{{ asset('images/resource/welcome-2.jpg') }}" alt="Program Panti Al Munawwar" />
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</section>
-
 
 <!-- Donation Section -->
-<section class="featured-one" style="padding: 120px 0; display:none;">
+<section class="featured-one" style="padding: 120px 0;">
     <div class="auto-container">
         <!-- Sec Title -->
         <div class="sec-title centered">
@@ -353,6 +234,46 @@
             </div>
             
         </div>
+        <!-- Contact Form Box -->
+        <div class="contact-form_box">
+            <div class="auto-container">
+                <h4>Hubungi Kami untuk Konsultasi dan Pendaftaran</h4>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <form method="post" action="sendemail.php" id="contact-form">
+                        
+                        <div class="form-group">
+                            <input type="text" name="username" placeholder="Nama Lengkap" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" name="email" placeholder="Alamat Email" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea class="" name="message" placeholder="Ketik pesanmu di sini"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <!-- Button Box -->
+                            <div class="button-box">
+                                <button type="submit" class="theme-btn btn-style-four">
+                                    <span class="btn-wrap">
+                                        <span class="text-one">Kirim Pesan</span>
+                                        <span class="text-two">Kirim Pesan</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <!-- End Comment Form -->
+
+            </div>
+        </div>
+        <!-- End Contact Form Box -->
     </div>
 </section>
 </div>

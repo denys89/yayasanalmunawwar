@@ -415,8 +415,8 @@
                 
                 <!-- Image Column -->
                 <div class="welcome-one_image-column col-lg-6 col-md-12 col-sm-12">
-                    <div class="welcome-one_image-inner">
-                        <div class="welcome-one_image">
+                    <div class="welcome-two_image-inner">
+                        <div class="welcome-two_image-outer">
                             <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Visi Misi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-2.jpg') }}'" />
                         </div>
                     </div>

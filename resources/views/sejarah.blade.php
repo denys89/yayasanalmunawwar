@@ -29,14 +29,9 @@
                 <div class="welcome-two_image-outer">
                     <div class="welcome-two_dots" style="background-image:url(assets/images/background/pattern-2.png)"></div>
                     <div class="welcome-two_dots-two" style="background-image:url(assets/images/background/pattern-2.png)"></div>
-                    <div class="welcome-two_ameen">
-                        <img src="assets/images/icons/ameen-1.png" alt="" />
-                    </div>
+                    
                     <div class="welcome-two_image">
-                        <img src="assets/images/resource/welcome-2.jpg" alt="" />
-                    </div>
-                    <div class="welcome-two_image-two">
-                        <img src="assets/images/resource/welcome-4.jpg" alt="" />
+                        <img src="assets/images/resource/welcome-1.jpg" alt="" />
                     </div>
                     <div class="welcome-two_years d-flex align-items-center flex-wrap">
                         <span class="fa-solid fa-calendar fa-fw"></span>
@@ -53,23 +48,6 @@
                         <div class="sec-title_title d-flex align-items-center">Sejarah Yayasan <span><img src="assets/images/icons/bismillah-2.png" alt="" /></span></div>
                         <h2 class="sec-title_heading">Perjalanan Panjang Al-Munawwar</h2>
                         <div class="sec-title_text">Yayasan Al-Munawwar didirikan pada tahun 1995 dengan visi mulia untuk menyediakan pendidikan Islam yang berkualitas dan terjangkau bagi seluruh lapisan masyarakat. Nama "Al-Munawwar" yang berarti "yang bercahaya" dipilih dengan harapan menjadi cahaya penerang dalam dunia pendidikan Islam.</div>
-                    </div>
-                    <div class="welcome-two_middle-content">
-                        <div class="welcome-two_learn">
-                            <span class="welcome-two_learn-icon flaticon-mosque"></span>
-                            Pendidikan Islam <br> Berkualitas Sejak 1995
-                        </div>
-                        <div class="welcome-two_learn">
-                            <span class="welcome-two_learn-icon flaticon-quran-3"></span>
-                            Mencetak Generasi <br> Berakhlak Mulia
-                        </div>
-                    </div>
-                    <div class="welcome-two_middle-lower d-flex align-items-center flex-wrap">
-                        <div class="welcome-two_thumb">
-                            <img src="assets/images/resource/welcome-3.jpg" alt="" />
-                        </div>
-                        <h5 class="welcome-two_title">Warisan</h5>
-                        <p>Lebih dari 25 tahun mengabdi untuk pendidikan Islam dan pemberdayaan masyarakat dengan berbagai prestasi membanggakan.</p>
                     </div>
                 </div>
             </div>

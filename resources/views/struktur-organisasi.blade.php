@@ -468,9 +468,9 @@
                 
                 <!-- Image Column -->
                 <div class="welcome-one_image-column col-lg-6 col-md-12 col-sm-12">
-                    <div class="welcome-one_image-inner">
-                        <div class="welcome-one_image">
-                            <img src="{{ asset('images/resource/welcome-2.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
+                    <div class="welcome-two_image-inner">
+                        <div class="welcome-two_image-outer">
+                            <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
                         </div>
                     </div>
                 </div>

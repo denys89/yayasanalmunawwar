@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\EventController as PublicEventController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -65,28 +66,9 @@ Route::get('/berita/{slug}', function ($slug) {
     return view('berita-detail', compact('news'));
 })->name('berita.detail');
 
-Route::get('/acara', function () {
-    return view('acara');
-})->name('acara');
-
-Route::get('/acara/{slug}', function ($slug) {
-    // For now, return view with sample data
-    // In the future, this will fetch actual event data from database
-    $event = (object) [
-        'title' => 'Kajian Rutin Tafsir Al-Quran',
-        'description' => 'Kajian rutin tafsir Al-Quran merupakan program unggulan Yayasan Al-Munawwar yang dilaksanakan setiap minggu. Kajian ini dirancang untuk memberikan pemahaman yang mendalam tentang makna dan hikmah yang terkandung dalam Al-Quran.',
-        'event_date' => now()->addDays(7),
-        'event_time' => '09:00 WIB',
-        'location' => 'Masjid Al-Munawwar',
-        'organizer' => 'Yayasan Al-Munawwar',
-        'contact_person' => '+62 21 1234 5678',
-        'price' => null,
-        'capacity' => null,
-        'featured_image' => null,
-        'slug' => $slug
-    ];
-    return view('acara-detail', compact('event'));
-})->name('acara.detail');
+// Public Events
+Route::get('/acara', [PublicEventController::class, 'index'])->name('acara');
+Route::get('/acara/{event}', [PublicEventController::class, 'show'])->name('acara.detail');
 
 
 // Web Dashboard route (for default Laravel UI components)

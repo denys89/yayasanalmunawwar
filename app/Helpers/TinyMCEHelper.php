@@ -59,15 +59,23 @@ class TinyMCEHelper
             $content = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', $content);
         }
         
-        // Remove form elements if configured
+        // Remove form elements if configured (preserve non-form tags like img, br, hr)
         if ($config['remove_form_elements'] ?? true) {
-            $content = preg_replace('/<(form|input|textarea|select|button)\b[^>]*>.*?<\/\1>/mi', '', $content);
-            $content = preg_replace('/<(input|img|br|hr)\b[^>]*>/mi', '', $content);
+            // Remove paired form tags
+            $content = preg_replace('/<(form|textarea|select|button)\b[^>]*>.*?<\/\1>/is', '', $content);
+            // Remove input controls
+            $content = preg_replace('/<input\b[^>]*>/i', '', $content);
         }
+
+        // Remove inline event handler attributes (e.g., onclick, onerror)
+        $content = preg_replace('/\son[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content);
+
+        // Disallow javascript: in href/src attributes
+        $content = preg_replace('/\s(href|src)\s*=\s*("|\')javascript:[^\2]*\2/i', '', $content);
         
         // Basic HTML sanitization if configured
         if ($config['sanitize_html'] ?? true) {
-            $content = strip_tags($content, '<p><br><strong><em><u><ol><ul><li><h1><h2><h3><h4><h5><h6><a><img><table><tr><td><th><thead><tbody><blockquote><code><pre>');
+            $content = strip_tags($content, '<div><span><p><br><hr><strong><em><u><b><i><ol><ul><li><h1><h2><h3><h4><h5><h6><a><img><figure><figcaption><table><tr><td><th><thead><tbody><blockquote><code><pre>');
         }
         
         return $content;

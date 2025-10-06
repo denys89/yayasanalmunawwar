@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($event->title ?? 'Detail Acara') . ' - Yayasan Al-Munawwar')
+@section('title', ($event->name ?? 'Detail Acara') . ' - Yayasan Al-Munawwar')
 
 @section('content')
 <div class="page-wrapper">
@@ -8,11 +8,11 @@
     <!-- Page Title -->
     <section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
         <div class="auto-container">
-            <h2>{{ $event->title ?? 'Detail Acara' }}</h2>
+            <h2>{{ $event->name ?? 'Detail Acara' }}</h2>
             <ul class="bread-crumb clearfix">
                 <li><a href="{{ route('home') }}">Beranda</a></li>
                 <li><a href="{{ route('acara') }}">Acara</a></li>
-                <li>{{ Str::limit($event->title ?? 'Detail Acara', 30) }}</li>
+                <li>{{ Str::limit($event->name ?? 'Detail Acara', 30) }}</li>
             </ul>
         </div>
     </section>
@@ -30,57 +30,32 @@
                         <!-- Event Detail Block -->
                         <div class="event-detail_block">
                             <div class="event-detail_image">
-                                <img src="{{ $event->featured_image ? asset('storage/' . $event->featured_image) : asset('images/resource/event-detail.jpg') }}" alt="{{ $event->title ?? 'Detail Acara' }}" />
+                                <img src="{{ $event->banner_image ? asset('storage/' . $event->banner_image) : asset('images/resource/event-detail.jpg') }}" alt="{{ $event->name ?? 'Detail Acara' }}" />
                                 <div class="event-detail_date">
-                                    <span>{{ $event->event_date ? $event->event_date->format('d') : date('d') }}</span>
-                                    {{ $event->event_date ? $event->event_date->format('M') : date('M') }}
+                                    <span>{{ $event->datetime ? $event->datetime->format('d') : date('d') }}</span>
+                                    {{ $event->datetime ? $event->datetime->format('M') : date('M') }}
                                 </div>
                             </div>
                             
                             <div class="event-detail_content">
-                                <h3 class="event-detail_heading">{{ $event->title ?? 'Kajian Rutin Tafsir Al-Quran' }}</h3>
+                                <h3 class="event-detail_heading">{{ $event->name ?? 'Kajian Rutin Tafsir Al-Quran' }}</h3>
                                 
                                 <!-- Event Meta -->
                                 <ul class="event-detail_meta">
-                                    <li><span class="icon fa-solid fa-clock fa-fw"></span><strong>Waktu:</strong> {{ $event->event_time ?? '09:00 WIB' }}</li>
-                                    <li><span class="icon fa-solid fa-calendar fa-fw"></span><strong>Tanggal:</strong> {{ $event->event_date ? $event->event_date->format('d F Y') : date('d F Y') }}</li>
+                                    <li><span class="icon fa-solid fa-clock fa-fw"></span><strong>Waktu:</strong> {{ $event->datetime ? $event->datetime->format('H:i') : '09:00' }} WIB</li>
+                                    <li><span class="icon fa-solid fa-calendar fa-fw"></span><strong>Tanggal:</strong> {{ $event->datetime ? $event->datetime->format('d F Y') : date('d F Y') }}</li>
                                     <li><span class="icon fa-solid fa-map-marker-alt fa-fw"></span><strong>Lokasi:</strong> {{ $event->location ?? 'Masjid Al-Munawwar' }}</li>
-                                    @if($event->organizer ?? null)
+                                    @if($event->organizer)
                                     <li><span class="icon fa-solid fa-user fa-fw"></span><strong>Penyelenggara:</strong> {{ $event->organizer }}</li>
                                     @endif
-                                    @if($event->contact_person ?? null)
-                                    <li><span class="icon fa-solid fa-phone fa-fw"></span><strong>Kontak:</strong> {{ $event->contact_person }}</li>
+                                    @if($event->contact)
+                                    <li><span class="icon fa-solid fa-phone fa-fw"></span><strong>Kontak:</strong> {{ $event->contact }}</li>
                                     @endif
                                 </ul>
                                 
                                 <!-- Event Description -->
                                 <div class="event-detail_text">
-                                    @if($event->description ?? null)
-                                        {!! nl2br(e($event->description)) !!}
-                                    @else
-                                        <p>Kajian rutin tafsir Al-Quran merupakan program unggulan Yayasan Al-Munawwar yang dilaksanakan setiap minggu. Kajian ini dirancang untuk memberikan pemahaman yang mendalam tentang makna dan hikmah yang terkandung dalam Al-Quran.</p>
-                                        
-                                        <h4>Materi Kajian:</h4>
-                                        <ul>
-                                            <li>Tafsir ayat-ayat pilihan dari berbagai surah</li>
-                                            <li>Kontekstualisasi ajaran Al-Quran dalam kehidupan modern</li>
-                                            <li>Diskusi dan tanya jawab interaktif</li>
-                                            <li>Aplikasi praktis dalam kehidupan sehari-hari</li>
-                                        </ul>
-                                        
-                                        <h4>Target Peserta:</h4>
-                                        <p>Kajian ini terbuka untuk semua kalangan, mulai dari remaja hingga dewasa. Tidak ada persyaratan khusus untuk mengikuti kajian ini, hanya niat yang tulus untuk mempelajari Al-Quran.</p>
-                                        
-                                        <h4>Fasilitas:</h4>
-                                        <ul>
-                                            <li>Ruangan ber-AC yang nyaman</li>
-                                            <li>Mushaf Al-Quran dan buku tafsir</li>
-                                            <li>Snack dan minuman</li>
-                                            <li>Materi kajian dalam bentuk handout</li>
-                                        </ul>
-                                        
-                                        <p>Mari bergabung dengan kami dalam mendalami kekayaan makna Al-Quran. Kajian ini gratis dan terbuka untuk umum. Untuk informasi lebih lanjut, silakan hubungi sekretariat Yayasan Al-Munawwar.</p>
-                                    @endif
+                                    {!! \App\Helpers\TinyMCEHelper::sanitizeContent($event->description ?? '') !!}
                                 </div>
                                 
                                 <!-- Registration Button -->
@@ -120,38 +95,23 @@
                                 <li>
                                     <span class="icon fa-solid fa-calendar fa-fw"></span>
                                     <strong>Tanggal:</strong><br>
-                                    {{ $event->event_date ? $event->event_date->format('d F Y') : date('d F Y') }}
+                                    {{ $event->datetime ? $event->datetime->format('d F Y') : date('d F Y') }}
                                 </li>
                                 <li>
                                     <span class="icon fa-solid fa-clock fa-fw"></span>
                                     <strong>Waktu:</strong><br>
-                                    {{ $event->event_time ?? '09:00 WIB' }}
+                                    {{ $event->datetime ? $event->datetime->format('H:i') : '09:00' }} WIB
                                 </li>
                                 <li>
                                     <span class="icon fa-solid fa-map-marker-alt fa-fw"></span>
                                     <strong>Lokasi:</strong><br>
                                     {{ $event->location ?? 'Masjid Al-Munawwar' }}
                                 </li>
-                                @if($event->price ?? null)
-                                <li>
-                                    <span class="icon fa-solid fa-tag fa-fw"></span>
-                                    <strong>Harga:</strong><br>
-                                    {{ $event->price }}
-                                </li>
-                                @else
                                 <li>
                                     <span class="icon fa-solid fa-tag fa-fw"></span>
                                     <strong>Harga:</strong><br>
                                     Gratis
                                 </li>
-                                @endif
-                                @if($event->capacity ?? null)
-                                <li>
-                                    <span class="icon fa-solid fa-users fa-fw"></span>
-                                    <strong>Kapasitas:</strong><br>
-                                    {{ $event->capacity }} orang
-                                </li>
-                                @endif
                             </ul>
                             
                         </div>
@@ -166,13 +126,13 @@
                                 @foreach($upcomingEvents as $upcoming)
                                 <div class="event-widget">
                                     <div class="event-widget_date">
-                                        <span>{{ $upcoming->event_date ? $upcoming->event_date->format('d') : date('d') }}</span>
-                                        {{ $upcoming->event_date ? $upcoming->event_date->format('M') : date('M') }}
+                                        <span>{{ $upcoming->datetime ? $upcoming->datetime->format('d') : date('d') }}</span>
+                                        {{ $upcoming->datetime ? $upcoming->datetime->format('M') : date('M') }}
                                     </div>
                                     <div class="event-widget_content">
-                                        <h6><a href="{{ route('acara.detail', $upcoming->slug) }}">{{ Str::limit($upcoming->title, 40) }}</a></h6>
+                                        <h6><a href="{{ route('acara.detail', $upcoming) }}">{{ Str::limit($upcoming->name, 40) }}</a></h6>
                                         <div class="event-widget_info">
-                                            <span class="icon fa-solid fa-clock fa-fw"></span>{{ $upcoming->event_time ?? '09:00 WIB' }}
+                                            <span class="icon fa-solid fa-clock fa-fw"></span>{{ $upcoming->datetime ? $upcoming->datetime->format('H:i') : '09:00' }} WIB
                                         </div>
                                     </div>
                                 </div>

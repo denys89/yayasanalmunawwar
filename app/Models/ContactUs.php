@@ -14,7 +14,9 @@ class ContactUs extends Model
     protected $fillable = [
         'name',
         'email',
+        'subject',
         'phone_number',
+        'destination',
         'message',
     ];
 
@@ -26,8 +28,10 @@ class ContactUs extends Model
         return [
             'name' => 'required|string',
             'email' => 'required|email',
+            'subject' => 'required|string|max:255',
             'phone_number' => 'nullable|string|max:20',
-            'message' => 'required|string',
+            'destination' => 'required|in:kb/tk,sd,panti,masjid',
+            'message' => 'required|string|max:5000',
         ];
     }
 }

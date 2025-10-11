@@ -49,11 +49,12 @@
     function initEditor() {
         try {
             const customOptions = {!! $customOptions !!};
+            const selector = '{{ $selector }}';
+            const configType = '{{ $config }}';
             if (typeof window.TinyMCEConfig !== 'undefined') {
                 // Safely remove any existing TinyMCE instances on the target selector
                 try {
                     if (window.tinymce && Array.isArray(window.tinymce.editors)) {
-                        const selector = '{{ $selector }}';
                         window.tinymce.editors.forEach(function(ed) {
                             if (ed && ed.targetElm && ed.targetElm.matches && ed.targetElm.matches(selector)) {
                                 try { ed.remove(); } catch (e) {}
@@ -65,7 +66,29 @@
                     console.warn('TinyMCE cleanup warning:', cleanupErr);
                 }
 
-                window.TinyMCEConfig.init('{{ $selector }}', '{{ $config }}', customOptions);
+                // Enhance options to ensure value syncing for required textarea
+                const enhancedOptions = Object.assign({}, customOptions, {
+                    setup: function(editor) {
+                        const sync = function() {
+                            if (window.tinymce && typeof window.tinymce.triggerSave === 'function') {
+                                window.tinymce.triggerSave();
+                            }
+                        };
+                        // Keep textarea value up to date
+                        editor.on('init', sync);
+                        editor.on('change keyup undo redo SetContent', sync);
+                        // Ensure sync just before submitting the form
+                        try {
+                            const target = document.querySelector(selector);
+                            const form = target ? target.closest('form') : null;
+                            if (form) {
+                                form.addEventListener('submit', sync);
+                            }
+                        } catch (e) { /* non-fatal */ }
+                    }
+                });
+
+                window.TinyMCEConfig.init(selector, configType, enhancedOptions);
             } else {
                 console.error('TinyMCE configuration not loaded. Expected window.TinyMCEConfig.');
             }

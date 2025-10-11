@@ -39,7 +39,7 @@
             <!-- Featured Image -->
             @if($news->image_url)
             <div class="mb-8">
-                <img src="{{ $news->image_url }}" alt="{{ $news->title }}" class="w-full rounded-lg shadow-lg">
+                <img src="{{ Str::startsWith($news->image_url, 'http') ? $news->image_url : asset('storage/' . $news->image_url) }}" alt="{{ $news->title }}" class="w-full rounded-lg shadow-lg">
             </div>
             @endif
 

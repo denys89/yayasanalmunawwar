@@ -7,58 +7,71 @@
 @section('content')
 <!-- Slider One -->
 <section class="slider-one">
-	<div class="main-slider swiper-container">
-		<div class="swiper-wrapper">
-
-			<!-- Slide -->
-			<div class="swiper-slide">
-				<div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/1.jpg)"></div>
-				<div class="auto-container">
-					<!-- Content Column -->
-					<div class="slider-one_content">
-						<div class="slider-one_content-inner">
-							<h1 class="slider-one_heading">Yayasan Al-Munawwar</h1>
-							<div class="slider-one_text">Pendaftaran gelombang kedua di buka pada 15 Maret 2024 sampai 30 Maret 2024</div>
-							<div class="slider-one_button">
-								<a href="course-detail.html" class="theme-btn btn-style-two">
-									<span class="btn-wrap">
-										<span class="text-one">Daftar Sekarang</span>
-										<span class="text-two">Daftar Sekarang</span>
-									</span>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Slide -->
-			<div class="swiper-slide">
-				<div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/2.jpg)"></div>
-				<div class="auto-container">
-					
-					
-					
-				</div>
-			</div>
-
-			<!-- Slide -->
-			<div class="swiper-slide">
-				<div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/3.jpg)"></div>
-				<div class="auto-container">
-					
-					
-					
-				</div>
-			</div>
-
-		</div>
-		<div class="slider-one-arrow">
-			<!-- If we need navigation buttons -->
-			<div class="main-slider-prev fas fa-arrow-left fa-fw"></div>
-			<div class="main-slider-next fas fa-arrow-right fa-fw"></div>
-		</div>
-	</div>
+    <div class="main-slider swiper-container">
+        <div class="swiper-wrapper">
+            @forelse(($banners ?? []) as $banner)
+            <!-- Dynamic Slide -->
+            <div class="swiper-slide">
+                <div class="slider-one_image-layer" style="background-image:url({{ asset('storage/' . $banner->image) }})"></div>
+                <div class="auto-container">
+                    <!-- Content Column -->
+                    <div class="slider-one_content">
+                        <div class="slider-one_content-inner">
+                            <h1 class="slider-one_heading">{{ $banner->title }}</h1>
+                            @if(!empty($banner->subtitle))
+                            <div class="slider-one_text">{{ $banner->subtitle }}</div>
+                            @endif
+                            @if(!empty($banner->button_label))
+                            <div class="slider-one_button">
+                                <a href="{{ $banner->cta ?? route('hubungi-kami') }}" class="theme-btn btn-style-two">
+                                    <span class="btn-wrap">
+                                        <span class="text-one">{{ $banner->button_label }}</span>
+                                        <span class="text-two">{{ $banner->button_label }}</span>
+                                    </span>
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <!-- Fallback Static Slides -->
+            <div class="swiper-slide">
+                <div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/1.jpg)"></div>
+                <div class="auto-container">
+                    <div class="slider-one_content">
+                        <div class="slider-one_content-inner">
+                            <h1 class="slider-one_heading">Yayasan Al-Munawwar</h1>
+                            <div class="slider-one_text">Pendaftaran gelombang kedua di buka pada 15 Maret 2024 sampai 30 Maret 2024</div>
+                            <div class="slider-one_button">
+                                <a href="{{ route('hubungi-kami') }}" class="theme-btn btn-style-two">
+                                    <span class="btn-wrap">
+                                        <span class="text-one">Daftar Sekarang</span>
+                                        <span class="text-two">Daftar Sekarang</span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/2.jpg)"></div>
+                <div class="auto-container"></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/3.jpg)"></div>
+                <div class="auto-container"></div>
+            </div>
+            @endforelse
+        </div>
+        <div class="slider-one-arrow">
+            <!-- If we need navigation buttons -->
+            <div class="main-slider-prev fas fa-arrow-left fa-fw"></div>
+            <div class="main-slider-next fas fa-arrow-right fa-fw"></div>
+        </div>
+    </div>
 </section>
 <!-- End Main Slider Section -->
 

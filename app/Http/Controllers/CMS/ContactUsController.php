@@ -15,7 +15,7 @@ class ContactUsController extends Controller
     {
         $query = ContactUs::query();
 
-        // Filters: name, email, phone_number
+        // Filters: name, email, phone_number, subject, destination
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
@@ -24,6 +24,12 @@ class ContactUsController extends Controller
         }
         if ($request->filled('phone_number')) {
             $query->where('phone_number', 'like', '%' . $request->phone_number . '%');
+        }
+        if ($request->filled('subject')) {
+            $query->where('subject', 'like', '%' . $request->subject . '%');
+        }
+        if ($request->filled('destination')) {
+            $query->where('destination', $request->destination);
         }
 
         // Sort by created_at, newest first by default
@@ -51,7 +57,7 @@ class ContactUsController extends Controller
     {
         $query = ContactUs::query();
 
-        // Apply filters: name, email, phone_number
+        // Apply filters: name, email, phone_number, subject, destination
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
@@ -60,6 +66,12 @@ class ContactUsController extends Controller
         }
         if ($request->filled('phone_number')) {
             $query->where('phone_number', 'like', '%' . $request->phone_number . '%');
+        }
+        if ($request->filled('subject')) {
+            $query->where('subject', 'like', '%' . $request->subject . '%');
+        }
+        if ($request->filled('destination')) {
+            $query->where('destination', $request->destination);
         }
 
         // Sort by created_at, newest first by default
@@ -75,7 +87,7 @@ class ContactUsController extends Controller
             $out = fopen('php://output', 'w');
 
             // CSV header
-            fputcsv($out, ['Name', 'Email', 'Phone Number', 'Message', 'Created At']);
+            fputcsv($out, ['Name', 'Email', 'Phone Number', 'Destination', 'Subject', 'Message', 'Created At']);
 
             // Stream data in chunks to avoid memory issues
             $query->chunk(200, function ($rows) use ($out) {
@@ -86,6 +98,8 @@ class ContactUsController extends Controller
                         $row->name,
                         $row->email,
                         $row->phone_number,
+                        $row->destination,
+                        $row->subject,
                         $message,
                         $row->created_at->format('Y-m-d H:i:s'),
                     ]);

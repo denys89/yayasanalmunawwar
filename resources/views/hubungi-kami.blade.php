@@ -63,31 +63,77 @@
 
         <!-- Contact Form -->
         <div class="contact-form">
-            <form method="post" action="sendemail.php" id="contact-form">
-                
+            @if (session('status'))
+                <div class="alert alert-success" style="padding: 12px; border: 1px solid #d4edda; background-color: #dff0d8; color: #155724; border-radius: 6px; margin-bottom: 16px;">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger" style="padding: 12px; border: 1px solid #f5c6cb; background-color: #f8d7da; color: #721c24; border-radius: 6px; margin-bottom: 16px;">
+                    <ul style="margin: 0; padding-left: 18px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="post" action="{{ route('hubungi-kami.submit') }}" id="contact-form" accept-charset="UTF-8" autocomplete="on" novalidate>
+                @csrf
+
+                <!-- Honeypot (anti-spam) -->
+                <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute; left:-10000px; opacity:0; height:0; width:0;" aria-hidden="true">
+
                 <!-- Destination Selection -->
                 <div class="form-group">
-                    <select name="tujuan" id="tujuan" required="" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                    <select name="destination" id="destination" required style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
                         <option value="">Pilih Tujuan Konsultasi/Pendaftaran</option>
-                        <option value="KB-TK Al Munawwar">KB-TK Al Munawwar</option>
-                        <option value="SD Al Munawwar">SD Al Munawwar</option>
-                        <option value="Panti Al Munawwar">Panti Al Munawwar</option>
-                        <option value="Masjid Al Munawwar">Masjid Al Munawwar</option>
+                        <option value="kb/tk" {{ old('destination') === 'kb/tk' ? 'selected' : '' }}>KB-TK Al Munawwar</option>
+                        <option value="sd" {{ old('destination') === 'sd' ? 'selected' : '' }}>SD Al Munawwar</option>
+                        <option value="panti" {{ old('destination') === 'panti' ? 'selected' : '' }}>Panti Al Munawwar</option>
+                        <option value="masjid" {{ old('destination') === 'masjid' ? 'selected' : '' }}>Masjid Al Munawwar</option>
                     </select>
+                    @error('destination')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
                 </div>
-                
+
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Nama Lengkap" required="" id="username" disabled>
+                    <input type="text" name="name" placeholder="Nama Lengkap" required id="name" maxlength="100" value="{{ old('name') }}" disabled style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #f5f5f5;">
+                    @error('name')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
                 </div>
-                
+
                 <div class="form-group">
-                    <input type="text" name="email" placeholder="Alamat Email" required="" id="email" disabled>
+                    <input type="email" name="email" placeholder="Alamat Email" required id="email" maxlength="255" value="{{ old('email') }}" disabled style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #f5f5f5;">
+                    @error('email')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
                 </div>
-                
+
                 <div class="form-group">
-                    <textarea class="" name="message" placeholder="Ketik pesanmu di sini" id="message" disabled></textarea>
+                    <input type="text" name="subject" placeholder="Subjek" required id="subject" maxlength="255" value="{{ old('subject') }}" disabled style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #f5f5f5;">
+                    @error('subject')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
                 </div>
-                
+
+                <div class="form-group">
+                    <input type="text" name="phone_number" placeholder="Nomor Telepon (opsional)" id="phone_number" maxlength="20" value="{{ old('phone_number') }}" disabled style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #f5f5f5;">
+                    @error('phone_number')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <textarea name="message" placeholder="Ketik pesanmu di sini" id="message" required maxlength="5000" disabled style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #f5f5f5; height: 160px;">{{ old('message') }}</textarea>
+                    @error('message')
+                        <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <!-- Button Box -->
                     <div class="button-box">
@@ -99,56 +145,52 @@
                         </button>
                     </div>
                 </div>
-                
             </form>
         </div>
 
         <!-- JavaScript for form control -->
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const tujuanSelect = document.getElementById('tujuan');
-            const usernameInput = document.getElementById('username');
+            const tujuanSelect = document.getElementById('destination');
+            const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
+            const subjectInput = document.getElementById('subject');
+            const phoneInput = document.getElementById('phone_number');
             const messageTextarea = document.getElementById('message');
             const submitBtn = document.getElementById('submit-btn');
-            
-            // Function to enable/disable form fields
+
             function toggleFormFields(enable) {
-                usernameInput.disabled = !enable;
+                nameInput.disabled = !enable;
                 emailInput.disabled = !enable;
+                subjectInput.disabled = !enable;
+                phoneInput.disabled = !enable;
                 messageTextarea.disabled = !enable;
                 submitBtn.disabled = !enable;
-                
-                if (enable) {
-                    submitBtn.style.opacity = '1';
-                    submitBtn.style.cursor = 'pointer';
-                    usernameInput.style.backgroundColor = '#fff';
-                    emailInput.style.backgroundColor = '#fff';
-                    messageTextarea.style.backgroundColor = '#fff';
-                } else {
-                    submitBtn.style.opacity = '0.5';
-                    submitBtn.style.cursor = 'not-allowed';
-                    usernameInput.style.backgroundColor = '#f5f5f5';
-                    emailInput.style.backgroundColor = '#f5f5f5';
-                    messageTextarea.style.backgroundColor = '#f5f5f5';
-                }
+
+                const enabledBg = '#fff';
+                const disabledBg = '#f5f5f5';
+                nameInput.style.backgroundColor = enable ? enabledBg : disabledBg;
+                emailInput.style.backgroundColor = enable ? enabledBg : disabledBg;
+                subjectInput.style.backgroundColor = enable ? enabledBg : disabledBg;
+                phoneInput.style.backgroundColor = enable ? enabledBg : disabledBg;
+                messageTextarea.style.backgroundColor = enable ? enabledBg : disabledBg;
+                submitBtn.style.opacity = enable ? '1' : '0.5';
+                submitBtn.style.cursor = enable ? 'pointer' : 'not-allowed';
             }
-            
-            // Listen for changes in destination selection
+
             tujuanSelect.addEventListener('change', function() {
-                if (this.value !== '') {
-                    toggleFormFields(true);
-                } else {
-                    toggleFormFields(false);
-                    // Clear other fields when destination is deselected
-                    usernameInput.value = '';
+                const enabled = this.value !== '';
+                toggleFormFields(enabled);
+                if (!enabled) {
+                    nameInput.value = '';
                     emailInput.value = '';
+                    subjectInput.value = '';
+                    phoneInput.value = '';
                     messageTextarea.value = '';
                 }
             });
-            
-            // Initialize form with disabled fields
-            toggleFormFields(false);
+
+            toggleFormFields(!!tujuanSelect.value);
         });
         </script>
         <!-- End Comment Form -->

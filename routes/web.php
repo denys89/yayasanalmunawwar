@@ -3,15 +3,32 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\EventController as PublicEventController;
+use App\Http\Controllers\ContactController;
+use App\Models\Banner;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    $banners = Cache::remember('home_banners', 300, function () {
+        try {
+            return Banner::latest()->get();
+        } catch (\Throwable $e) {
+            Log::warning('Failed to load banners for homepage: ' . $e->getMessage());
+            return collect();
+        }
+    });
+    return view('home', compact('banners'));
 })->name('home');
 
 Route::get('/hubungi-kami', function () {
     return view('hubungi-kami');
 })->name('hubungi-kami');
+
+// Secure Contact form submission
+Route::post('/hubungi-kami', [ContactController::class, 'store'])
+    ->name('hubungi-kami.submit')
+    ->middleware(['throttle:10,1']);
 
 Route::get('/sejarah', function () {
     return view('sejarah');

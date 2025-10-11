@@ -37,6 +37,20 @@
                     </p>
                 </div>
 
+                @if($contact->subject)
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject:</label>
+                    <p class="text-gray-900 dark:text-white">{{ $contact->subject }}</p>
+                </div>
+                @endif
+
+                @if($contact->destination)
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Destination:</label>
+                    <p class="text-gray-900 dark:text-white">{{ $contact->destination }}</p>
+                </div>
+                @endif
+
                 @if($contact->phone_number)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number:</label>

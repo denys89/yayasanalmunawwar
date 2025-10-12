@@ -18,7 +18,7 @@
                 <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Program Information</h2>
             </div>
             <div class="p-4">
-                <form action="{{ route('cms.programs.store') }}" method="POST" id="program-form" class="space-y-5">
+                <form action="{{ route('cms.programs.store') }}" method="POST" enctype="multipart/form-data" id="program-form" class="space-y-5">
                     @csrf
 
                     <div>
@@ -51,54 +51,65 @@
                     </div>
 
                     <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Detailed Content</label>
-                        <textarea id="content" name="content"
-                                  class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('content') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('content') }}</textarea>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Detailed information about the program</p>
-                        @error('content')
+                        <label for="curriculum" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Curriculum <span class="text-rose-600">*</span></label>
+                        <textarea id="curriculum" name="curriculum" required
+                                  class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('curriculum') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('curriculum') }}</textarea>
+                        @error('curriculum')
                             <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                         @enderror
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Brochure</label>
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <label for="brochure_url" class="sr-only">Brochure URL</label>
+                                <input type="url" id="brochure_url" name="brochure_url" value="{{ old('brochure_url') }}" placeholder="https://example.com/brochure.pdf"
+                                       class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('brochure_url') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                                @error('brochure_url')
+                                    <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="brochure_file" class="sr-only">Upload Brochure File</label>
+                                <input type="file" id="brochure_file" name="brochure_file"
+                                       accept=".pdf,.doc,.docx,.odt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.oasis.opendocument.text"
+                                       class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('brochure_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                                @error('brochure_file')
+                                    <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter a brochure URL or upload a file (PDF, DOC, DOCX, ODT). Uploaded file overrides URL. Max size 10MB.</p>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
-                            <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                            <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('start_date') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                            @error('start_date')
+                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+                            <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
+                                   placeholder="+62 812-3456-7890"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('phone') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                            @error('phone')
                                 <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
-                            <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('end_date') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave empty for ongoing programs</p>
-                            @error('end_date')
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="info@schoolprogram.id"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('email') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                            @error('email')
                                 <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div>
-                            <label for="target_beneficiaries" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Beneficiaries</label>
-                            <input type="number" id="target_beneficiaries" name="target_beneficiaries" value="{{ old('target_beneficiaries') }}" min="0"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('target_beneficiaries') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Expected number of people to benefit</p>
-                            @error('target_beneficiaries')
-                                <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label for="budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Budget (IDR)</label>
-                            <input type="number" id="budget" name="budget" value="{{ old('budget') }}" min="0" step="1000"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('budget') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Total program budget</p>
-                            @error('budget')
-                                <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Jl. Merdeka No. 45, Jakarta, Indonesia"
+                                  class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('address') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('address') }}</textarea>
+                        @error('address')
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center justify-between gap-3">
@@ -117,121 +128,7 @@
     </div>
 
     <div>
-        <!-- Program Settings -->
-        <div class="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
-                <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Program Settings</h2>
-            </div>
-            <div class="p-4 space-y-4">
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Program Type <span class="text-rose-600">*</span></label>
-                    <select id="type" name="type" required form="program-form"
-                            class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('type') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                        <option value="">Select Type</option>
-                        <option value="education" {{ old('type') == 'education' ? 'selected' : '' }}>Education</option>
-                        <option value="health" {{ old('type') == 'health' ? 'selected' : '' }}>Health</option>
-                        <option value="social" {{ old('type') == 'social' ? 'selected' : '' }}>Social</option>
-                        <option value="economic" {{ old('type') == 'economic' ? 'selected' : '' }}>Economic</option>
-                        <option value="religious" {{ old('type') == 'religious' ? 'selected' : '' }}>Religious</option>
-                    </select>
-                    @error('type')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
-                    <input type="text" id="location" name="location" value="{{ old('location') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('location') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Where the program takes place</p>
-                    @error('location')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="contact_person" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contact Person</label>
-                    <input type="text" id="contact_person" name="contact_person" value="{{ old('contact_person') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('contact_person') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    @error('contact_person')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contact Phone</label>
-                    <input type="tel" id="contact_phone" name="contact_phone" value="{{ old('contact_phone') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('contact_phone') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    @error('contact_phone')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="featured_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Featured Image URL</label>
-                    <input type="url" id="featured_image" name="featured_image" value="{{ old('featured_image') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('featured_image') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">URL of the program's featured image</p>
-                    @error('featured_image')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="flex items-start gap-3">
-                    <input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900" type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} form="program-form">
-                    <div>
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="is_featured">Featured Program</label>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Featured programs appear prominently on the homepage</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3">
-                    <input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900" type="checkbox" id="accepts_donations" name="accepts_donations" value="1" {{ old('accepts_donations') ? 'checked' : '' }} form="program-form">
-                    <div>
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="accepts_donations">Accepts Donations</label>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Allow people to donate to this program</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SEO Settings -->
-        <div class="mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
-                <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">SEO Settings</h2>
-            </div>
-            <div class="p-4 space-y-4">
-                <div>
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Meta Title</label>
-                    <input type="text" id="meta_title" name="meta_title" value="{{ old('meta_title') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('meta_title') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave empty to use program name</p>
-                    @error('meta_title')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="meta_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Meta Description</label>
-                    <textarea id="meta_description" name="meta_description" rows="3" form="program-form"
-                              class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('meta_description') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('meta_description') }}</textarea>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Recommended: 150-160 characters</p>
-                    @error('meta_description')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="meta_keywords" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Meta Keywords</label>
-                    <input type="text" id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords') }}" form="program-form"
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('meta_keywords') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Separate keywords with commas</p>
-                    @error('meta_keywords')
-                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-        </div>
+        <!-- Removed Program Settings and SEO sections to align with schema -->
 
         <!-- Program Tips -->
         <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -268,57 +165,20 @@
 @endsection
 
 @push('scripts')
-<x-tinymce-scripts selector="#description, #content" config="standard" />
+<x-tinymce-scripts selector="#description, #curriculum" config="standard" />
 <script>
-
     // Auto-generate slug from name
     document.getElementById('name').addEventListener('input', function() {
         const slugField = document.getElementById('slug');
-        
         if (!slugField.value) {
             const slug = this.value
                 .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
-                .replace(/\s+/g, '-') // Replace spaces with -
-                .replace(/-+/g, '-') // Replace multiple - with single -
-                .trim('-'); // Trim - from start and end
-            
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
             slugField.value = slug;
         }
-    });
-
-    // Auto-generate meta description from description if empty
-    document.getElementById('description').addEventListener('blur', function() {
-        const metaDescField = document.getElementById('meta_description');
-        if (!metaDescField.value && this.value) {
-            const description = this.value.substring(0, 160).trim();
-            metaDescField.value = description + (this.value.length > 160 ? '...' : '');
-        }
-    });
-
-    // Validate end date is after start date
-    document.getElementById('end_date').addEventListener('change', function() {
-        const startDate = document.getElementById('start_date').value;
-        const endDate = this.value;
-        
-        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
-            alert('End date must be after start date');
-            this.value = '';
-        }
-    });
-
-    // Format budget input
-    document.getElementById('budget').addEventListener('input', function() {
-        let value = this.value.replace(/[^0-9]/g, '');
-        if (value) {
-            this.value = parseInt(value).toLocaleString('id-ID');
-        }
-    });
-
-    // Remove formatting before form submission
-    document.getElementById('program-form').addEventListener('submit', function() {
-        const budgetField = document.getElementById('budget');
-        budgetField.value = budgetField.value.replace(/[^0-9]/g, '');
     });
 </script>
 @endpush

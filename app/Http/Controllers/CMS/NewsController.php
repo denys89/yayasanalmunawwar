@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class NewsController extends Controller
 {
@@ -15,7 +16,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::latest()->paginate(10);
+        $news = News::with(['createdBy', 'updatedBy'])->latest()->paginate(10);
         return view('cms.news.index', compact('news'));
     }
 
@@ -36,6 +37,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
             'content' => 'required|string',
+            'summary' => 'nullable|string|max:1000',
             'category' => 'required|in:news,event,coverage',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'published_at' => 'nullable|date',
@@ -75,6 +77,9 @@ class NewsController extends Controller
 
         News::create($validated);
 
+        // Invalidate homepage latest news cache
+        Cache::forget('home_latest_news');
+
         return redirect()->route('cms.news.index')
             ->with('success', 'News created successfully.');
     }
@@ -84,6 +89,7 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
+        $news->load(['createdBy', 'updatedBy']);
         return view('cms.news.show', compact('news'));
     }
 
@@ -92,6 +98,7 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
+        $news->load(['createdBy', 'updatedBy']);
         return view('cms.news.edit', compact('news'));
     }
 
@@ -104,6 +111,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
             'content' => 'required|string',
+            'summary' => 'nullable|string|max:1000',
             'category' => 'required|in:news,event,coverage',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'published_at' => 'nullable|date',
@@ -143,6 +151,9 @@ class NewsController extends Controller
         $validated['updated_by'] = $request->user()->id;
         $news->update($validated);
 
+        // Invalidate homepage latest news cache
+        Cache::forget('home_latest_news');
+
         return redirect()->route('cms.news.index')
             ->with('success', 'News updated successfully.');
     }
@@ -153,6 +164,9 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         $news->delete();
+
+        // Invalidate homepage latest news cache
+        Cache::forget('home_latest_news');
 
         return redirect()->route('cms.news.index')
             ->with('success', 'News deleted successfully.');

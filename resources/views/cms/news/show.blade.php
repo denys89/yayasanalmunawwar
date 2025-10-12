@@ -18,7 +18,7 @@
             </svg>
             Edit Article
         </a>
-        @if($news->is_published)
+        @if($news->isPublished())
         <a href="{{ route('news.show', $news->slug) }}" target="_blank" class="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
             <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
@@ -39,9 +39,9 @@
                 <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100">Article Content</h2>
             </div>
             <div class="px-6 py-5">
-                @if($news->featured_image)
+                @if(!empty($news->image_url))
                 <div class="mb-4">
-                    <img src="{{ $news->featured_image }}" alt="{{ $news->title }}" class="h-72 w-full rounded-lg object-cover">
+                    <img src="{{ Str::startsWith($news->image_url, 'http') ? $news->image_url : asset('storage/' . $news->image_url) }}" alt="{{ $news->title }}" loading="lazy" decoding="async" class="w-full rounded-lg object-cover h-64 sm:h-80 lg:h-[22rem]">
                 </div>
                 @endif
 
@@ -50,19 +50,13 @@
                     @if($news->is_featured)
                         <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-100">Featured</span>
                     @endif
-                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $news->is_published ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100' }}">
-                        {{ $news->is_published ? 'Published' : 'Draft' }}
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $news->isPublished() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100' }}">
+                        {{ $news->isPublished() ? 'Published' : 'Draft' }}
                     </span>
                 </div>
 
-                @if($news->excerpt)
-                <div class="mb-4 rounded-md border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-100">
-                    <strong class="font-semibold">Excerpt:</strong> {{ $news->excerpt }}
-                </div>
-                @endif
-
-                <div class="content prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200">
-                    {!! nl2br(e($news->content)) !!}
+                <div class="content prose dark:prose-invert max-w-none break-words text-gray-800 dark:text-gray-200">
+                    {!! $news->content !!}
                 </div>
             </div>
         </div>
@@ -78,8 +72,8 @@
             <div class="px-6 py-5">
                 <div class="mb-3 flex items-center">
                     <strong class="text-gray-700 dark:text-gray-300">Status:</strong>
-                    <span class="ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $news->is_published ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100' }}">
-                        {{ $news->is_published ? 'Published' : 'Draft' }}
+                    <span class="ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $news->isPublished() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100' }}">
+                        {{ $news->isPublished() ? 'Published' : 'Draft' }}
                     </span>
                 </div>
                 
@@ -95,7 +89,7 @@
                     </div>
                 </div>
 
-                @if($news->is_published)
+                @if($news->isPublished())
                 <div class="mb-3">
                     <strong class="text-gray-700 dark:text-gray-300">URL:</strong>
                     <div class="mt-1">
@@ -111,8 +105,8 @@
                 @endif
 
                 <div class="mb-3">
-                    <strong class="text-gray-700 dark:text-gray-300">Author:</strong>
-                    <div class="text-gray-500 dark:text-gray-400">{{ $news->user->name ?? 'Unknown' }}</div>
+                    <strong class="text-gray-700 dark:text-gray-300">Created By:</strong>
+                    <div class="text-gray-500 dark:text-gray-400">{{ $news->createdBy->name ?? $news->created_by ?? 'Unknown' }}</div>
                 </div>
 
                 <div class="mb-3">
@@ -124,8 +118,12 @@
                     <strong class="text-gray-700 dark:text-gray-300">Last Updated:</strong>
                     <div class="text-gray-500 dark:text-gray-400">{{ $news->updated_at->format('M d, Y g:i A') }}</div>
                 </div>
+                <div class="mb-3">
+                    <strong class="text-gray-700 dark:text-gray-300">Updated By:</strong>
+                    <div class="text-gray-500 dark:text-gray-400">{{ $news->updatedBy->name ?? $news->updated_by ?? 'Unknown' }}</div>
+                </div>
 
-                @if($news->is_published && $news->published_at)
+                @if($news->isPublished() && $news->published_at)
                 <div class="mb-3">
                     <strong class="text-gray-700 dark:text-gray-300">Published:</strong>
                     <div class="text-gray-500 dark:text-gray-400">{{ $news->published_at->format('M d, Y g:i A') }}</div>
@@ -220,7 +218,7 @@
                         Edit Article
                     </a>
                     
-                    @if($news->is_published)
+                    @if($news->isPublished())
                     <a href="{{ route('news.show', $news->slug) }}" class="inline-flex items-center justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500" target="_blank">
                         <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
@@ -313,6 +311,23 @@
 }
 
 .dark .content pre { background-color: #1f2937; /* gray-800 */ color: #e5e7eb; }
+
+/* Ensure images and embeds inside content are responsive */
+.content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    display: block;
+    margin: 0.75rem 0;
+}
+
+.content iframe,
+.content video,
+.content embed {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 0.5rem;
+}
 </style>
 @endpush
 

@@ -70,7 +70,7 @@
             <!-- Pagination -->
             @if(isset($events) && $events->hasPages())
             <div class="styled-pagination text-center">
-                {{ $events->links() }}
+                {{ $events->links('vendor.pagination.tailwind') }}
             </div>
             @endif
         </div>

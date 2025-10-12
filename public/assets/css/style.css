@@ -3983,7 +3983,7 @@
 }
 
 .styled-pagination{
-	position:relative;
+    position:relative;
 }
 
 .styled-pagination li{
@@ -4022,7 +4022,93 @@
 
 .styled-pagination li a:hover,
 .styled-pagination li a.active{
-	background-color:var(--color-two);
+    background-color:var(--color-two);
+}
+
+/* Tailwind (Laravel default) pagination inside styled container */
+.styled-pagination nav[role="navigation"]{
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.styled-pagination nav[role="navigation"] a,
+.styled-pagination nav[role="navigation"] span{
+    position: relative;
+    display: inline-block;
+    line-height: 48px;
+    height: 50px;
+    min-width: 50px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 5px;
+    text-transform: capitalize;
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    font-size: var(--font-16);
+    color: var(--black-color);
+    background-color: var(--color-fourty);
+    padding: 0 16px;
+    width: auto;
+}
+.styled-pagination nav[role="navigation"] a:hover,
+.styled-pagination nav[role="navigation"] span[aria-current="page"]{
+    background-color: var(--color-two);
+}
+.styled-pagination nav[role="navigation"] a[aria-disabled="true"],
+.styled-pagination nav[role="navigation"] span[aria-disabled="true"]{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Laravel default pagination compatibility inside styled container */
+.styled-pagination .pagination{
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+.styled-pagination .page-item{
+    list-style: none;
+    display: inline-block;
+    margin: 0 0 10px;
+}
+.styled-pagination .page-item .page-link,
+.styled-pagination li span{
+    position: relative;
+    display: inline-block;
+    line-height: 48px;
+    height: 50px;
+    min-width: 50px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 5px;
+    text-transform: capitalize;
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    font-size: var(--font-16);
+    color: var(--black-color);
+    background-color: var(--color-fourty);
+    padding: 0 16px;
+    width: auto;
+}
+.styled-pagination .page-item.active .page-link,
+.styled-pagination .page-item .page-link:hover{
+    background-color: var(--color-two);
+}
+.styled-pagination .page-item.disabled .page-link{
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /*** 

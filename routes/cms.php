@@ -16,6 +16,8 @@ use App\Http\Controllers\CMS\DiscountController;
 use App\Http\Controllers\CMS\ContactUsController;
 use App\Http\Controllers\CMS\EventController;
 use App\Http\Controllers\CMS\BannerController;
+use App\Http\Controllers\CMS\ProgramFacilityController;
+use App\Http\Controllers\CMS\ProgramEducationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,19 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // Programs Management
     Route::resource('programs', ProgramController::class);
+    // Program Facilities (nested under program)
+    Route::prefix('programs/{program}')->name('programs.')->group(function () {
+        Route::get('facilities', [ProgramFacilityController::class, 'index'])->name('facilities.index');
+        Route::post('facilities', [ProgramFacilityController::class, 'store'])->name('facilities.store');
+        Route::patch('facilities/{facility}', [ProgramFacilityController::class, 'update'])->name('facilities.update');
+        Route::delete('facilities/{facility}', [ProgramFacilityController::class, 'destroy'])->name('facilities.destroy');
+
+        // Program Educations
+        Route::get('educations', [ProgramEducationController::class, 'index'])->name('educations.index');
+        Route::post('educations', [ProgramEducationController::class, 'store'])->name('educations.store');
+        Route::patch('educations/{education}', [ProgramEducationController::class, 'update'])->name('educations.update');
+        Route::delete('educations/{education}', [ProgramEducationController::class, 'destroy'])->name('educations.destroy');
+    });
     
     // Explore Management
     Route::resource('explores', ExploreController::class);

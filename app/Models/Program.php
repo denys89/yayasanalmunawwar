@@ -15,10 +15,23 @@ class Program extends Model
         'description',
         'curriculum',
         'brochure_url',
+        'phone',
+        'email',
+        'address',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function facilities()
+    {
+        return $this->hasMany(ProgramFacility::class);
+    }
+
+    public function educations()
+    {
+        return $this->hasMany(ProgramEducation::class);
+    }
 }

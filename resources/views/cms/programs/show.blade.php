@@ -27,54 +27,65 @@
             <div class="p-4">
                 <dl class="space-y-4 text-sm">
                     <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Title</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->title }}</dd>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Name</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->name }}</dd>
                     </div>
 
-                    @if($program->image)
-                    <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Featured Image</dt>
-                        <dd class="mt-1">
-                            <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->title }}" class="max-h-72 w-auto rounded border border-gray-200 object-cover dark:border-gray-700">
-                        </dd>
-                    </div>
-                    @endif
+                    
 
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Description</dt>
-                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! nl2br(e($program->description)) !!}</dd>
+                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! $program->description !!}</dd>
                     </div>
 
                     <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Content</dt>
-                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! nl2br(e($program->content)) !!}</dd>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Curriculum</dt>
+                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! $program->curriculum !!}</dd>
                     </div>
 
-                    @if($program->duration)
                     <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Duration</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->duration }}</dd>
-                    </div>
-                    @endif
-
-                    @if($program->price)
-                    <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Price</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->price }}</dd>
-                    </div>
-                    @endif
-
-                    <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Status</dt>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Brochure</dt>
                         <dd class="mt-1">
-                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' }}">
-                                {{ $program->is_active ? 'Active' : 'Inactive' }}
-                            </span>
+                            @if($program->brochure_url)
+                                @php $isExternal = str_starts_with($program->brochure_url, 'http'); @endphp
+                                @if($isExternal)
+                                    <a href="{{ $program->brochure_url }}" target="_blank" class="text-amber-600 hover:underline">{{ $program->brochure_url }}</a>
+                                @else
+                                    <a href="{{ Storage::disk('public')->url($program->brochure_url) }}" target="_blank" class="text-amber-600 hover:underline">Download brochure</a>
+                                @endif
+                            @else
+                                <span class="text-gray-900 dark:text-gray-100">-</span>
+                            @endif
                         </dd>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <dt class="font-medium text-gray-700 dark:text-gray-300">Phone</dt>
+                            <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->phone ?? '-' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="font-medium text-gray-700 dark:text-gray-300">Email</dt>
+                            <dd class="mt-1">
+                                @if($program->email)
+                                    <a href="mailto:{{ $program->email }}" class="text-amber-600 hover:underline">{{ $program->email }}</a>
+                                @else
+                                    <span class="text-gray-900 dark:text-gray-100">-</span>
+                                @endif
+                            </dd>
+                        </div>
+                    </div>
+
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Address</dt>
+                        <dd class="mt-1 whitespace-pre-line text-gray-900 dark:text-gray-100">{{ $program->address ?? '-' }}</dd>
                     </div>
                 </dl>
             </div>
         </div>
+
+        @include('cms.programs.facilities.index')
+        @include('cms.programs.educations.index')
     </div>
 
     <div>
@@ -86,11 +97,11 @@
                 <dl class="space-y-4 text-sm">
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Created</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->created_at->format('M d, Y H:i') }}</dd>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ optional($program->created_at)->format('M d, Y H:i') }}</dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Last Updated</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->updated_at->format('M d, Y H:i') }}</dd>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ optional($program->updated_at)->format('M d, Y H:i') }}</dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Actions</dt>

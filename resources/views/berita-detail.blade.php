@@ -25,23 +25,54 @@
                 
                 <!-- Content Side -->
                 <div class="content-side col-lg-8 col-md-12 col-sm-12">
+                    @if($news && method_exists($news, 'isPublished') ? $news->isPublished() : ($news->status ?? null) === 'published')
                     <div class="blog-detail">
                         <div class="blog-detail_inner">
                             <div class="blog-detail_image">
-                                <img src="{{ $news->featured_image ? asset('storage/' . $news->featured_image) : asset('images/resource/news-1.jpg') }}" alt="{{ $news->title ?? 'Detail Berita' }}" />
+                                @php
+                                    $heroSrc = null;
+                                    if (!empty($news->image_url)) {
+                                        $heroSrc = Str::startsWith($news->image_url, 'http')
+                                            ? $news->image_url
+                                            : asset('storage/' . $news->image_url);
+                                    } else {
+                                        $heroSrc = asset('images/resource/news-1.jpg');
+                                    }
+                                @endphp
+                                <img
+                                    src="{{ $heroSrc }}"
+                                    alt="{{ $news->title ?? 'Detail Berita' }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="blog-hero"
+                                    onerror="this.src='{{ asset('images/resource/news-1.jpg') }}';this.onerror=null;"
+                                />
                             </div>
                             <div class="blog-detail_content">
                                 <ul class="blog-detail_meta">
-                                    <li><span class="icon fa-solid fa-user fa-fw"></span>{{ $news->author_name ?? 'Admin' }}</li>
-                                    <li><span class="icon fa-solid fa-clock fa-fw"></span>{{ $news->created_at ? $news->created_at->format('d M Y') : date('d M Y') }}</li>
+                                    <li><span class="icon fa-solid fa-user fa-fw" aria-hidden="true"></span> Dibuat oleh {{ optional($news->createdBy)->name ?? 'Admin' }}</li>
+                                    @php
+                                        $date = $news->published_at ?? $news->created_at ?? null;
+                                    @endphp
+                                    <li><span class="icon fa-solid fa-clock fa-fw"></span>{{ $date ? \Carbon\Carbon::parse($date)->format('d M Y') : date('d M Y') }}</li>
                                     @if($news->category ?? null)
                                     <li><span class="icon fa-solid fa-tag fa-fw"></span>{{ $news->category }}</li>
                                     @endif
                                 </ul>
                                 <h3 class="blog-detail_heading">{{ $news->title ?? 'Program Pendidikan Al-Quran untuk Anak-Anak' }}</h3>
+                                @php
+                                    $summaryText = null;
+                                    if (!empty($news->summary)) {
+                                        $summaryText = Str::limit($news->summary, 220);
+                                    } elseif (!empty($news->content)) {
+                                        $summaryText = Str::limit(strip_tags($news->content), 220);
+                                    }
+                                @endphp
                                 <div class="blog-detail_text">
-                                    @if($news->content ?? null)
-                                        {!! nl2br(e($news->content)) !!}
+                                    @if(($news->summary ?? null) || ($news->content ?? null))
+                                        @if($news->content ?? null)
+                                            {!! \App\Helpers\TinyMCEHelper::sanitizeContent($news->content ?? '') !!}
+                                        @endif
                                     @else
                                         <p>Yayasan Al-Munawwar dengan bangga mengumumkan peluncuran program pendidikan Al-Quran khusus untuk anak-anak. Program ini dirancang dengan metode pembelajaran yang menyenangkan dan interaktif, sehingga anak-anak dapat belajar Al-Quran dengan mudah dan penuh semangat.</p>
                                         
@@ -75,6 +106,9 @@
 
                         
                     </div>
+                    @else
+                        <div class="alert alert-warning">Artikel tidak ditemukan atau belum dipublikasikan.</div>
+                    @endif
                 </div>
                 
                 <!-- Sidebar Side -->
@@ -83,11 +117,23 @@
                         
                         <!-- Search -->
                         <div class="sidebar-widget search-box">
-                            <form method="post" action="#">
+                            <form method="get" action="{{ route('berita') }}" novalidate>
                                 <div class="form-group">
-                                    <input type="search" name="search-field" value="" placeholder="Cari berita..." required>
-                                    <button type="submit"><span class="icon fa fa-search"></span></button>
+                                    <input
+                                        type="search"
+                                        name="q"
+                                        value="{{ old('q') }}"
+                                        placeholder="Cari berita..."
+                                        minlength="2"
+                                        maxlength="100"
+                                        required
+                                        autocomplete="off"
+                                    >
+                                    <button type="submit" aria-label="Cari"><span class="icon fa fa-search"></span></button>
                                 </div>
+                                @error('q')
+                                    <div class="text-danger small" role="alert">{{ $message }}</div>
+                                @enderror
                             </form>
                         </div>
                         
@@ -97,70 +143,27 @@
                                 <h4>Berita Terbaru</h4>
                             </div>
                             
-                            @if(isset($latestNews) && $latestNews->count() > 0)
-                                @foreach($latestNews as $latest)
-                                <article class="post d-flex">
-                                    <figure class="post-thumb" style="flex:0 0 75px;">
-                                        <a href="{{ route('berita.detail', $latest->slug) }}">
-                                            <img src="{{ $latest->featured_image ? asset('storage/' . $latest->featured_image) : asset('images/resource/post-thumb-1.png') }}" alt="{{ $latest->title }}">
-                                        </a>
-                                    </figure>
-                                    <div class="text">
-                                        <a href="{{ route('berita.detail', $latest->slug) }}">{{ Str::limit($latest->title, 50) }}</a>
-                                    </div>
-                                    <div class="post-info">{{ $latest->created_at->format('d M Y') }}</div>
-                                </article>
-                                @endforeach
-                            @else
+                            @foreach($latestNews as $latest)
+                            @continue(!(method_exists($latest, 'isPublished') ? $latest->isPublished() : (($latest->status ?? null) === 'published')))
+                            @php
+                                $imgSrc = !empty($latest->image_url)
+                                    ? (Str::startsWith($latest->image_url, 'http') ? $latest->image_url : asset('storage/' . $latest->image_url))
+                                    : asset('images/resource/post-thumb-1.png');
+                                $dateToShow = $latest->published_at ?? $latest->created_at;
+                            @endphp
                             <article class="post d-flex">
-                                <figure class="post-thumb" style="flex:0 0 75px;">
-                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
+                                <figure class="post-thumb">
+                                    <a href="{{ route('berita.detail', $latest->slug) }}">
+                                        <img src="{{ $imgSrc }}" alt="{{ $latest->title }}" loading="lazy" decoding="async" width="84" height="84" onerror="this.src='{{ asset('images/resource/post-thumb-1.png') }}';this.onerror=null;">
+                                    </a>
                                 </figure>
-                                <div class="post-content ml-3">
-                                    <div class="text"><a href="#">Kegiatan Bakti Sosial di Bulan Ramadan</a></div>
-                                    <div class="post-info">{{ date('d M Y') }}</div>
+                                <div class="post-content">
+                                    <a class="post-title" href="{{ route('berita.detail', $latest->slug) }}">{{ Str::limit($latest->title, 60) }}</a>
+                                    <div class="post-info">{{ $dateToShow?->format('d M Y') }}</div>
                                 </div>
                             </article>
-                            
-                            <article class="post d-flex">
-                                <figure class="post-thumb" style="flex:0 0 75px;">
-                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
-                                </figure>
-                                <div class="post-content ml-3">
-                                    <div class="text"><a href="#">Seminar Parenting Islami untuk Orang Tua</a></div>
-                                    <div class="post-info">{{ date('d M Y', strtotime('-1 day')) }}</div>
-                                </div>
-                            </article>
-                            
-                            <article class="post d-flex">
-                                <figure class="post-thumb" style="flex:0 0 75px;">
-                                    <a href="#"><img src="{{ asset('images/resource/post-thumb-1.png') }}" alt="Berita"></a>
-                                </figure>
-                                <div class="post-content ml-3">
-                                    <div class="text"><a href="#">Pembangunan Masjid Baru di Kompleks Yayasan</a></div>
-                                    <div class="post-info">{{ date('d M Y', strtotime('-2 days')) }}</div>
-                                </div>
-                            </article>
-                            @endif
-                            
+                            @endforeach
                         </div>
-                        
-                        <!-- Categories -->
-                        <div class="sidebar-widget categories">
-                            <div class="sidebar-title">
-                                <h4>Kategori</h4>
-                            </div>
-                            <ul class="blog-cat">
-                                <li><a href="#">Pendidikan <span>(12)</span></a></li>
-                                <li><a href="#">Kegiatan <span>(8)</span></a></li>
-                                <li><a href="#">Pengumuman <span>(6)</span></a></li>
-                                <li><a href="#">Bakti Sosial <span>(4)</span></a></li>
-                                <li><a href="#">Kajian <span>(10)</span></a></li>
-                            </ul>
-                        </div>
-                        
-                       
-                        
                     </aside>
                 </div>
                 
@@ -198,5 +201,138 @@
     background: #2e8b57;
     color: #ffffff;
 }
+
+/* Hero image responsive styling */
+.blog-detail_image .blog-hero {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Summary block styling */
+.blog-detail_summary {
+    background: #f8fafc;
+    border-left: 3px solid #0f5132;
+    padding: 12px 16px;
+    margin: 16px 0;
+    color: #1f2937;
+}
+.blog-detail_summary p { margin: 0; }
+
+/* Category list formatting */
+.categories .blog-cat { list-style: none; padding-left: 0; margin: 0; }
+.categories .blog-cat li { padding: 6px 0; }
+.categories .blog-cat a { display: inline-block; color: #0f5132; }
+
+/* Sidebar Latest Posts layout */
+.popular-posts .post { align-items: center; gap: 12px; padding: 10px 0; }
+.popular-posts .post-thumb { flex: 0 0 84px; margin: 0; }
+.popular-posts .post-thumb img { width: 84px; height: 84px; object-fit: cover; border-radius: 6px; display: block; }
+.popular-posts .post-content { display: flex; flex-direction: column; justify-content: center; }
+.popular-posts .post-title { display: block; line-height: 1.3; }
+.popular-posts .post-info { font-size: 0.875rem; color: #6b7280; }
+
+@media (max-width: 576px) {
+    .popular-posts .post-thumb { flex-basis: 64px; }
+    .popular-posts .post-thumb img { width: 64px; height: 64px; }
+}
+
+/* CTA extracted widget styling */
+.cta-extracted .cta-list-group { border-top: 1px solid #eee; padding-top: 8px; margin-top: 12px; }
+.cta-extracted .cta-group-title { margin: 0 0 6px; font-weight: 600; color: #111827; font-size: 1rem; }
+.cta-extracted .cta-link-list { list-style: none; padding: 0; margin: 0; }
+.cta-extracted .cta-link-list li { margin: 4px 0; }
+.cta-extracted .cta-link { color: #0f5132; }
+.cta-extracted .cta-link:hover { text-decoration: underline; }
 </style>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.getElementById('cta-extracted-widget');
+  if (!container) return;
+
+  // Candidate containers to scan for CTA buttons on this page
+  const candidateSelectors = [
+    '.blog-detail_text',        // Buttons possibly embedded in the article content
+    'section.cta-one',          // Global CTA sections if present
+    'section.cta-two',          // Global CTA sections if present
+    '.event-detail_button'      // Parity with event detail template
+  ];
+
+  const collected = [];
+  const seen = new Set();
+
+  function classifyCategory(anchor) {
+    const ds = anchor.dataset?.category;
+    if (ds) return ds;
+    const cls = anchor.classList;
+    // Map button styles to human-friendly categories
+    if (cls.contains('btn-style-three')) return 'Pendaftaran';
+    if (cls.contains('btn-style-one')) return 'Unduhan';
+    if (cls.contains('btn-style-two')) return 'Informasi';
+    return 'Lainnya';
+  }
+
+  candidateSelectors.forEach(sel => {
+    document.querySelectorAll(sel + ' a.theme-btn').forEach(a => {
+      const href = a.getAttribute('href') || '#';
+      const text = (a.textContent || '').trim();
+      const key = href + '|' + text;
+      if (!text) return; // skip empty labels
+      if (seen.has(key)) return; // de-duplicate
+      seen.add(key);
+      collected.push({
+        href,
+        text,
+        category: classifyCategory(a)
+      });
+    });
+  });
+
+  if (!collected.length) {
+    container.innerHTML = '<p>Tidak ada CTA ditemukan.</p>';
+    return;
+  }
+
+  // Group by category
+  const groups = collected.reduce((acc, item) => {
+    (acc[item.category] = acc[item.category] || []).push(item);
+    return acc;
+  }, {});
+
+  // Render groups with clear separation
+  const frag = document.createDocumentFragment();
+  Object.keys(groups).sort().forEach(cat => {
+    const group = document.createElement('div');
+    group.className = 'cta-list-group';
+
+    const title = document.createElement('h5');
+    title.className = 'cta-group-title';
+    title.textContent = cat;
+    group.appendChild(title);
+
+    const ul = document.createElement('ul');
+    ul.className = 'cta-link-list';
+    groups[cat].forEach(item => {
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = item.href;
+      link.textContent = item.text;
+      link.className = 'cta-link';
+      link.rel = 'noopener';
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+    group.appendChild(ul);
+    frag.appendChild(group);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(frag);
+});
+</script>
+@endpush
 @endsection

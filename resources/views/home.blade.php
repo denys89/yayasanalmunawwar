@@ -262,63 +262,44 @@
 			</div>
 			<div class="row clearfix">
 
-				<!-- News Block One -->
-				<div class="news-block_one col-lg-4 col-md-6 col-sm-12">
-					<div class="news-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1500ms">
-						<div class="news-block_one-image">
-							<a href="news-detail.html"><img src="assets/images/resource/news-funcamp.png" alt="" /></a>
-						</div>
-						<div class="news-block_one-content">
-							<ul class="news-block_one-meta">
-								<li><span class="icon fa-solid fa-clock fa-fw"></span>October 18 2025</li>
-							</ul>
-							<h5 class="news-block_one-heading"><a href="news-detail.html">FunCamp Kb-Tk Al-Munawwar 2025</a></h5>
-							<div class="news-block_one-text">There are many variations of passages of lorem Ipsum available islam courses</div>
-							<div class="news-block_one-info d-flex justify-content-between align-items-center flex-wrap">
-								<a class="news-block_one-more theme-btn" href="news-detail.html">read more</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				@forelse(($latestNews ?? []) as $item)
 				<!-- News Block One -->
 				<div class="news-block_one col-lg-4 col-md-6 col-sm-12">
 					<div class="news-block_one-inner wow fadeInUp" data-wow-delay="150ms" data-wow-duration="1500ms">
 						<div class="news-block_one-image">
-							<a href="news-detail.html"><img src="assets/images/resource/news-hari-ayah.png" alt="" /></a>
+							<a href="{{ route('news.show', $item->slug) }}">
+								<img src="{{ isset($item->image_url) ? (Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url)) : asset('assets/images/resource/news-placeholder.png') }}" alt="{{ $item->title }}" />
+							</a>
 						</div>
 						<div class="news-block_one-content">
 							<ul class="news-block_one-meta">
-								<li><span class="icon fa-solid fa-clock fa-fw"></span>October 18 2025</li>
+								<li><span class="icon fa-solid fa-clock fa-fw"></span>{{ ($item->published_at ?? $item->created_at)->format('F d Y') }}</li>
 							</ul>
-							<h5 class="news-block_one-heading"><a href="news-detail.html">Hari Ayah</a></h5>
-							<div class="news-block_one-text">There are many variations of passages of lorem Ipsum available islam courses</div>
+							<h5 class="news-block_one-heading"><a href="{{ route('berita.detail', $item->slug) }}">{{ $item->title }}</a></h5>
+							<div class="news-block_one-text">{{ Str::limit(strip_tags($item->summary), 120) }}</div>
 							<div class="news-block_one-info d-flex justify-content-between align-items-center flex-wrap">
-								
-								<a class="news-block_one-more theme-btn" href="news-detail.html">read more</a>
+								<div class="news-block_one-author">
+                                    <!-- <div class="news-block_one-author_image">
+                                        <img src="{{ $item->author_avatar ?? asset('images/resource/author-1.png') }}" alt="{{ $item->author_name ?? 'Admin' }}" />
+                                    </div> -->
+                                    {{ optional($item->createdBy)->name ?? 'Admin' }}
+                                </div>
+                                <a class="news-block_one-more theme-btn" href="{{ route('berita.detail', $item->slug ?? '#') }}">Baca Selengkapnya</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- News Block One -->
+				@empty
+				<!-- Fallback static items when no news available -->
 				<div class="news-block_one col-lg-4 col-md-6 col-sm-12">
-					<div class="news-block_one-inner wow fadeInRight" data-wow-delay="150ms" data-wow-duration="1500ms">
-						<div class="news-block_one-image">
-							<a href="news-detail.html"><img src="assets/images/resource/news-outing.png" alt="" /></a>
-						</div>
+					<div class="news-block_one-inner wow fadeInUp" data-wow-delay="150ms" data-wow-duration="1500ms">
 						<div class="news-block_one-content">
-							<ul class="news-block_one-meta">
-								<li><span class="icon fa-solid fa-clock fa-fw"></span>October 18 2025</li>
-							</ul>
-							<h5 class="news-block_one-heading"><a href="news-detail.html">Pengalaman Outing KB-TK ke Kidzania</a></h5>
-							<div class="news-block_one-text">There are many variations of passages of lorem Ipsum available islam courses</div>
-							<div class="news-block_one-info d-flex justify-content-between align-items-center flex-wrap">
-								<a class="news-block_one-more theme-btn" href="news-detail.html">read more</a>
-							</div>
+							<h5 class="news-block_one-heading">Belum ada berita</h5>
+							<div class="news-block_one-text">Konten berita akan tampil di sini setelah dipublikasikan.</div>
 						</div>
 					</div>
 				</div>
+				@endforelse
 
 			</div>
 		</div>

@@ -439,8 +439,8 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $news->created_at->diffForHumans() }}</p>
                                 </div>
                                 <div class="ml-4 flex-shrink-0">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $news->status === 'published' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
-                                        {{ ucfirst($news->status) }}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $news->isPublished() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
+                                        {{ $news->isPublished() ? 'Published' : 'Draft' }}
                                     </span>
                                 </div>
                             </div>
@@ -464,8 +464,8 @@
                                 <small class="text-muted">{{ $news->created_at->diffForHumans() }}</small>
                             </div>
                             <div>
-                                <span class="badge bg-{{ $news->is_published ? 'success' : 'secondary' }}">
-                                    {{ $news->is_published ? 'Published' : 'Draft' }}
+                                <span class="badge bg-{{ $news->isPublished() ? 'success' : 'secondary' }}">
+                                    {{ $news->isPublished() ? 'Published' : 'Draft' }}
                                 </span>
                             </div>
                         </div>

@@ -68,6 +68,23 @@
                             @enderror
                         </div>
 
+                        <!-- Summary -->
+                        <div>
+                            <label for="summary" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                                Summary
+                            </label>
+                            <div class="mt-2">
+                                <textarea name="summary"
+                                          id="summary"
+                                          rows="3"
+                                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('summary') ring-red-500 @enderror">{{ old('summary', $news->summary) }}</textarea>
+                            </div>
+                            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">A short excerpt shown in listings and previews.</p>
+                            @error('summary')
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Content -->
                         <div>
                             <label for="content" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
@@ -82,6 +99,18 @@
                             @error('content')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
+                        </div>
+
+                        <!-- Created By / Updated By (read-only) -->
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Created By</label>
+                                <input type="text" value="{{ $news->createdBy->name ?? $news->created_by ?? '—' }}" readonly class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Updated By</label>
+                                <input type="text" value="{{ $news->updatedBy->name ?? $news->updated_by ?? '—' }}" readonly class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            </div>
                         </div>
 
 
@@ -222,16 +251,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     const titleField = document.getElementById('title');
     const slugField = document.getElementById('slug');
+    let lastGeneratedSlug = null;
     
     if (titleField && slugField) {
         titleField.addEventListener('input', function() {
-            if (!slugField.value || slugField.value === '') {
-                const slug = this.value.toLowerCase()
-                    .replace(/[^a-z0-9 -]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/^-+|-+$/g, '');
-                slugField.value = slug;
+            const currentTitleSlug = this.value.toLowerCase()
+                .replace(/[^a-z0-9 -]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            const shouldUpdate = !slugField.value || slugField.value === '' || slugField.value === lastGeneratedSlug;
+            if (shouldUpdate) {
+                slugField.value = currentTitleSlug;
+                lastGeneratedSlug = currentTitleSlug;
             }
         });
     }

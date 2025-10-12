@@ -1,25 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\EventController as PublicEventController;
 use App\Http\Controllers\ContactController;
-use App\Models\Banner;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
+// Removed model and cache imports from routes; moved to HomeController
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $banners = Cache::remember('home_banners', 300, function () {
-        try {
-            return Banner::latest()->get();
-        } catch (\Throwable $e) {
-            Log::warning('Failed to load banners for homepage: ' . $e->getMessage());
-            return collect();
-        }
-    });
-    return view('home', compact('banners'));
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/hubungi-kami', function () {
     return view('hubungi-kami');
@@ -59,29 +49,9 @@ Route::get('/masjid-al-munawwar', function () {
     return view('masjid-al-munawwar');
 })->name('masjid-al-munawwar');
 
-Route::get('/berita', function () {
-    return view('berita');
-})->name('berita');
+Route::get('/berita', [PublicNewsController::class, 'index'])->name('berita');
 
-Route::get('/berita/{slug}', function ($slug) {
-    // For now, return view with sample data
-    // In the future, this will fetch actual news data from database
-    $news = (object) [
-        'title' => 'Program Pendidikan Al-Quran untuk Anak-Anak',
-        'content' => 'Yayasan Al-Munawwar dengan bangga mengumumkan peluncuran program pendidikan Al-Quran khusus untuk anak-anak. Program ini dirancang dengan metode pembelajaran yang menyenangkan dan interaktif.',
-        'author_name' => 'Admin Yayasan',
-        'author_title' => 'Administrator',
-        'author_bio' => 'Tim admin Yayasan Al-Munawwar yang berkomitmen untuk menyebarkan informasi dan kegiatan yayasan kepada masyarakat luas.',
-        'created_at' => now(),
-        'comments_count' => 0,
-        'category' => 'Pendidikan',
-        'tags' => 'Pendidikan,Al-Quran,Anak-anak,Program',
-        'featured_image' => null,
-        'author_avatar' => null,
-        'slug' => $slug
-    ];
-    return view('berita-detail', compact('news'));
-})->name('berita.detail');
+Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('berita.detail');
 
 // Public Events
 Route::get('/acara', [PublicEventController::class, 'index'])->name('acara');

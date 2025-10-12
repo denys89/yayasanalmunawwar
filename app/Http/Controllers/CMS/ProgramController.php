@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Program;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProgramController extends Controller
 {
@@ -36,9 +37,19 @@ class ProgramController extends Controller
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
+            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'phone' => ['nullable','regex:/^[0-9\s+\-()]+$/','max:50'],
+            'email' => 'nullable|email|max:100',
+            'address' => 'nullable|string',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        // Handle brochure file upload (takes precedence over URL if both provided)
+        if ($request->hasFile('brochure_file')) {
+            $path = $request->file('brochure_file')->store('programs/brochures', 'public');
+            $validated['brochure_url'] = $path;
+        }
 
         Program::create($validated);
 
@@ -51,7 +62,9 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        return view('cms.programs.show', compact('program'));
+        $facilities = $program->facilities()->latest()->get();
+        $educations = $program->educations()->latest()->get();
+        return view('cms.programs.show', compact('program', 'facilities', 'educations'));
     }
 
     /**
@@ -72,9 +85,23 @@ class ProgramController extends Controller
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
+            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'phone' => ['nullable','regex:/^[0-9\s+\-()]+$/','max:50'],
+            'email' => 'nullable|email|max:100',
+            'address' => 'nullable|string',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        // Handle brochure file upload (takes precedence over URL if both provided)
+        if ($request->hasFile('brochure_file')) {
+            // Delete previous stored file if it was a local storage path
+            if ($program->brochure_url && !str_starts_with($program->brochure_url, 'http')) {
+                Storage::disk('public')->delete($program->brochure_url);
+            }
+            $path = $request->file('brochure_file')->store('programs/brochures', 'public');
+            $validated['brochure_url'] = $path;
+        }
 
         $program->update($validated);
 

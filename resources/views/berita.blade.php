@@ -24,34 +24,50 @@
             <div class="sec-title centered">
                 <div class="sec-title_title">Berita Terkini</div>
                 <h2 class="sec-title_heading">Informasi dan Berita <br> Yayasan Al-Munawwar</h2>
+                @if(!empty($query))
+                    <p class="mt-2">Hasil pencarian untuk: <strong>{{ e($query) }}</strong></p>
+                @endif
             </div>
             
             <div class="row clearfix">
 
                 @forelse($news ?? [] as $item)
+                @continue(!$item->isPublished())
                 <!-- News Block One -->
                 <div class="news-block_one col-lg-4 col-md-6 col-sm-12">
                     <div class="news-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1500ms">
                         <div class="news-block_one-image">
                             <a href="{{ route('berita.detail', $item->slug ?? '#') }}">
-                                <img src="{{ $item->featured_image ? asset('storage/' . $item->featured_image) : asset('images/resource/news-1.jpg') }}" alt="{{ $item->title ?? 'Berita' }}" />
+                                @php
+                                    $imageUrl = $item->image_url ?? null;
+                                    $isExternal = $imageUrl && str_starts_with($imageUrl, 'http');
+                                @endphp
+                                <img
+                                    src="{{ $imageUrl ? ($isExternal ? $imageUrl : asset('storage/' . $imageUrl)) : asset('images/resource/news-1.jpg') }}"
+                                    alt="{{ $item->title ?? 'Berita' }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
                             </a>
                         </div>
                         <div class="news-block_one-content">
                             <ul class="news-block_one-meta">
                                 <!-- <li><span class="icon fa-brands fa-rocketchat fa-fw"></span>{{ $item->comments_count ?? 0 }} Komentar</li> -->
-                                <li><span class="icon fa-solid fa-clock fa-fw"></span>{{ $item->created_at ? $item->created_at->format('d M Y') : date('d M Y') }}</li>
+                                @php
+                                    $date = $item->published_at ?? $item->created_at ?? null;
+                                @endphp
+                                <li><span class="icon fa-solid fa-clock fa-fw"></span>{{ $date ? \Carbon\Carbon::parse($date)->format('d M Y') : date('d M Y') }}</li>
                             </ul>
                             <h5 class="news-block_one-heading">
                                 <a href="{{ route('berita.detail', $item->slug ?? '#') }}">{{ $item->title ?? 'Judul Berita' }}</a>
                             </h5>
-                            <div class="news-block_one-text">{{ Str::limit($item->excerpt ?? $item->content ?? 'Ringkasan berita akan ditampilkan di sini...', 100) }}</div>
+                            <div class="news-block_one-text">{{ Str::limit($item->summary ?? $item->content ?? 'Ringkasan berita akan ditampilkan di sini...', 100) }}</div>
                             <div class="news-block_one-info d-flex justify-content-between align-items-center flex-wrap">
                                 <div class="news-block_one-author">
                                     <!-- <div class="news-block_one-author_image">
                                         <img src="{{ $item->author_avatar ?? asset('images/resource/author-1.png') }}" alt="{{ $item->author_name ?? 'Admin' }}" />
                                     </div> -->
-                                    {{ $item->author_name ?? 'Admin' }}
+                                    {{ optional($item->createdBy)->name ?? 'Admin' }}
                                 </div>
                                 <a class="news-block_one-more theme-btn" href="{{ route('berita.detail', $item->slug ?? '#') }}">Baca Selengkapnya</a>
                             </div>
@@ -221,7 +237,7 @@
             <!-- Pagination -->
             @if(isset($news) && $news->hasPages())
             <div class="styled-pagination text-center">
-                {{ $news->links() }}
+                {{ $news->links('vendor.pagination.tailwind') }}
             </div>
             @endif
         </div>

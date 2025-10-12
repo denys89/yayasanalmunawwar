@@ -58,6 +58,26 @@
     </div>
 </section>
 
+<!-- CTA One -->
+<section class="cta-one">
+    <div class="auto-container mt-4">
+        <div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
+            <div class="cta-one_bg" style="background-image:url(assets/images/background/cta-one_bg.png)"></div>
+            <h3 class="cta-one_heading">Dapatkan informasi lengkap mengenai<br />KB-TK Islam Al-Munawwar.</h3>
+            <!-- Button Box -->
+            <div class="cta-one_button">
+                <a href="#" class="theme-btn btn-style-one">
+                    <span class="btn-wrap">
+                        <span class="text-one">Unduh Brosur</span>
+                        <span class="text-two">Unduh Brosur</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End CTA One -->
+
 <!-- Program Section -->
 <section class="service-one" style="background-image:url({{ asset('assets/images/background/service-bg.png') }}); padding: 120px 0;">
     <div class="auto-container">

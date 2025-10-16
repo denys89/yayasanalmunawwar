@@ -56,6 +56,38 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('cms.history.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.history*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.history*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75zm.75 4.5a.75.75 0 00-1.5 0v4.5a.75.75 0 00.75.75h3a.75.75 0 000-1.5h-2.25V11.25z" />
+                        </svg>
+                        History
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('cms.vision_mission.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.vision_mission*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.vision_mission*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75m-3 3.75h6m-6 3h6" />
+                        </svg>
+                        Vision & Mission
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('cms.homepage.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.homepage*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.homepage*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4.5 9.75V21h15V9.75" />
+                        </svg>
+                        Homepage
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('cms.organizational_structure.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.organizational_structure*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.organizational_structure*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-15a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5zm3 3h9v5.25h-9V9.75z" />
+                        </svg>
+                        Organizational Structure
+                    </a>
+                </li>
+                <li>
                     <!-- Admissions menu removed -->
                 </li>
                 <li>

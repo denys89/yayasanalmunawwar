@@ -26,12 +26,16 @@
             </div>
             <div class="p-4">
                 <dl class="space-y-4 text-sm">
+                    @if($program->title)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Title</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->title }}</dd>
+                    </div>
+                    @endif
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Name</dt>
                         <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $program->name }}</dd>
                     </div>
-
-                    
 
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Description</dt>
@@ -59,6 +63,27 @@
                         </dd>
                     </div>
 
+                    @if($program->banner_url)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Banner</dt>
+                        <dd class="mt-1">
+                            <img src="{{ str_starts_with($program->banner_url, 'http') ? $program->banner_url : Storage::disk('public')->url($program->banner_url) }}" alt="Program Banner" class="h-auto max-h-64 w-full rounded-md border border-gray-200 dark:border-gray-700">
+                        </dd>
+                    </div>
+                    @endif
+
+                    @if($program->photo_url)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Photo</dt>
+                        <dd class="mt-1">
+                            <img src="{{ str_starts_with($program->photo_url, 'http') ? $program->photo_url : Storage::disk('public')->url($program->photo_url) }}" alt="Program Photo" class="h-auto max-h-64 w-full rounded-md border border-gray-200 dark:border-gray-700">
+                            @if($program->photo_description)
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">{{ $program->photo_description }}</p>
+                            @endif
+                        </dd>
+                    </div>
+                    @endif
+
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <dt class="font-medium text-gray-700 dark:text-gray-300">Phone</dt>
@@ -84,8 +109,81 @@
             </div>
         </div>
 
-        @include('cms.programs.facilities.index')
-        @include('cms.programs.educations.index')
+        @php
+            $type = $program->program_type ?? 'education';
+            $tabs = [];
+            if ($type === 'education') {
+                $tabs = [
+                    ['key' => 'educations', 'label' => 'Education Units'],
+                    ['key' => 'facilities', 'label' => 'Facilities'],
+                ];
+            } elseif ($type === 'social') {
+                $tabs = [
+                    ['key' => 'services', 'label' => 'Services'],
+                    ['key' => 'donations', 'label' => 'Donations'],
+                ];
+            } elseif ($type === 'religious') {
+                $tabs = [
+                    ['key' => 'activities', 'label' => 'Activities'],
+                    ['key' => 'donations', 'label' => 'Donations'],
+                ];
+            } else {
+                $tabs = [
+                    ['key' => 'educations', 'label' => 'Education Units'],
+                    ['key' => 'facilities', 'label' => 'Facilities'],
+                ];
+            }
+        @endphp
+
+        <div class="mt-6">
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="flex -mb-px space-x-6" aria-label="Tabs">
+                    @foreach($tabs as $idx => $tab)
+                        <button type="button" class="tab-btn whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium {{ $idx === 0 ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-600' }}" data-tab="tab-{{ $tab['key'] }}">
+                            {{ $tab['label'] }}
+                        </button>
+                    @endforeach
+                </nav>
+            </div>
+
+            @foreach($tabs as $idx => $tab)
+                <div id="tab-{{ $tab['key'] }}" class="tab-panel {{ $idx === 0 ? '' : 'hidden' }}">
+                    @if($tab['key'] === 'educations')
+                        @include('cms.programs.educations.index')
+                    @elseif($tab['key'] === 'facilities')
+                        @include('cms.programs.facilities.index')
+                    @elseif($tab['key'] === 'services')
+                        @include('cms.programs.services.index')
+                    @elseif($tab['key'] === 'donations')
+                        @include('cms.programs.donations.index')
+                    @elseif($tab['key'] === 'activities')
+                        @include('cms.programs.activities.index')
+                    @endif
+                </div>
+            @endforeach
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.tab-btn');
+                const panels = document.querySelectorAll('.tab-panel');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const target = this.getAttribute('data-tab');
+                        // update buttons
+                        buttons.forEach(b => {
+                            b.classList.remove('border-amber-600','text-amber-600');
+                            b.classList.add('border-transparent','text-gray-500');
+                        });
+                        this.classList.remove('border-transparent','text-gray-500');
+                        this.classList.add('border-amber-600','text-amber-600');
+                        // update panels
+                        panels.forEach(p => p.classList.add('hidden'));
+                        document.getElementById(target)?.classList.remove('hidden');
+                    });
+                });
+            });
+        </script>
     </div>
 
     <div>

@@ -22,6 +22,15 @@
                     @csrf
 
                     <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                        <input type="text" id="title" name="title" value="{{ old('title') }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('title') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                        @error('title')
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Program Name <span class="text-rose-600">*</span></label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}" required
                                class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('name') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
@@ -81,6 +90,36 @@
                             </div>
                         </div>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter a brochure URL or upload a file (PDF, DOC, DOCX, ODT). Uploaded file overrides URL. Max size 10MB.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="banner_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Banner Image</label>
+                            <input type="file" id="banner_file" name="banner_file" accept="image/*"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('banner_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a banner image (max 5MB).</p>
+                            @error('banner_file')
+                                <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="photo_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo</label>
+                            <input type="file" id="photo_file" name="photo_file" accept="image/*"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('photo_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a photo (max 5MB).</p>
+                            @error('photo_file')
+                                <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="photo_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo Description</label>
+                        <input type="text" id="photo_description" name="photo_description" value="{{ old('photo_description') }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('photo_description') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                        @error('photo_description')
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">

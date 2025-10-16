@@ -25,8 +25,6 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Program</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
@@ -50,24 +48,19 @@
                                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                                         {{ Str::limit($program->name, 50) }}
                                     </div>
+                                    @if($program->title)
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">Title: {{ Str::limit($program->title, 60) }}</div>
+                                    @endif
                                     @if($program->description)
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ Str::limit($program->description, 60) }}</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">{!! \App\Helpers\TinyMCEHelper::sanitizeContent($program->description ?? '') !!}</div>
                                     @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                {{ ucfirst($program->type ?? 'General') }}
+                                {{ ucfirst($program->program_type ?? 'General') }}
                             </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
-                                {{ $program->is_active ? 'Active' : 'Inactive' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {{ $program->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">

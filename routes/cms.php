@@ -18,6 +18,19 @@ use App\Http\Controllers\CMS\EventController;
 use App\Http\Controllers\CMS\BannerController;
 use App\Http\Controllers\CMS\ProgramFacilityController;
 use App\Http\Controllers\CMS\ProgramEducationController;
+use App\Http\Controllers\CMS\ProgramServiceController;
+use App\Http\Controllers\CMS\ProgramDonationController;
+use App\Http\Controllers\CMS\ProgramActivityController;
+use App\Http\Controllers\CMS\HistoryController;
+use App\Http\Controllers\CMS\MilestoneController;
+use App\Http\Controllers\CMS\VisionMissionController;
+use App\Http\Controllers\CMS\MissionController;
+use App\Http\Controllers\CMS\CoreValueController;
+use App\Http\Controllers\CMS\OrganizationalStructureController;
+use App\Http\Controllers\CMS\FoundationLeadershipStructureController;
+use App\Http\Controllers\CMS\IslamicLeadershipValueController;
+use App\Http\Controllers\CMS\HomepageController;
+use App\Http\Controllers\CMS\FoundationValueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +68,24 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
         Route::post('educations', [ProgramEducationController::class, 'store'])->name('educations.store');
         Route::patch('educations/{education}', [ProgramEducationController::class, 'update'])->name('educations.update');
         Route::delete('educations/{education}', [ProgramEducationController::class, 'destroy'])->name('educations.destroy');
+
+        // Program Services
+        Route::get('services', [ProgramServiceController::class, 'index'])->name('services.index');
+        Route::post('services', [ProgramServiceController::class, 'store'])->name('services.store');
+        Route::patch('services/{service}', [ProgramServiceController::class, 'update'])->name('services.update');
+        Route::delete('services/{service}', [ProgramServiceController::class, 'destroy'])->name('services.destroy');
+
+        // Program Donations
+        Route::get('donations', [ProgramDonationController::class, 'index'])->name('donations.index');
+        Route::post('donations', [ProgramDonationController::class, 'store'])->name('donations.store');
+        Route::patch('donations/{donation}', [ProgramDonationController::class, 'update'])->name('donations.update');
+        Route::delete('donations/{donation}', [ProgramDonationController::class, 'destroy'])->name('donations.destroy');
+
+        // Program Activities
+        Route::get('activities', [ProgramActivityController::class, 'index'])->name('activities.index');
+        Route::post('activities', [ProgramActivityController::class, 'store'])->name('activities.store');
+        Route::patch('activities/{activity}', [ProgramActivityController::class, 'update'])->name('activities.update');
+        Route::delete('activities/{activity}', [ProgramActivityController::class, 'destroy'])->name('activities.destroy');
     });
     
     // Explore Management
@@ -111,6 +142,45 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // Settings Management
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // History Management (single record) with Milestones
+    Route::get('history', [HistoryController::class, 'index'])->name('history.index');
+    Route::put('history', [HistoryController::class, 'update'])->name('history.update');
+    Route::post('history/milestones', [MilestoneController::class, 'store'])->name('history.milestones.store');
+    Route::patch('history/milestones/{milestone}', [MilestoneController::class, 'update'])->name('history.milestones.update');
+    Route::delete('history/milestones/{milestone}', [MilestoneController::class, 'destroy'])->name('history.milestones.destroy');
+
+    // Vision & Mission Management (single record) with Missions and Core Values
+    Route::get('vision-mission', [VisionMissionController::class, 'index'])->name('vision_mission.index');
+    Route::put('vision-mission', [VisionMissionController::class, 'update'])->name('vision_mission.update');
+    // Missions (nested under Vision & Mission)
+    Route::post('vision-mission/missions', [MissionController::class, 'store'])->name('vision_mission.missions.store');
+    Route::patch('vision-mission/missions/{mission}', [MissionController::class, 'update'])->name('vision_mission.missions.update');
+    Route::delete('vision-mission/missions/{mission}', [MissionController::class, 'destroy'])->name('vision_mission.missions.destroy');
+    // Core Values (nested under Vision & Mission)
+    Route::post('vision-mission/core-values', [CoreValueController::class, 'store'])->name('vision_mission.core_values.store');
+    Route::patch('vision-mission/core-values/{coreValue}', [CoreValueController::class, 'update'])->name('vision_mission.core_values.update');
+    Route::delete('vision-mission/core-values/{coreValue}', [CoreValueController::class, 'destroy'])->name('vision_mission.core_values.destroy');
+
+    // Homepage Management (single record) with Foundation Values
+    Route::get('homepage', [HomepageController::class, 'index'])->name('homepage.index');
+    Route::put('homepage', [HomepageController::class, 'update'])->name('homepage.update');
+    // Foundation Values (nested under Homepage)
+    Route::post('homepage/foundation-values', [FoundationValueController::class, 'store'])->name('homepage.foundation_values.store');
+    Route::patch('homepage/foundation-values/{foundationValue}', [FoundationValueController::class, 'update'])->name('homepage.foundation_values.update');
+    Route::delete('homepage/foundation-values/{foundationValue}', [FoundationValueController::class, 'destroy'])->name('homepage.foundation_values.destroy');
+
+    // Organizational Structure Management (single record) with Leadership Structures and Values
+    Route::get('organizational-structure', [OrganizationalStructureController::class, 'index'])->name('organizational_structure.index');
+    Route::put('organizational-structure', [OrganizationalStructureController::class, 'update'])->name('organizational_structure.update');
+    // Foundation Leadership Structures
+    Route::post('organizational-structure/foundation-leadership-structures', [FoundationLeadershipStructureController::class, 'store'])->name('organizational_structure.foundation_leadership_structures.store');
+    Route::patch('organizational-structure/foundation-leadership-structures/{leadership}', [FoundationLeadershipStructureController::class, 'update'])->name('organizational_structure.foundation_leadership_structures.update');
+    Route::delete('organizational-structure/foundation-leadership-structures/{leadership}', [FoundationLeadershipStructureController::class, 'destroy'])->name('organizational_structure.foundation_leadership_structures.destroy');
+    // Islamic Leadership Values
+    Route::post('organizational-structure/islamic-leadership-values', [IslamicLeadershipValueController::class, 'store'])->name('organizational_structure.islamic_leadership_values.store');
+    Route::patch('organizational-structure/islamic-leadership-values/{value}', [IslamicLeadershipValueController::class, 'update'])->name('organizational_structure.islamic_leadership_values.update');
+    Route::delete('organizational-structure/islamic-leadership-values/{value}', [IslamicLeadershipValueController::class, 'destroy'])->name('organizational_structure.islamic_leadership_values.destroy');
     
     // Users Management (Admin only)
     Route::resource('users', UserController::class);

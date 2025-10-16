@@ -34,10 +34,15 @@ class ProgramController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
             'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'banner_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'photo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'photo_description' => 'nullable|string|max:255',
+            'program_type' => 'nullable|in:education,social,religious',
             'phone' => ['nullable','regex:/^[0-9\s+\-()]+$/','max:50'],
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string',
@@ -49,6 +54,18 @@ class ProgramController extends Controller
         if ($request->hasFile('brochure_file')) {
             $path = $request->file('brochure_file')->store('programs/brochures', 'public');
             $validated['brochure_url'] = $path;
+        }
+
+        // Handle banner upload
+        if ($request->hasFile('banner_file')) {
+            $bannerPath = $request->file('banner_file')->store('programs/banners', 'public');
+            $validated['banner_url'] = $bannerPath;
+        }
+
+        // Handle photo upload
+        if ($request->hasFile('photo_file')) {
+            $photoPath = $request->file('photo_file')->store('programs/photos', 'public');
+            $validated['photo_url'] = $photoPath;
         }
 
         Program::create($validated);
@@ -64,7 +81,10 @@ class ProgramController extends Controller
     {
         $facilities = $program->facilities()->latest()->get();
         $educations = $program->educations()->latest()->get();
-        return view('cms.programs.show', compact('program', 'facilities', 'educations'));
+        $services = $program->services()->latest()->get();
+        $donations = $program->donations()->latest()->get();
+        $activities = $program->activities()->latest()->get();
+        return view('cms.programs.show', compact('program', 'facilities', 'educations', 'services', 'donations', 'activities'));
     }
 
     /**
@@ -82,10 +102,15 @@ class ProgramController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
             'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'banner_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'photo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'photo_description' => 'nullable|string|max:255',
+            'program_type' => 'nullable|in:education,social,religious',
             'phone' => ['nullable','regex:/^[0-9\s+\-()]+$/','max:50'],
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string',
@@ -101,6 +126,24 @@ class ProgramController extends Controller
             }
             $path = $request->file('brochure_file')->store('programs/brochures', 'public');
             $validated['brochure_url'] = $path;
+        }
+
+        // Handle banner upload
+        if ($request->hasFile('banner_file')) {
+            if ($program->banner_url && !str_starts_with($program->banner_url, 'http')) {
+                Storage::disk('public')->delete($program->banner_url);
+            }
+            $bannerPath = $request->file('banner_file')->store('programs/banners', 'public');
+            $validated['banner_url'] = $bannerPath;
+        }
+
+        // Handle photo upload
+        if ($request->hasFile('photo_file')) {
+            if ($program->photo_url && !str_starts_with($program->photo_url, 'http')) {
+                Storage::disk('public')->delete($program->photo_url);
+            }
+            $photoPath = $request->file('photo_file')->store('programs/photos', 'public');
+            $validated['photo_url'] = $photoPath;
         }
 
         $program->update($validated);

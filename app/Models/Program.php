@@ -11,10 +11,15 @@ class Program extends Model
 
     protected $fillable = [
         'name',
+        'title',
         'slug',
         'description',
         'curriculum',
         'brochure_url',
+        'banner_url',
+        'photo_url',
+        'photo_description',
+        'program_type',
         'phone',
         'email',
         'address',
@@ -33,5 +38,20 @@ class Program extends Model
     public function educations()
     {
         return $this->hasMany(ProgramEducation::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(ProgramService::class);
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(ProgramDonation::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(ProgramActivity::class);
     }
 }

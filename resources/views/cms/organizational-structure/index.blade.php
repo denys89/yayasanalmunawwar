@@ -2,6 +2,38 @@
 
 @section('title', 'Organizational Structure')
 
+@push('styles')
+<style>
+    /* Icon selector modal styles */
+    .icon-selector-modal {
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+        margin: auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    /* Ensure no other elements interfere */
+    body.modal-open {
+        overflow: hidden !important;
+    }
+    /* Override any Tailwind or other framework modal styles */
+    .modal, .popup, .overlay {
+        z-index: 999998 !important;
+    }
+</style>
+@endpush
+
 @section('content')
     <div class="p-4">
         <div class="flex items-center justify-between mb-4">
@@ -196,19 +228,19 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="add-leader-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('add-leader-icon', this.value)">
-                        <select id="add-leader-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('add-leader-icon-preview', this.value)">
-                            <option value="">Select an icon</option>
-                            <option value="fa-solid fa-user-tie">Leader</option>
-                            <option value="fa-solid fa-users">Team</option>
-                            <option value="fa-solid fa-sitemap">Structure</option>
-                            <option value="fa-solid fa-briefcase">Management</option>
-                            <option value="fa-solid fa-chalkboard-teacher">Mentor</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                        </select>
-                        <div class="mt-2"><i id="add-leader-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="add-leader-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('addLeadershipIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-leader-selected-icon" class="hidden">
+                                <i id="add-leader-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-leader-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -238,18 +270,19 @@
                     @method('PATCH')
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="edit-leader-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('edit-leader-icon', this.value)">
-                        <select id="edit-leader-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('edit-leader-icon-preview', this.value)">
-                            <option value="fa-solid fa-user-tie">Leader</option>
-                            <option value="fa-solid fa-users">Team</option>
-                            <option value="fa-solid fa-sitemap">Structure</option>
-                            <option value="fa-solid fa-briefcase">Management</option>
-                            <option value="fa-solid fa-chalkboard-teacher">Mentor</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                        </select>
-                        <div class="mt-2"><i id="edit-leader-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="edit-leader-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('editLeadershipIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-leader-selected-icon" class="hidden">
+                                <i id="edit-leader-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-leader-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -278,20 +311,19 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="add-value-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('add-value-icon', this.value)">
-                        <select id="add-value-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('add-value-icon-preview', this.value)">
-                            <option value="">Select an icon</option>
-                            <option value="fa-solid fa-heart">Heart</option>
-                            <option value="fa-solid fa-user-shield">Integrity</option>
-                            <option value="fa-solid fa-book">Knowledge</option>
-                            <option value="fa-solid fa-balance-scale">Fairness</option>
-                            <option value="fa-solid fa-hands-helping">Helping Hands</option>
-                            <option value="fa-solid fa-hand-holding-heart">Compassion</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-lightbulb">Innovation</option>
-                            <option value="fa-solid fa-leaf">Growth</option>
-                        </select>
-                        <div class="mt-2"><i id="add-value-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="add-value-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('addValueIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-value-selected-icon" class="hidden">
+                                <i id="add-value-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-value-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -321,19 +353,19 @@
                     @method('PATCH')
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="edit-value-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('edit-value-icon', this.value)">
-                        <select id="edit-value-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('edit-value-icon-preview', this.value)">
-                            <option value="fa-solid fa-heart">Heart</option>
-                            <option value="fa-solid fa-user-shield">Integrity</option>
-                            <option value="fa-solid fa-book">Knowledge</option>
-                            <option value="fa-solid fa-balance-scale">Fairness</option>
-                            <option value="fa-solid fa-hands-helping">Helping Hands</option>
-                            <option value="fa-solid fa-hand-holding-heart">Compassion</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-lightbulb">Innovation</option>
-                            <option value="fa-solid fa-leaf">Growth</option>
-                        </select>
-                        <div class="mt-2"><i id="edit-value-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="edit-value-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('editValueIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-value-selected-icon" class="hidden">
+                                <i id="edit-value-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-value-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -351,6 +383,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Icon Selector Modals -->
+    <x-icon-selector 
+        modal-id="addLeadershipIconSelectorModal" 
+        title="Select Icon for Leadership Item" 
+        on-select-callback="handleAddLeadershipIconSelect" />
+
+    <x-icon-selector 
+        modal-id="editLeadershipIconSelectorModal" 
+        title="Select Icon for Leadership Item" 
+        on-select-callback="handleEditLeadershipIconSelect" />
+
+    <x-icon-selector 
+        modal-id="addValueIconSelectorModal" 
+        title="Select Icon for Leadership Value" 
+        on-select-callback="handleAddValueIconSelect" />
+
+    <x-icon-selector 
+        modal-id="editValueIconSelectorModal" 
+        title="Select Icon for Leadership Value" 
+        on-select-callback="handleEditValueIconSelect" />
 
     <x-tinymce-scripts selector="#description" config="standard" />
 
@@ -391,16 +444,6 @@
             const el = document.getElementById(elId);
             el.className = iconClass + ' text-2xl';
         }
-        function filterSelectOptions(selectId, query) {
-            const select = document.getElementById(selectId);
-            const lower = (query || '').toLowerCase();
-            Array.from(select.options).forEach(opt => {
-                if (opt.value === '') { opt.hidden = false; return; }
-                const text = (opt.text || '').toLowerCase();
-                const value = (opt.value || '').toLowerCase();
-                opt.hidden = !(text.includes(lower) || value.includes(lower));
-            });
-        }
 
         function openAddLeadership() {
             document.getElementById('addLeadershipModal').classList.remove('hidden');
@@ -415,12 +458,23 @@
             const form = document.getElementById('editLeadershipForm');
             form.action = '{{ route('cms.organizational_structure.foundation_leadership_structures.update', ['leadership' => '__ID__']) }}'.replace('__ID__', id);
             document.getElementById('edit-leader-icon').value = icon;
-            previewIcon('edit-leader-icon-preview', icon);
+            
+            // Update the new UI structure
+            if (icon) {
+                document.getElementById('edit-leader-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-leader-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-leader-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-leader-selected-icon').classList.add('hidden');
+                document.getElementById('edit-leader-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit-leader-title').value = title;
             document.getElementById('edit-leader-description').value = description;
             document.getElementById('editLeadershipModal').classList.remove('hidden');
             document.getElementById('editLeadershipModal').classList.add('flex');
         }
+
         function closeEditLeadership() {
             document.getElementById('editLeadershipModal').classList.add('hidden');
             document.getElementById('editLeadershipModal').classList.remove('flex');
@@ -439,7 +493,17 @@
             const form = document.getElementById('editValueForm');
             form.action = '{{ route('cms.organizational_structure.islamic_leadership_values.update', ['value' => '__ID__']) }}'.replace('__ID__', id);
             document.getElementById('edit-value-icon').value = icon;
-            previewIcon('edit-value-icon-preview', icon);
+            
+            // Update the new UI structure
+            if (icon) {
+                document.getElementById('edit-value-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-value-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-value-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-value-selected-icon').classList.add('hidden');
+                document.getElementById('edit-value-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit-value-title').value = title;
             document.getElementById('edit-value-description').value = description;
             document.getElementById('editValueModal').classList.remove('hidden');
@@ -448,6 +512,60 @@
         function closeEditValue() {
             document.getElementById('editValueModal').classList.add('hidden');
             document.getElementById('editValueModal').classList.remove('flex');
+        }
+
+        // Icon selector modal functions
+        function openIconSelector(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                // Add body class to prevent scrolling
+                document.body.classList.add('modal-open');
+                
+                // Remove hidden class and add flex
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeIconSelector(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                // Remove body class to restore scrolling
+                document.body.classList.remove('modal-open');
+                
+                // Hide the modal
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Icon selector callback functions
+        function handleAddLeadershipIconSelect(iconClass) {
+            document.getElementById('add-leader-icon').value = iconClass;
+            document.getElementById('add-leader-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('add-leader-selected-icon').classList.remove('hidden');
+            document.getElementById('add-leader-no-icon').classList.add('hidden');
+        }
+
+        function handleEditLeadershipIconSelect(iconClass) {
+            document.getElementById('edit-leader-icon').value = iconClass;
+            document.getElementById('edit-leader-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('edit-leader-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-leader-no-icon').classList.add('hidden');
+        }
+
+        function handleAddValueIconSelect(iconClass) {
+            document.getElementById('add-value-icon').value = iconClass;
+            document.getElementById('add-value-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('add-value-selected-icon').classList.remove('hidden');
+            document.getElementById('add-value-no-icon').classList.add('hidden');
+        }
+
+        function handleEditValueIconSelect(iconClass) {
+            document.getElementById('edit-value-icon').value = iconClass;
+            document.getElementById('edit-value-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('edit-value-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-value-no-icon').classList.add('hidden');
         }
 
         // Default open General tab

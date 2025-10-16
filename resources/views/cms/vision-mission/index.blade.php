@@ -196,23 +196,19 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="add-mission-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('add-mission-icon', this.value)">
-                        <select id="add-mission-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('add-mission-icon-preview', this.value)">
-                            <option value="">Select an icon</option>
-                            <option value="fa-solid fa-flag">Flag</option>
-                            <option value="fa-solid fa-star">Star</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-calendar">Calendar</option>
-                            <option value="fa-solid fa-trophy">Trophy</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-graduation-cap">Education</option>
-                            <option value="fa-solid fa-heart">Care</option>
-                            <option value="fa-solid fa-book">Knowledge</option>
-                            <option value="fa-solid fa-leaf">Growth</option>
-                        </select>
-                        <div class="mt-2"><i id="add-mission-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="add-mission-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('addMissionIconSelectorModal')" class="w-full h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors">
+                            <div id="add-mission-selected-icon" class="hidden flex-col items-center">
+                                <i id="add-mission-icon-preview" class="text-3xl mb-2"></i>
+                                <span class="text-sm">Click to change icon</span>
+                            </div>
+                            <div id="add-mission-no-icon" class="flex flex-col items-center">
+                                <i class="fas fa-plus text-2xl mb-2"></i>
+                                <span class="text-sm">Click to select an icon</span>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -242,22 +238,19 @@
                     @method('PATCH')
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="edit-mission-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('edit-mission-icon', this.value)">
-                        <select id="edit-mission-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('edit-mission-icon-preview', this.value)">
-                            <option value="fa-solid fa-flag">Flag</option>
-                            <option value="fa-solid fa-star">Star</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-calendar">Calendar</option>
-                            <option value="fa-solid fa-trophy">Trophy</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-graduation-cap">Education</option>
-                            <option value="fa-solid fa-heart">Care</option>
-                            <option value="fa-solid fa-book">Knowledge</option>
-                            <option value="fa-solid fa-leaf">Growth</option>
-                        </select>
-                        <div class="mt-2"><i id="edit-mission-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="edit-mission-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('editMissionIconSelectorModal')" class="w-full h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors">
+                            <div id="edit-mission-selected-icon" class="hidden flex-col items-center">
+                                <i id="edit-mission-icon-preview" class="text-3xl mb-2"></i>
+                                <span class="text-sm">Click to change icon</span>
+                            </div>
+                            <div id="edit-mission-no-icon" class="flex flex-col items-center">
+                                <i class="fas fa-plus text-2xl mb-2"></i>
+                                <span class="text-sm">Click to select an icon</span>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -286,20 +279,19 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="add-value-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('add-value-icon', this.value)">
-                        <select id="add-value-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('add-value-icon-preview', this.value)">
-                            <option value="">Select an icon</option>
-                            <option value="fa-solid fa-heart">Heart</option>
-                            <option value="fa-solid fa-hands-helping">Helping Hands</option>
-                            <option value="fa-solid fa-book">Book</option>
-                            <option value="fa-solid fa-leaf">Leaf</option>
-                            <option value="fa-solid fa-user-shield">Integrity</option>
-                            <option value="fa-solid fa-hand-holding-heart">Compassion</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-balance-scale">Fairness</option>
-                            <option value="fa-solid fa-lightbulb">Innovation</option>
-                        </select>
-                        <div class="mt-2"><i id="add-value-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="add-value-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('addValueIconSelectorModal')" class="w-full h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors">
+                            <div id="add-value-selected-icon" class="hidden flex-col items-center">
+                                <i id="add-value-icon-preview" class="text-3xl mb-2"></i>
+                                <span class="text-sm">Click to change icon</span>
+                            </div>
+                            <div id="add-value-no-icon" class="flex flex-col items-center">
+                                <i class="fas fa-plus text-2xl mb-2"></i>
+                                <span class="text-sm">Click to select an icon</span>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -329,19 +321,19 @@
                     @method('PATCH')
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="edit-value-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('edit-value-icon', this.value)">
-                        <select id="edit-value-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('edit-value-icon-preview', this.value)">
-                            <option value="fa-solid fa-heart">Heart</option>
-                            <option value="fa-solid fa-hands-helping">Helping Hands</option>
-                            <option value="fa-solid fa-book">Book</option>
-                            <option value="fa-solid fa-leaf">Leaf</option>
-                            <option value="fa-solid fa-user-shield">Integrity</option>
-                            <option value="fa-solid fa-hand-holding-heart">Compassion</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-balance-scale">Fairness</option>
-                            <option value="fa-solid fa-lightbulb">Innovation</option>
-                        </select>
-                        <div class="mt-2"><i id="edit-value-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="edit-value-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('editValueIconSelectorModal')" class="w-full h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors">
+                            <div id="edit-value-selected-icon" class="hidden flex-col items-center">
+                                <i id="edit-value-icon-preview" class="text-3xl mb-2"></i>
+                                <span class="text-sm">Click to change icon</span>
+                            </div>
+                            <div id="edit-value-no-icon" class="flex flex-col items-center">
+                                <i class="fas fa-plus text-2xl mb-2"></i>
+                                <span class="text-sm">Click to select an icon</span>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -359,6 +351,24 @@
             </div>
         </div>
     </div>
+
+    <!-- Icon Selector Modals -->
+        <x-icon-selector 
+            modal-id="addMissionIconSelectorModal" 
+            title="Select Icon for Mission" 
+            on-select-callback="handleAddMissionIconSelect" />
+        <x-icon-selector 
+            modal-id="editMissionIconSelectorModal" 
+            title="Select Icon for Mission" 
+            on-select-callback="handleEditMissionIconSelect" />
+        <x-icon-selector 
+            modal-id="addValueIconSelectorModal" 
+            title="Select Icon for Core Value" 
+            on-select-callback="handleAddValueIconSelect" />
+        <x-icon-selector 
+            modal-id="editValueIconSelectorModal" 
+            title="Select Icon for Core Value" 
+            on-select-callback="handleEditValueIconSelect" />
 
     <x-tinymce-scripts selector="#description" config="standard" />
 
@@ -395,19 +405,35 @@
             }
         }
 
-        function previewIcon(elId, iconClass) {
-            const el = document.getElementById(elId);
-            el.className = iconClass + ' text-2xl';
+
+
+        // Icon selector callback functions
+        function handleAddMissionIconSelect(iconClass) {
+            document.getElementById('add-mission-icon').value = iconClass;
+            document.getElementById('add-mission-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('add-mission-selected-icon').classList.remove('hidden');
+            document.getElementById('add-mission-no-icon').classList.add('hidden');
         }
-        function filterSelectOptions(selectId, query) {
-            const select = document.getElementById(selectId);
-            const lower = (query || '').toLowerCase();
-            Array.from(select.options).forEach(opt => {
-                if (opt.value === '') { opt.hidden = false; return; }
-                const text = (opt.text || '').toLowerCase();
-                const value = (opt.value || '').toLowerCase();
-                opt.hidden = !(text.includes(lower) || value.includes(lower));
-            });
+
+        function handleEditMissionIconSelect(iconClass) {
+            document.getElementById('edit-mission-icon').value = iconClass;
+            document.getElementById('edit-mission-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('edit-mission-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-mission-no-icon').classList.add('hidden');
+        }
+
+        function handleAddValueIconSelect(iconClass) {
+            document.getElementById('add-value-icon').value = iconClass;
+            document.getElementById('add-value-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('add-value-selected-icon').classList.remove('hidden');
+            document.getElementById('add-value-no-icon').classList.add('hidden');
+        }
+
+        function handleEditValueIconSelect(iconClass) {
+            document.getElementById('edit-value-icon').value = iconClass;
+            document.getElementById('edit-value-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('edit-value-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-value-no-icon').classList.add('hidden');
         }
 
         function openAddMission() {
@@ -423,7 +449,17 @@
             const form = document.getElementById('editMissionForm');
             form.action = '{{ route('cms.vision_mission.missions.update', ['mission' => '__ID__']) }}'.replace('__ID__', id);
             document.getElementById('edit-mission-icon').value = icon;
-            previewIcon('edit-mission-icon-preview', icon);
+            
+            // Update icon display
+            if (icon) {
+                document.getElementById('edit-mission-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-mission-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-mission-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-mission-selected-icon').classList.add('hidden');
+                document.getElementById('edit-mission-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit-mission-title').value = title;
             document.getElementById('edit-mission-description').value = description;
             document.getElementById('editMissionModal').classList.remove('hidden');
@@ -447,7 +483,17 @@
             const form = document.getElementById('editCoreValueForm');
             form.action = '{{ route('cms.vision_mission.core_values.update', ['coreValue' => '__ID__']) }}'.replace('__ID__', id);
             document.getElementById('edit-value-icon').value = icon;
-            previewIcon('edit-value-icon-preview', icon);
+            
+            // Update icon display
+            if (icon) {
+                document.getElementById('edit-value-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-value-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-value-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-value-selected-icon').classList.add('hidden');
+                document.getElementById('edit-value-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit-value-title').value = title;
             document.getElementById('edit-value-description').value = description;
             document.getElementById('editCoreValueModal').classList.remove('hidden');

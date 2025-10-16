@@ -2,6 +2,38 @@
 
 @section('title', 'History')
 
+@push('styles')
+<style>
+    /* Icon selector modal styles */
+    .icon-selector-modal {
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+        margin: auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    /* Ensure no other elements interfere */
+    body.modal-open {
+        overflow: hidden !important;
+    }
+    /* Override any Tailwind or other framework modal styles */
+    .modal, .popup, .overlay {
+        z-index: 999998 !important;
+    }
+</style>
+@endpush
+
 @section('content')
     <div class="p-4">
         <div class="flex items-center justify-between mb-4">
@@ -156,20 +188,19 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="add-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('add-icon', this.value)">
-                        <select id="add-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('add-icon-preview', this.value)">
-                            <option value="">Select an icon</option>
-                            <option value="fa-solid fa-flag">Flag</option>
-                            <option value="fa-solid fa-star">Star</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-calendar">Calendar</option>
-                            <option value="fa-solid fa-trophy">Trophy</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-graduation-cap">Education</option>
-                        </select>
-                        <div class="mt-2"><i id="add-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="add-milestone-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('addMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-milestone-selected-icon" class="hidden">
+                                <i id="add-milestone-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-milestone-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -199,19 +230,19 @@
                     @method('PATCH')
                     <div>
                         <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="text" id="edit-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterSelectOptions('edit-icon', this.value)">
-                        <select id="edit-icon" name="icon" class="w-full border rounded p-2" required onchange="previewIcon('edit-icon-preview', this.value)">
-                            <option value="fa-solid fa-flag">Flag</option>
-                            <option value="fa-solid fa-star">Star</option>
-                            <option value="fa-solid fa-award">Award</option>
-                            <option value="fa-solid fa-calendar">Calendar</option>
-                            <option value="fa-solid fa-trophy">Trophy</option>
-                            <option value="fa-solid fa-lightbulb">Idea</option>
-                            <option value="fa-solid fa-handshake">Partnership</option>
-                            <option value="fa-solid fa-users">Community</option>
-                            <option value="fa-solid fa-graduation-cap">Education</option>
-                        </select>
-                        <div class="mt-2"><i id="edit-icon-preview" class="text-2xl"></i></div>
+                        <input type="hidden" id="edit-milestone-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="openIconSelector('editMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-milestone-selected-icon" class="hidden">
+                                <i id="edit-milestone-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-milestone-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
@@ -228,6 +259,17 @@
                 </form>
             </div>
         </div>
+
+        <!-- Icon Selector Modals -->
+        <x-icon-selector 
+            modal-id="addMilestoneIconSelectorModal" 
+            title="Select Icon for Milestone" 
+            on-select-callback="handleAddMilestoneIconSelect" />
+
+        <x-icon-selector 
+            modal-id="editMilestoneIconSelectorModal" 
+            title="Select Icon for Milestone" 
+            on-select-callback="handleEditMilestoneIconSelect" />
     </div>
 
     <x-tinymce-scripts selector="#description" config="standard" />
@@ -252,19 +294,44 @@
             }
         }
 
-        function previewIcon(elId, iconClass) {
-            const el = document.getElementById(elId);
-            el.className = iconClass + ' text-2xl';
+        // Icon selector modal functions
+        function openIconSelector(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                // Add body class to prevent scrolling
+                document.body.classList.add('modal-open');
+                
+                // Remove hidden class and add flex
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
         }
-        function filterSelectOptions(selectId, query) {
-            const select = document.getElementById(selectId);
-            const lower = (query || '').toLowerCase();
-            Array.from(select.options).forEach(opt => {
-                if (opt.value === '') { opt.hidden = false; return; }
-                const text = (opt.text || '').toLowerCase();
-                const value = (opt.value || '').toLowerCase();
-                opt.hidden = !(text.includes(lower) || value.includes(lower));
-            });
+
+        function closeIconSelector(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                // Remove body class to restore scrolling
+                document.body.classList.remove('modal-open');
+                
+                // Hide the modal
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Icon selector callback functions
+        function handleAddMilestoneIconSelect(iconClass) {
+            document.getElementById('add-milestone-icon').value = iconClass;
+            document.getElementById('add-milestone-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('add-milestone-selected-icon').classList.remove('hidden');
+            document.getElementById('add-milestone-no-icon').classList.add('hidden');
+        }
+
+        function handleEditMilestoneIconSelect(iconClass) {
+            document.getElementById('edit-milestone-icon').value = iconClass;
+            document.getElementById('edit-milestone-icon-preview').className = iconClass + ' text-3xl mb-2';
+            document.getElementById('edit-milestone-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-milestone-no-icon').classList.add('hidden');
         }
 
         function openAddMilestone() {
@@ -279,8 +346,18 @@
         function openEditMilestone(id, icon, title, description) {
             const form = document.getElementById('editMilestoneForm');
             form.action = '{{ route('cms.history.milestones.update', ['milestone' => '__ID__']) }}'.replace('__ID__', id);
-            document.getElementById('edit-icon').value = icon;
-            previewIcon('edit-icon-preview', icon);
+            document.getElementById('edit-milestone-icon').value = icon;
+            
+            // Update the new UI structure
+            if (icon) {
+                document.getElementById('edit-milestone-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-milestone-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-milestone-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-milestone-selected-icon').classList.add('hidden');
+                document.getElementById('edit-milestone-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit-title').value = title;
             document.getElementById('edit-description').value = description;
             document.getElementById('editMilestoneModal').classList.remove('hidden');

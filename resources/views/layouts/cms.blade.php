@@ -13,8 +13,11 @@
     
     <!-- Icons are inlined as SVG; removed external Heroicons CDN scripts -->
     
-    <!-- Tailwind CSS built asset to avoid Vite dev client in CMS -->
-    <link rel="stylesheet" href="{{ asset('build/assets/app-DKmDYDTJ.css') }}">
+    <!-- Flaticon CSS -->
+    <link rel="stylesheet" href="{{ asset('css/flaticon_afbd3404a2e1104832d0.css') }}">
+    
+    <!-- Vite CSS and JS assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     @stack('styles')
 </head>

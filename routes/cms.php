@@ -46,10 +46,8 @@ use App\Http\Controllers\CMS\FoundationValueController;
 // CMS Routes with Admin Middleware
 Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(function () {
     
-    // Redirect root CMS to pages
-    Route::get('/', function () {
-        return redirect()->route('cms.pages.index');
-    })->name('dashboard');
+    // CMS Dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     
     // Pages Management
     Route::resource('pages', PageController::class);

@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -10,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add 'parent' to users.role enum
-        DB::statement("ALTER TABLE `users` MODIFY `role` ENUM('admin','editor','parent') NOT NULL DEFAULT 'editor'");
+        // For SQLite, we need to recreate the table to modify enum
+        Schema::table('users', function (Blueprint $table) {
+            // Drop the old role column
+            $table->dropColumn('role');
+        });
+        
+        Schema::table('users', function (Blueprint $table) {
+            // Add the new role column with parent option
+            $table->enum('role', ['admin', 'editor', 'parent'])->default('editor')->after('email_verified_at');
+        });
     }
 
     /**
@@ -19,7 +28,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert to original enum without 'parent'
-        DB::statement("ALTER TABLE `users` MODIFY `role` ENUM('admin','editor') NOT NULL DEFAULT 'editor'");
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
+        
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role', ['admin', 'editor'])->default('editor')->after('email_verified_at');
+        });
     }
 };

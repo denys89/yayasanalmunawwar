@@ -168,8 +168,8 @@
 						<!-- Sec Title -->
 						<div class="sec-title">
 							<div class="sec-title_title d-flex align-items-center">Yayasan Al-Munawwar <span><img src="{{ asset('assets/images/icons/bismillah-2.png') }}" alt="" /></span></div>
-							<h2 class="sec-title_heading">Sekolah Islam Terpadu Yayasan Al-Munawwar</h2>
-							<div class="sec-title_text">Kami berkomitmen menghadirkan pendidikan Islam berkualitas mulai dari usia dini hingga tingkat menengah. Dengan pengajaran yang menggabungkan nilai-nilai Al-Qur’an, akhlak mulia, dan wawasan global, kami siap mendampingi tumbuh kembang anak-anak Anda.</div>
+                            <h2 class="sec-title_heading">{{ $homepage?->title ?? 'Sekolah Islam Terpadu Yayasan Al-Munawwar' }}</h2>
+                            <div class="sec-title_text">{!! $homepage?->description ?? 'Kami berkomitmen menghadirkan pendidikan Islam berkualitas mulai dari usia dini hingga tingkat menengah. Dengan pengajaran yang menggabungkan nilai-nilai Al-Qur’an, akhlak mulia, dan wawasan global, kami siap mendampingi tumbuh kembang anak-anak Anda.' !!}</div>
 						</div>
 					</div>
 				</div>
@@ -179,10 +179,11 @@
 					<div class="welcome-one_image-outer">
 						
 						<div class="welcome-one_image">
-							<img src="{{ asset('assets/images/resource/welcome-1.jpg') }}" alt="" />
+							@php $photoUrl = !empty($homepage?->photo) ? asset('storage/' . $homepage->photo) : asset('assets/images/resource/welcome-1.jpg'); @endphp
+							<img src="{{ $photoUrl }}" alt="{{ $homepage->photo_title ?? 'Homepage Photo' }}" />
 						</div>
 						<div class="welcome-one_years d-flex align-items-center flex-wrap">
-							Pendidikan Berkarakter, Prestasi Unggul
+							{{ $homepage->photo_title ?? 'Pendidikan Berkarakter, Prestasi Unggul' }}
 						</div>
 					</div>
 				</div>
@@ -198,30 +199,19 @@
 			<div class="inner-container" style="background-image:url(assets/images/icons/featured.png)">
 				<div class="row clearfix">
 
-					<!-- Feature Block One -->
-					<div class="feature-block_one col-lg-4 col-md-6 col-sm-12">
-						<div class="feature-block_one-inner">
-							<div class="feature-block_one-icon flaticon-allah"></div>
-							
-							Kurikulum terpadu berbasis Al-Qur'an dan ilmu pengetahuan modern
+					@forelse(($foundationValues ?? []) as $value)
+						<div class="feature-block_one col-lg-4 col-md-6 col-sm-12">
+							<div class="feature-block_one-inner">
+								<div class="feature-block_one-icon {{ $value->icon }}"></div>
+								<h4 class="feature-block_one-heading">{{ $value->title }}</h4>
+								<div class="feature-block_one-text">{{ $value->description }}</div>
+							</div>
 						</div>
-					</div>
-
-					<!-- Feature Block One -->
-					<div class="feature-block_one col-lg-4 col-md-6 col-sm-12">
-						<div class="feature-block_one-inner">
-							<div class="feature-block_one-icon flaticon-education"></div>
-							Tenaga pendidik profesional dan berpengalama
+					@empty
+						<div class="col-12">
+							<div class="text-center text-muted py-3">Belum ada nilai yayasan ditambahkan.</div>
 						</div>
-					</div>
-
-					<!-- Feature Block One -->
-					<div class="feature-block_one col-lg-4 col-md-6 col-sm-12">
-						<div class="feature-block_one-inner">
-							<div class="feature-block_one-icon flaticon-islamic"></div>
-							Pembelajaran berkarakter Islami dan kreatif
-						</div>
-					</div>
+					@endforelse
 				</div>
 			</div>
 		</div>
@@ -238,73 +228,32 @@
 			</div>
 			<div class="row clearfix">
 
+				@forelse(($programs ?? []) as $program)
 				<!-- Course Block One -->
 				<div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="course-block_one-inner wow fadeInLeft"  data-wow-delay="150ms" data-wow-duration="1000ms">
+					<div class="course-block_one-inner wow fadeInLeft" data-wow-delay="{{ 150 * ($loop->index + 1) }}ms" data-wow-duration="1000ms">
 						<div class="course-block_one-image">
-							<a href="course-detail.html"><img src="assets/images/resource/course-dummy1.png" alt="" /></a>
+							@php $photo = $program->photo_url; $isExternal = $photo && Str::startsWith($photo, 'http'); @endphp
+							<a href="#" data-slug="{{ $program->slug }}">
+								<img src="{{ $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png') }}" alt="{{ $program->title ?? $program->name }}" />
+							</a>
 						</div>
 						<div class="course-block_one-content">
-							
-							<h4 class="course-block_one-heading"><a href="course-detail.html">KB & TK</a></h4>
-							
-							<div class="course-block_one-text">Menanamkan nilai-nilai Islam dan pembiasaan positif sejak dini melalui kegiatan belajar yang menyenangkan, kreatif, dan sesuai tahap perkembangan anak.</div>
+							<h4 class="course-block_one-heading">
+								<a href="#" data-slug="{{ $program->slug }}">{{ $program->title ?? $program->name }}</a>
+							</h4>
+							<div class="course-block_one-text">{{ Str::limit(strip_tags($program->description), 160) }}</div>
 							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="#">Lihat Detail</a>
+								<a class="theme-btn course-block_one-study" href="" data-slug="{{ $program->slug }}">Lihat Detail</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Course Block One -->
-				<div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="course-block_one-inner wow fadeInLeft"  data-wow-delay="300ms" data-wow-duration="1000ms">
-						<div class="course-block_one-image">
-							<a href="course-detail.html"><img src="assets/images/resource/course-dummy2.png" alt="" /></a>
-						</div>
-						<div class="course-block_one-content">
-						
-							<h4 class="course-block_one-heading"><a href="course-detail.html">Sekolah Dasar (SD) Islam Al-Munawwar</a></h4>
-							
-							<div class="course-block_one-text">Membentuk generasi Qur’ani yang cerdas, disiplin, dan berprestasi dengan kurikulum terpadu yang menggabungkan ilmu agama dan pengetahuan umum.</div>
-							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="#">Lihat Detail</a>
-							</div>
-						</div>
-					</div>
+				@empty
+				<div class="col-12">
+					<div class="text-center text-muted py-3">Belum ada program ditambahkan.</div>
 				</div>
-				
-				<!-- Course Block One -->
-				<div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="course-block_one-inner wow fadeInLeft"  data-wow-delay="450ms" data-wow-duration="1000ms">
-						<div class="course-block_one-image">
-							<a href="course-detail.html"><img src="assets/images/resource/course-dummy4.png" alt="" /></a>
-						</div>
-						<div class="course-block_one-content">
-							<h4 class="course-block_one-heading"><a href="course-detail.html">Panti Asuhan Islam Al-Munawwar</a></h4>
-							<div class="course-block_one-text">Membentuk generasi Qur’ani yang cerdas, disiplin, dan berprestasi dengan kurikulum terpadu yang menggabungkan ilmu agama dan pengetahuan umum.</div>
-							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="#">Lihat Detail</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Course Block One -->
-				<div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="course-block_one-inner wow fadeInLeft"  data-wow-delay="600ms" data-wow-duration="1000ms">
-						<div class="course-block_one-image">
-							<a href="course-detail.html"><img src="assets/images/resource/course-dummy3.png" alt="" /></a>
-						</div>
-						<div class="course-block_one-content">
-							<h4 class="course-block_one-heading"><a href="course-detail.html">Masjid Islam Al-Munawwar</a></h4>
-							<div class="course-block_one-text">Membentuk generasi Qur’ani yang cerdas, disiplin, dan berprestasi dengan kurikulum terpadu yang menggabungkan ilmu agama dan pengetahuan umum.</div>
-							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="#">Lihat Detail</a>
-							</div>
-						</div>
-					</div>
-				</div>
+				@endforelse
 
 			</div>
 		</div>

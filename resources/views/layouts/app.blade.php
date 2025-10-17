@@ -11,6 +11,7 @@
     <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/swiper.min.css') }}" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -70,8 +71,22 @@
 
     <!-- JavaScript Files -->
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
-    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <!-- Initialize Bootstrap components -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Auto-initialize all carousels
+            var carouselElements = document.querySelectorAll('.carousel');
+            carouselElements.forEach(function(carouselEl) {
+                var carousel = new bootstrap.Carousel(carouselEl, {
+                    interval: 5000,
+                    wrap: true
+                });
+            });
+        });
+    </script>
     <script src="{{ asset('assets/js/appear.js') }}"></script>
     <script src="{{ asset('assets/js/parallax.min.js') }}"></script>
     <script src="{{ asset('assets/js/tilt.jquery.min.js') }}"></script>

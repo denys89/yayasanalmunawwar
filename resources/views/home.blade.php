@@ -261,7 +261,7 @@
 	<!-- End Courses One -->
 
 	<!-- Facilities One -->
-	<section class="facilities-one">
+	<section class="facilities-one" style="display:none;">
 		<div class="auto-container">
 			<!-- Sec Title -->
 			<div class="sec-title centered">
@@ -352,6 +352,162 @@
 	</section>
 	<!-- End Facilities One -->
 
+	<!-- School Programs Tabs Section -->
+	<section class="school-programs-tabs">
+		<div class="auto-container">
+			<!-- Sec Title -->
+			<div class="sec-title centered">
+				<div class="sec-title_title">Program unggulan sekolah kami</div>
+				<h2 class="sec-title_heading">Program Sekolah</h2>
+			</div>
+			
+			<!-- Tabs Container -->
+			<div class="tabs-container">
+				<!-- Tab Navigation -->
+				<div class="tabs-nav">
+					<div class="tab-btns tab-buttons clearfix">
+						<div class="tab-btn active-btn" data-tab="#facilities-tab">Facilities</div>
+						<div class="tab-btn" data-tab="#extracurricular-tab">Extracurricular</div>
+						<div class="tab-btn" data-tab="#islamic-life-tab">Islamic Life</div>
+						<div class="tab-btn" data-tab="#school-life-tab">School Life</div>
+					</div>
+				</div>
+				
+				<!-- Tabs Content -->
+				<div class="tabs-content">
+					<!-- Facilities Tab -->
+					<div class="tab active-tab" id="facilities-tab">
+						<div class="tab-inner">
+							<div class="row clearfix">
+								<div class="image-column col-lg-6 col-md-12 col-sm-12">
+									<div class="image">
+										<img src="{{ asset('assets/images/resource/facilities-tab.jpg') }}" alt="Facilities" />
+									</div>
+								</div>
+								<div class="content-column col-lg-6 col-md-12 col-sm-12">
+									<div class="inner-column">
+										<h3>Fasilitas Lengkap</h3>
+										<p>At Sekolah Insan cendekia Madani, Students are not only provided with the best academic resources but also an amazing student life experience, supported with well-maintained and impressive facilities.</p>
+										<ul class="list">
+											<li>Ruang kelas modern dengan AC</li>
+											<li>Perpustakaan lengkap</li>
+											<li>Laboratorium sains dan komputer</li>
+											<li>Fasilitas olahraga</li>
+											<li>Kantin sehat</li>
+										</ul>
+										<a href="#" class="theme-btn btn-style-two">
+											<span class="btn-wrap">
+												<span class="text-one">Learn more</span>
+												<span class="text-two">Learn more</span>
+											</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Extracurricular Tab -->
+					<div class="tab" id="extracurricular-tab">
+						<div class="tab-inner">
+							<div class="row clearfix">
+								<div class="image-column col-lg-6 col-md-12 col-sm-12">
+									<div class="image">
+										<img src="{{ asset('assets/images/resource/extracurricular-tab.jpg') }}" alt="Extracurricular" />
+									</div>
+								</div>
+								<div class="content-column col-lg-6 col-md-12 col-sm-12">
+									<div class="inner-column">
+										<h3>Kegiatan Ekstrakurikuler</h3>
+										<p>Kami menyediakan berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat dan minat siswa di luar jam pelajaran reguler.</p>
+										<ul class="list">
+											<li>Pramuka</li>
+											<li>Seni dan Budaya</li>
+											<li>Olahraga</li>
+											<li>Robotika</li>
+											<li>Public Speaking</li>
+										</ul>
+										<a href="#" class="theme-btn btn-style-two">
+											<span class="btn-wrap">
+												<span class="text-one">Learn more</span>
+												<span class="text-two">Learn more</span>
+											</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Islamic Life Tab -->
+					<div class="tab" id="islamic-life-tab">
+						<div class="tab-inner">
+							<div class="row clearfix">
+								<div class="image-column col-lg-6 col-md-12 col-sm-12">
+									<div class="image">
+										<img src="{{ asset('assets/images/resource/islamic-life-tab.jpg') }}" alt="Islamic Life" />
+									</div>
+								</div>
+								<div class="content-column col-lg-6 col-md-12 col-sm-12">
+									<div class="inner-column">
+										<h3>Kehidupan Islami</h3>
+										<p>Kami menerapkan nilai-nilai Islam dalam kehidupan sehari-hari di sekolah untuk membentuk karakter dan akhlak mulia siswa.</p>
+										<ul class="list">
+											<li>Sholat berjamaah</li>
+											<li>Tahfidz Al-Qur'an</li>
+											<li>Pembelajaran Hadits</li>
+											<li>Peringatan hari besar Islam</li>
+											<li>Pembiasaan adab Islami</li>
+										</ul>
+										<a href="#" class="theme-btn btn-style-two">
+											<span class="btn-wrap">
+												<span class="text-one">Learn more</span>
+												<span class="text-two">Learn more</span>
+											</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- School Life Tab -->
+					<div class="tab" id="school-life-tab">
+						<div class="tab-inner">
+							<div class="row clearfix">
+								<div class="image-column col-lg-6 col-md-12 col-sm-12">
+									<div class="image">
+										<img src="{{ asset('assets/images/resource/school-life-tab.jpg') }}" alt="School Life" />
+									</div>
+								</div>
+								<div class="content-column col-lg-6 col-md-12 col-sm-12">
+									<div class="inner-column">
+										<h3>Kehidupan Sekolah</h3>
+										<p>Kami menciptakan lingkungan belajar yang menyenangkan dan kondusif untuk perkembangan akademik dan sosial siswa.</p>
+										<ul class="list">
+											<li>Field trip edukatif</li>
+											<li>Kegiatan sosial</li>
+											<li>Kompetisi akademik</li>
+											<li>Pekan kreativitas</li>
+											<li>Pentas seni tahunan</li>
+										</ul>
+										<a href="#" class="theme-btn btn-style-two">
+											<span class="btn-wrap">
+												<span class="text-one">Learn more</span>
+												<span class="text-two">Learn more</span>
+											</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End School Programs Tabs Section -->
+
 	<!-- News One -->
 	<section class="news-one">
 		<div class="auto-container">
@@ -427,4 +583,163 @@
 	</section>
 	<!-- End CTA One -->
 
+<!-- Tab Styles -->
+<style>
+.school-programs-tabs {
+    position: relative;
+    padding: 90px 0;
+    background-color: #f7f7f7;
+}
+
+.tabs-container {
+    position: relative;
+    margin-top: 40px;
+}
+
+.tabs-nav {
+    position: relative;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tab-btns {
+    display: inline-flex;
+    background-color: #ffffff;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.tab-btn {
+    position: relative;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+}
+
+.tab-btn.active-btn {
+    background-color: #50bc84;
+    color: #ffffff;
+}
+
+.tabs-content {
+    position: relative;
+}
+
+.tab {
+    position: relative;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.tab.active-tab {
+    display: block;
+    opacity: 1;
+}
+
+.tab-inner {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.tab .image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.tab .image img {
+    width: 100%;
+    height: auto;
+    transition: all 0.5s ease;
+}
+
+.tab .inner-column {
+    padding: 20px 0 0 20px;
+}
+
+.tab h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.tab p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.tab .list {
+    margin-bottom: 25px;
+}
+
+.tab .list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.tab .list li:before {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #50bc84;
+}
+
+@media (max-width: 767px) {
+    .tab-btns {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .tab .inner-column {
+        padding: 20px 0 0 0;
+    }
+}
+</style>
+
+<!-- Tab Functionality Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all tab buttons and tabs
+    const tabBtns = document.querySelectorAll('.school-programs-tabs .tab-btn');
+    const tabs = document.querySelectorAll('.school-programs-tabs .tab');
+    
+    // Add click event to each tab button
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons and tabs
+            tabBtns.forEach(b => b.classList.remove('active-btn'));
+            tabs.forEach(t => t.classList.remove('active-tab'));
+            
+            // Add active class to clicked button
+            this.classList.add('active-btn');
+            
+            // Get target tab and make it active
+            const targetTab = document.querySelector(this.getAttribute('data-tab'));
+            if (targetTab) {
+                targetTab.classList.add('active-tab');
+            }
+        });
+    });
+});
+</script>
 @endsection

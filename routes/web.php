@@ -6,6 +6,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\EventController as PublicEventController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ExploreController;
 // Removed model and cache imports from routes; moved to HomeController
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,10 @@ Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('berit
 Route::get('/acara', [PublicEventController::class, 'index'])->name('acara');
 Route::get('/acara/{event}', [PublicEventController::class, 'show'])->name('acara.detail');
 
+Route::get('/explore/fasilitas', [ExploreController::class, 'fasilitas'])->name('explore.fasilitas');
+Route::get('/explore/extrakurikuler', [ExploreController::class, 'extrakurikuler'])->name('explore.extrakurikuler');
+Route::get('/explore/islamic-life', [ExploreController::class, 'islamicLife'])->name('explore.islamic-life');
+Route::get('/explore/school-life', [ExploreController::class, 'schoolLife'])->name('explore.school-life');
 
 // Web Dashboard route (for default Laravel UI components)
 Route::middleware('auth')->group(function () {

@@ -52,6 +52,14 @@
                                             <li><a href="{{ route('struktur-organisasi') }}">Struktur Organisasi</a></li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown"><a href="#">Explore</a>
+                                        <ul>
+                                            <li><a href="{{ route('explore.fasilitas') }}">Facilities</a></li>
+                                            <li><a href="{{ route('explore.extrakurikuler') }}">Extracurricular</a></li>
+                                            <li><a href="{{ route('explore.islamic-life') }}">Islamic Life</a></li>
+                                            <li><a href="{{ route('explore.school-life') }}">School Life</a></li>
+                                        </ul>
+                                    </li>
                                     <li class="dropdown"><a href="#">Unit Sekolah</a>
                                         <ul>
                                             <li><a href="{{ route('tk-al-munawwar') }}">TK Islam Al Munawwar</a></li>

@@ -50,16 +50,34 @@
                         @enderror
                     </div>
 
-                    <!-- Description -->
+                    <!-- Category -->
                     <div>
-                        <label for="description" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Description</label>
+                        <label for="category" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                            Category <span class="text-red-500">*</span>
+                        </label>
                         <div class="mt-2">
-                            <textarea name="description" 
-                                      id="description" 
-                                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('description') ring-red-500 @enderror">{{ old('description', $explore->description) }}</textarea>
+                            <select name="category" id="category" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('category') ring-red-500 @enderror">
+                                <option value="">Select category</option>
+                                <option value="facility" {{ old('category', $explore->category) === 'facility' ? 'selected' : '' }}>Facilities</option>
+                                <option value="extracurricular" {{ old('category', $explore->category) === 'extracurricular' ? 'selected' : '' }}>Extracurriculars</option>
+                            </select>
+                        </div>
+                        @error('category')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Summary -->
+                    <div>
+                        <label for="summary" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Summary</label>
+                        <div class="mt-2">
+                            <textarea name="summary" 
+                                      id="summary" 
+                                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:placeholder:text-gray-400 @error('summary') ring-red-500 @enderror">{{ old('summary', $explore->summary) }}</textarea>
                             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Brief summary of the explore content</p>
                         </div>
-                        @error('description')
+                        @error('summary')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
@@ -111,21 +129,33 @@
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Explore Settings</h3>
             </div>
             <div class="p-6 space-y-6">
-                @if($explore->image)
+                @if($explore->image || $explore->image_url)
                 <!-- Current Image -->
                 <div>
                     <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Current Image</label>
                     <div class="mt-2">
-                        <img src="{{ asset('storage/' . $explore->image) }}" alt="Current image" 
+                        @php
+                            $currentImageSrc = null;
+                            if ($explore->image) {
+                                $currentImageSrc = asset('storage/' . $explore->image);
+                            } elseif ($explore->image_url) {
+                                $currentImageSrc = preg_match('/^https?:\/\//', $explore->image_url)
+                                    ? $explore->image_url
+                                    : asset('storage/' . ltrim($explore->image_url, '/'));
+                            }
+                        @endphp
+                        @if($currentImageSrc)
+                        <img src="{{ $currentImageSrc }}" alt="Current image" 
                              class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm max-h-40 object-cover">
+                        @endif
                     </div>
                 </div>
                 @endif
 
-                <!-- Featured Image -->
+                <!-- Featured Image (File Upload only) -->
                 <div>
                     <label for="image" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                        {{ $explore->image ? 'Replace Image' : 'Featured Image' }}
+                        {{ ($explore->image || $explore->image_url) ? 'Replace Image (File Upload)' : 'Featured Image (File Upload)' }}
                     </label>
                     <div class="mt-2">
                         <input type="file" 
@@ -134,7 +164,7 @@
                                accept="image/*"
                                form="explore-form"
                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 @error('image') border-red-500 @enderror">
-                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload an image for this explore content</p>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload an image file. Uploading will replace the current image.</p>
                     </div>
                     @error('image')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -160,22 +190,10 @@
                 </div>
 
                 <!-- Status -->
-                <div class="space-y-4">
-                    <div class="flex items-start">
-                        <div class="flex h-6 items-center">
-                            <input id="is_active" 
-                                   name="is_active" 
-                                   type="checkbox" 
-                                   value="1" 
-                                   {{ old('is_active', $explore->is_active) ? 'checked' : '' }}
-                                   form="explore-form"
-                                   class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800">
-                        </div>
-                        <div class="ml-3 text-sm leading-6">
-                            <label for="is_active" class="font-medium text-gray-900 dark:text-white">Active</label>
-                            <p class="text-gray-500 dark:text-gray-400">Make this explore visible to visitors</p>
-                        </div>
-                    </div>
+                <div class="space-y-2">
+                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                        Status is controlled by the action buttons: use <span class="font-medium">Save as Draft</span> or <span class="font-medium">Update & Publish</span>.
+                    </p>
                 </div>
             </div>
         </div>
@@ -211,5 +229,5 @@
 @endsection
 
 @push('scripts')
-<x-tinymce-scripts selector="#description, #content" config="standard" />
+<x-tinymce-scripts selector="#summary, #content" config="standard" />
 @endpush

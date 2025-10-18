@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Explore;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\TinyMCEHelper;
 
 class ExploreController extends Controller
 {
@@ -33,12 +35,31 @@ class ExploreController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'category' => 'required|in:facilities,extracurriculars',
+            'category' => 'required|in:facility,extracurricular',
+            'summary' => 'nullable|string',
             'content' => 'required|string',
+            'order' => 'nullable|integer|min:0',
             'image_url' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
+        // Sanitize rich text fields
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = TinyMCEHelper::sanitizeContent($validated['summary']);
+        }
+        $validated['content'] = TinyMCEHelper::sanitizeContent($validated['content']);
+
         $validated['slug'] = Str::slug($validated['title']);
+
+        // Determine status based on action buttons
+        $action = $request->input('action');
+        $validated['status'] = $action === 'publish' ? 'published' : 'draft';
+
+        // If a file is uploaded, store it and set image_url to stored path
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('explores', 'public');
+            $validated['image_url'] = $path;
+        }
 
         Explore::create($validated);
 
@@ -69,12 +90,38 @@ class ExploreController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'category' => 'required|in:facilities,extracurriculars',
+            'category' => 'required|in:facility,extracurricular',
+            'summary' => 'nullable|string',
             'content' => 'required|string',
+            'order' => 'nullable|integer|min:0',
             'image_url' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
+        // Sanitize rich text fields
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = TinyMCEHelper::sanitizeContent($validated['summary']);
+        }
+        $validated['content'] = TinyMCEHelper::sanitizeContent($validated['content']);
+
         $validated['slug'] = Str::slug($validated['title']);
+
+        // Determine status based on action buttons; keep current if none provided
+        $action = $request->input('action');
+        if ($action === 'publish') {
+            $validated['status'] = 'published';
+        } elseif ($action === 'save') {
+            $validated['status'] = 'draft';
+        }
+
+        // If a new file is uploaded, delete old stored file (if local) and set new path
+        if ($request->hasFile('image')) {
+            if ($explore->image_url && !str_starts_with($explore->image_url, 'http')) {
+                Storage::disk('public')->delete($explore->image_url);
+            }
+            $path = $request->file('image')->store('explores', 'public');
+            $validated['image_url'] = $path;
+        }
 
         $explore->update($validated);
 

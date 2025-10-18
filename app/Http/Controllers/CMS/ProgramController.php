@@ -35,6 +35,7 @@ class ProgramController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
+            'summary' => 'nullable|string',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
@@ -47,6 +48,21 @@ class ProgramController extends Controller
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string',
         ]);
+
+        // Status based on action if provided
+        $action = $request->input('action');
+        if ($action === 'publish') {
+            $validated['status'] = 'published';
+        } elseif ($action === 'save') {
+            $validated['status'] = 'draft';
+        }
+
+        // Basic sanitization for summary
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = \Illuminate\Support\Str::of($validated['summary'])
+                ->replace('<script', '&lt;script')
+                ->replace('</script>', '&lt;/script>');
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
 
@@ -103,6 +119,7 @@ class ProgramController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
+            'summary' => 'nullable|string',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
             'brochure_url' => 'nullable|url',
@@ -115,6 +132,21 @@ class ProgramController extends Controller
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string',
         ]);
+
+        // Status based on action if provided
+        $action = $request->input('action');
+        if ($action === 'publish') {
+            $validated['status'] = 'published';
+        } elseif ($action === 'save') {
+            $validated['status'] = 'draft';
+        }
+
+        // Basic sanitization for summary
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = \Illuminate\Support\Str::of($validated['summary'])
+                ->replace('<script', '&lt;script')
+                ->replace('</script>', '&lt;/script>');
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
 

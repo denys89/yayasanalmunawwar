@@ -34,26 +34,33 @@
                     <p class="text-gray-900 dark:text-white">{{ $explore->title }}</p>
                 </div>
 
-                @if($explore->image)
+                @if($explore->image_url)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Featured Image:</label>
                     <div class="mt-2">
-                        <img src="{{ asset('storage/' . $explore->image) }}" alt="{{ $explore->title }}" class="max-h-72 w-auto rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                        @php
+                            $src = \Illuminate\Support\Str::startsWith($explore->image_url, ['http://', 'https://'])
+                                ? $explore->image_url
+                                : asset('storage/' . $explore->image_url);
+                        @endphp
+                        <img src="{{ $src }}" alt="{{ $explore->title }}" class="max-h-72 w-auto rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                    </div>
+                </div>
+                @endif
+
+                @if($explore->summary)
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Summary:</label>
+                    <div class="text-gray-900 dark:text-white prose prose-sm max-w-none dark:prose-invert">
+                        {!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->summary) !!}
                     </div>
                 </div>
                 @endif
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description:</label>
-                    <div class="text-gray-900 dark:text-white prose prose-sm max-w-none dark:prose-invert">
-                        {!! nl2br(e($explore->description)) !!}
-                    </div>
-                </div>
-
-                <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Content:</label>
                     <div class="text-gray-900 dark:text-white prose prose-sm max-w-none dark:prose-invert">
-                        {!! nl2br(e($explore->content)) !!}
+                        {!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->content) !!}
                     </div>
                 </div>
 
@@ -64,12 +71,153 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status:</label>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $explore->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
-                        {{ $explore->is_active ? 'Active' : 'Inactive' }}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $explore->status === 'published' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
+                        {{ $explore->status === 'published' ? 'Published' : 'Draft' }}
                     </span>
                 </div>
             </div>
         </div>
+
+        <!-- Images List Section -->
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 mt-6">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Images</h3>
+                <button type="button" onclick="openExploreImageUpload()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    Add Image
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- Images Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-900/30">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Thumbnail</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Caption</th>
+                                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($explore->images as $image)
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                                    </td>
+                                    <td class="px-4 py-3 align-top">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ $image->caption ?? '—' }}</p>
+                                    </td>
+                                    <td class="px-4 py-3 text-right whitespace-nowrap">
+                                        <div class="inline-flex items-center gap-2">
+                                            <button type="button" onclick="openExploreImageViewModal({{ $image->id }})" class="px-3 py-2 text-xs font-medium rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">View</button>
+                                            <button type="button" onclick="openExploreImageEditModal({{ $image->id }})" class="px-3 py-2 text-xs font-medium rounded-md bg-yellow-600 text-white hover:bg-yellow-700">Edit</button>
+                                            <form action="{{ route('cms.explores.images.destroy', [$explore, $image]) }}" method="POST" onsubmit="return confirm('Delete this image?')" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-3 py-2 text-xs font-medium rounded-md bg-red-600 text-white hover:bg-red-700">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No images uploaded yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div
+
+        <!-- Upload Image Modal overlay centered -->
+        <div id="exploreImageUploadModal" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
+            <div class="w-full max-w-[36rem] max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Upload Image</h3>
+                    <button type="button" onclick="closeExploreImageUpload()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form action="{{ route('cms.explores.images.store', $explore) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label for="upload-image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image (jpg, jpeg, png, webp)</label>
+                        <input id="upload-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+                        @error('image')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-3">
+                            <img id="upload-image-preview" src="#" alt="Preview" class="hidden max-h-48 rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="upload-caption" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption (optional, max 300 chars)</label>
+                        <textarea id="upload-caption" name="caption" rows="3" maxlength="300" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Write a description..."></textarea>
+                        @error('caption')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="closeExploreImageUpload()" class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Cancel</button>
+                        <button type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Per-image View & Edit Modals -->
+        @foreach($explore->images as $image)
+            <!-- View Modal -->
+            <div id="exploreImageView-{{ $image->id }}" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
+                <div class="w-full max-w-[48rem] max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Image Preview</h3>
+                        <button type="button" onclick="closeExploreImageViewModal({{ $image->id }})" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" class="max-h-[70vh] w-auto mx-auto rounded-lg border border-gray-200 dark:border-gray-700" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Edit Modal -->
+            <div id="exploreImageEdit-{{ $image->id }}" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
+                <div class="w-full max-w-[36rem] max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Edit Image</h3>
+                        <button type="button" onclick="closeExploreImageEditModal({{ $image->id }})" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form action="{{ route('cms.explores.images.update', [$explore, $image]) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+                        @method('PATCH')
+                        <div>
+                            <label for="edit-image-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Replace Image (optional)</label>
+                            <input id="edit-image-{{ $image->id }}" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+                            <img src="#" alt="Preview" class="hidden mt-2 max-h-40 rounded-md border border-gray-200 dark:border-gray-700 js-edit-preview" loading="lazy">
+                        </div>
+                        <div>
+                            <label for="edit-caption-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption</label>
+                            <textarea id="edit-caption-{{ $image->id }}" name="caption" rows="2" maxlength="300" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-yellow-500 focus:ring-yellow-500" placeholder="Update description...">{{ old('caption', $image->caption) }}</textarea>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" onclick="closeExploreImageEditModal({{ $image->id }})" class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Cancel</button>
+                            <button type="submit" class="rounded-md bg-yellow-600 px-3 py-2 text-sm text-white hover:bg-yellow-700">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @endforeach
+
     </div>
 
     <div class="lg:col-span-1">
@@ -113,4 +261,95 @@
         </div>
     </div>
 </div>
+
+<!-- Image modal controls and previews -->
+@push('scripts')
+<script>
+    function openExploreImageUpload() {
+        const modal = document.getElementById('exploreImageUploadModal');
+        if (modal) modal.classList.remove('hidden');
+    }
+    function closeExploreImageUpload() {
+        const modal = document.getElementById('exploreImageUploadModal');
+        if (modal) {
+            // Hide the modal overlay
+            modal.classList.add('hidden');
+
+            const form = modal.querySelector('form');
+            if (form) form.reset();
+            const preview = document.getElementById('upload-image-preview');
+            if (preview) {
+                preview.src = '#';
+                preview.classList.add('hidden');
+            }
+        }
+    }
+
+    function openExploreImageViewModal(id) {
+        const modal = document.getElementById(`exploreImageView-${id}`);
+        if (modal) modal.classList.remove('hidden');
+    }
+    function closeExploreImageViewModal(id) {
+        const modal = document.getElementById(`exploreImageView-${id}`);
+        if (modal) modal.classList.add('hidden');
+    }
+
+    function openExploreImageEditModal(id) {
+        const modal = document.getElementById(`exploreImageEdit-${id}`);
+        if (modal) modal.classList.remove('hidden');
+    }
+    function closeExploreImageEditModal(id) {
+        const modal = document.getElementById(`exploreImageEdit-${id}`);
+        if (modal) modal.classList.add('hidden');
+    }
+
+    // Preview for upload modal
+    const uploadInput = document.getElementById('upload-image');
+    const uploadPreview = document.getElementById('upload-image-preview');
+    if (uploadInput && uploadPreview) {
+        uploadInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                const url = URL.createObjectURL(this.files[0]);
+                uploadPreview.src = url;
+                uploadPreview.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Preview for edit modals
+    document.querySelectorAll('input[type=file][name="image"]').forEach(function (input) {
+        input.addEventListener('change', function () {
+            const preview = this.closest('form').querySelector('.js-edit-preview');
+            if (this.files && this.files[0] && preview) {
+                const url = URL.createObjectURL(this.files[0]);
+                preview.src = url;
+                preview.classList.remove('hidden');
+            }
+        });
+    });
+
+    // Close modals when clicking outside
+    window.addEventListener('click', function (event) {
+        const id = event.target.id || '';
+        if (id === 'exploreImageUploadModal') {
+            closeExploreImageUpload();
+        } else if (id.startsWith('exploreImageView-')) {
+            const imgId = id.replace('exploreImageView-', '');
+            closeExploreImageViewModal(imgId);
+        } else if (id.startsWith('exploreImageEdit-')) {
+            const imgId = id.replace('exploreImageEdit-', '');
+            closeExploreImageEditModal(imgId);
+        }
+    });
+
+    // ESC key closes any open explore modals
+    window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeExploreImageUpload();
+            document.querySelectorAll('[id^="exploreImageView-"]').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="exploreImageEdit-"]').forEach(el => el.classList.add('hidden'));
+        }
+    });
+</script>
+@endpush
 @endsection

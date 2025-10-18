@@ -50,6 +50,16 @@
                     </div>
 
                     <div>
+                        <label for="summary" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Summary</label>
+                        <textarea id="summary" name="summary"
+                                  class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('summary') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('summary') }}</textarea>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Optional short overview shown above the description.</p>
+                        @error('summary')
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description <span class="text-rose-600">*</span></label>
                         <textarea id="description" name="description" required
                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('description') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('description') }}</textarea>
@@ -156,9 +166,9 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M5 3a2 2 0 0 0-2 2v14l4-4h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5Z"/></svg>
                             Save as Draft
                         </button>
-                        <button type="submit" name="action" value="activate" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="submit" name="action" value="publish" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M10.28 15.53a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l2.47 2.47 5.47-5.47a.75.75 0 0 1 1.06 1.06l-6 6Z" clip-rule="evenodd"/></svg>
-                            Save & Activate
+                            Save & Publish
                         </button>
                     </div>
                 </form>
@@ -204,7 +214,7 @@
 @endsection
 
 @push('scripts')
-<x-tinymce-scripts selector="#description, #curriculum" config="standard" />
+<x-tinymce-scripts selector="#summary, #description, #curriculum" config="standard" />
 <script>
     // Auto-generate slug from name
     document.getElementById('name').addEventListener('input', function() {

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 class Event extends Model
 {
@@ -18,6 +17,8 @@ class Event extends Model
         'organizer',
         'contact',
         'description',
+        'summary',
+        'status',
     ];
 
     protected $casts = [
@@ -26,9 +27,8 @@ class Event extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function getFormattedDatetimeAttribute(): string
+    public function getFormattedDatetimeAttribute()
     {
-        $dt = $this->datetime instanceof \Illuminate\Support\Carbon ? $this->datetime : Carbon::parse($this->datetime);
-        return $dt->format('l, d M Y \a\t H:i');
+        return $this->datetime ? $this->datetime->format('d M Y H:i') : null;
     }
 }

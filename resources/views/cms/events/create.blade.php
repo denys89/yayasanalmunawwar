@@ -59,13 +59,21 @@
         </div>
 
         <div>
+            <label for="summary" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Summary</label>
+            <textarea id="summary" name="summary" class="mt-2 block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600" rows="4">{{ old('summary') }}</textarea>
+        </div>
+
+        <div>
             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
             <textarea id="description" name="description" class="mt-2 block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600" rows="8">{{ old('description') }}</textarea>
         </div>
 
-        <div class="flex justify-end gap-3">
+        <div class="flex justify-between gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
             <a href="{{ route('cms.events.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition-colors duration-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">Cancel</a>
-            <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors duration-200">Create</button>
+            <div class="flex gap-3">
+                <button type="submit" name="action" value="save" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 rounded-lg shadow-sm transition-colors duration-200">Save as Draft</button>
+                <button type="submit" name="action" value="publish" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors duration-200">Save & Publish</button>
+            </div>
         </div>
     </form>
 </div>
@@ -82,5 +90,5 @@ document.querySelector('input[name="banner_image"]').addEventListener('change', 
 </script>
 @endpush
 
-<x-tinymce-scripts selector="#description" />
+<x-tinymce-scripts selector="#summary, #description" />
 @endsection

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ExploreImage;
 
 class Explore extends Model
 {
@@ -15,6 +16,9 @@ class Explore extends Model
         'category',
         'content',
         'image_url',
+        'summary',
+        'status',
+        'order',
     ];
 
     protected $casts = [
@@ -44,5 +48,10 @@ class Explore extends Model
     public function scopeExtracurriculars($query)
     {
         return $query->where('category', 'extracurricular');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ExploreImage::class);
     }
 }

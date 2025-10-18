@@ -14,6 +14,8 @@ class Program extends Model
         'title',
         'slug',
         'description',
+        'summary',
+        'status',
         'curriculum',
         'brochure_url',
         'banner_url',

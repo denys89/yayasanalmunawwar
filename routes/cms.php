@@ -5,6 +5,7 @@ use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\PageController;
 use App\Http\Controllers\CMS\ProgramController;
 use App\Http\Controllers\CMS\ExploreController;
+use App\Http\Controllers\CMS\ExploreImageController;
 use App\Http\Controllers\CMS\NewsController;
 use App\Http\Controllers\CMS\AdmissionWaveController;
 use App\Http\Controllers\CMS\StudentRegistrationController;
@@ -88,6 +89,11 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // Explore Management
     Route::resource('explores', ExploreController::class);
+    Route::prefix('explores/{explore}')->name('explores.')->group(function () {
+        Route::post('images', [ExploreImageController::class, 'store'])->name('images.store');
+        Route::patch('images/{image}', [ExploreImageController::class, 'update'])->name('images.update');
+        Route::delete('images/{image}', [ExploreImageController::class, 'destroy'])->name('images.destroy');
+    });
     
     // News Management
     Route::resource('news', NewsController::class);

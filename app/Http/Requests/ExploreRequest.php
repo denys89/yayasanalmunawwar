@@ -23,7 +23,7 @@ class ExploreRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'category' => 'required|in:facilities,extracurriculars',
+            'category' => 'required|in:facility,extracurricular',
             'content' => 'required|string',
             'image_url' => 'nullable|url',
         ];

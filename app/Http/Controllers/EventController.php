@@ -13,6 +13,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $events = Event::query()
+            ->where('status', 'published')
             ->latest('datetime')
             ->paginate(9)
             ->withQueryString();
@@ -25,7 +26,12 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        if ($event->status !== 'published') {
+            abort(404);
+        }
+
         $upcomingEvents = Event::query()
+            ->where('status', 'published')
             ->where('datetime', '>', now())
             ->orderBy('datetime')
             ->take(5)

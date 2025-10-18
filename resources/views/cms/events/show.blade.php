@@ -31,7 +31,20 @@
                     <h3 class="text-sm font-medium text-gray-500">Contact</h3>
                     <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $event->contact ?? '-' }}</p>
                 </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Status</h3>
+                    @if($event->status === 'published')
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">Published</span>
+                    @else
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100">Draft</span>
+                    @endif
+                </div>
             </div>
+            @if($event->summary)
+            <div class="prose dark:prose-invert max-w-none">
+                {!! $event->summary !!}
+            </div>
+            @endif
             <div class="prose dark:prose-invert max-w-none">
                 {!! $event->description !!}
             </div>

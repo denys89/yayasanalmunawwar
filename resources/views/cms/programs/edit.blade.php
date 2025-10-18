@@ -49,6 +49,15 @@
                 </div>
 
                 <div>
+                    <label for="summary" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Summary</label>
+                    <textarea id="summary" name="summary" rows="4"
+                              class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('summary') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('summary', $program->summary) }}</textarea>
+                    @error('summary')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
                     <textarea id="description" name="description" rows="4"
                               class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('description') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">{{ old('description', $program->description) }}</textarea>
@@ -155,8 +164,15 @@
                     @enderror
                 </div>
 
-                <div class="pt-2">
-                    <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Update Program</button>
+                <div class="flex items-center justify-between gap-3 pt-2">
+                    <button type="submit" name="action" value="save" class="inline-flex items-center gap-2 rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M5 3a2 2 0 0 0-2 2v14l4-4h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5Z"/></svg>
+                        Save as Draft
+                    </button>
+                    <button type="submit" name="action" value="publish" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M10.28 15.53a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l2.47 2.47 5.47-5.47a.75.75 0 0 1 1.06 1.06l-6 6Z" clip-rule="evenodd"/></svg>
+                        Update & Publish
+                    </button>
                 </div>
             </form>
         </div>
@@ -165,7 +181,7 @@
 @endsection
 
 @push('scripts')
-<x-tinymce-scripts selector="#description, #curriculum" config="standard" />
+<x-tinymce-scripts selector="#summary, #description, #curriculum" config="standard" />
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const nameInput = document.getElementById('name');

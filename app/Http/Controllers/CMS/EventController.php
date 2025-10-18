@@ -51,15 +51,26 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
             'contact' => 'nullable|string|max:20',
+            'summary' => 'nullable|string',
             'description' => 'required|string',
         ]);
+
+        // Determine status from action buttons
+        $action = $request->input('action');
+        $validated['status'] = $action === 'publish' ? 'published' : 'draft';
 
         if ($request->hasFile('banner_image')) {
             $path = $request->file('banner_image')->store('events', 'public');
             $validated['banner_image'] = $path;
         }
 
-        // Basic sanitization: allow safe HTML via strip_tags with allowed tags
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = \Illuminate\Support\Str::of($validated['summary'])
+                ->replace('<script', '&lt;script')
+                ->replace('</script>', '&lt;/script&gt;')
+                ->toString();
+        }
+
         $validated['description'] = \Illuminate\Support\Str::of($validated['description'])
             ->replace('<script', '&lt;script')
             ->replace('</script>', '&lt;/script&gt;')
@@ -98,16 +109,31 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
             'contact' => 'nullable|string|max:20',
+            'summary' => 'nullable|string',
             'description' => 'required|string',
         ]);
 
+        // Status based on action if provided
+        $action = $request->input('action');
+        if ($action === 'publish') {
+            $validated['status'] = 'published';
+        } elseif ($action === 'save') {
+            $validated['status'] = 'draft';
+        }
+
         if ($request->hasFile('banner_image')) {
-            // delete old if exists
             if ($event->banner_image && Storage::disk('public')->exists($event->banner_image)) {
                 Storage::disk('public')->delete($event->banner_image);
             }
             $path = $request->file('banner_image')->store('events', 'public');
             $validated['banner_image'] = $path;
+        }
+
+        if (!empty($validated['summary'])) {
+            $validated['summary'] = \Illuminate\Support\Str::of($validated['summary'])
+                ->replace('<script', '&lt;script')
+                ->replace('</script>', '&lt;/script&gt;')
+                ->toString();
         }
 
         $validated['description'] = \Illuminate\Support\Str::of($validated['description'])

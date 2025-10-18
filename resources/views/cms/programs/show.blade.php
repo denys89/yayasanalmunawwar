@@ -42,6 +42,13 @@
                         <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! $program->description !!}</dd>
                     </div>
 
+                    @if($program->summary)
+                    <div>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Summary</dt>
+                        <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! $program->summary !!}</dd>
+                    </div>
+                    @endif
+
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Curriculum</dt>
                         <dd class="prose prose-sm mt-1 max-w-none text-gray-800 dark:prose-invert">{!! $program->curriculum !!}</dd>
@@ -194,8 +201,13 @@
             <div class="p-4">
                 <dl class="space-y-4 text-sm">
                     <div>
-                        <dt class="font-medium text-gray-700 dark:text-gray-300">Created</dt>
-                        <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ optional($program->created_at)->format('M d, Y H:i') }}</dd>
+                        <dt class="font-medium text-gray-700 dark:text-gray-300">Status</dt>
+                        <dd class="mt-1 text-gray-900 dark:text-gray-100">
+                            @php $isPublished = ($program->status ?? 'draft') === 'published'; @endphp
+                            <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold {{ $isPublished ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300' }}">
+                                {{ $isPublished ? 'Published' : 'Draft' }}
+                            </span>
+                        </dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-700 dark:text-gray-300">Last Updated</dt>

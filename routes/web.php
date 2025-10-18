@@ -7,6 +7,9 @@ use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\EventController as PublicEventController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\PublicHistoryController;
+use App\Http\Controllers\PublicVisionMissionController;
+use App\Http\Controllers\PublicOrganizationalStructureController;
 // Removed model and cache imports from routes; moved to HomeController
 use Illuminate\Support\Facades\Route;
 
@@ -21,17 +24,11 @@ Route::post('/hubungi-kami', [ContactController::class, 'store'])
     ->name('hubungi-kami.submit')
     ->middleware(['throttle:10,1']);
 
-Route::get('/sejarah', function () {
-    return view('sejarah');
-})->name('sejarah');
+Route::get('/sejarah', [PublicHistoryController::class, 'show'])->name('sejarah');
 
-Route::get('/visi-misi', function () {
-    return view('visi-misi');
-})->name('visi-misi');
+Route::get('/visi-misi', [PublicVisionMissionController::class, 'show'])->name('visi-misi');
 
-Route::get('/struktur-organisasi', function () {
-    return view('struktur-organisasi');
-})->name('struktur-organisasi');
+Route::get('/struktur-organisasi', [PublicOrganizationalStructureController::class, 'show'])->name('struktur-organisasi');
 
 // Individual Unit Pages
 Route::get('/tk-al-munawwar', function () {

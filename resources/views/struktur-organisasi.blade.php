@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Page Title -->
-<section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
+<section class="page-title" style="background-image:url({{ $bannerUrl ?? asset('images/background/page-title.jpg') }})">
     <div class="auto-container">
         <h2>Struktur Organisasi</h2>
         <ul class="bread-crumb clearfix">
@@ -440,26 +440,28 @@
     <!-- Welcome One -->
     <section class="welcome-one">
         <div class="auto-container">
+            @if(!empty($errorMessage))
+                <div class="alert alert-warning" role="alert">{{ $errorMessage }}</div>
+            @endif
             <div class="row clearfix">
                 <!-- Content Column -->
                 <div class="welcome-one_content-column col-lg-6 col-md-12 col-sm-12">
                     <div class="welcome-one_content-inner">
                         <!-- Sec Title -->
                         <div class="sec-title">
-                            <div class="sec-title_title">Struktur Organisasi</div>
-                            <h2 class="sec-title_heading">Tata Kelola <span>Organisasi</span> yang Profesional</h2>
-                            <div class="sec-title_text">Yayasan Al-Munawwar memiliki struktur organisasi yang jelas, profesional, dan akuntabel untuk memastikan tata kelola yang baik dalam menjalankan amanah pendidikan dan dakwah Islam.</div>
+                            <div class="sec-title_title">{{ $organizationalStructure->name ?? 'Struktur Organisasi' }}</div>
+                            <h2 class="sec-title_heading">{{ $organizationalStructure->title ?? 'Tata Kelola ' }}<span>Organisasi</span>{{ ($organizationalStructure && $organizationalStructure->title) ? '' : ' yang Profesional' }}</h2>
+                            <div class="sec-title_text">{!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->description ?? 'Yayasan Al-Munawwar memiliki struktur organisasi yang jelas, profesional, dan akuntabel untuk memastikan tata kelola yang baik dalam menjalankan amanah pendidikan dan dakwah Islam.') !!}</div>
                         </div>
                         
                         <div class="welcome-one_text">
                             <h4>Prinsip Tata Kelola</h4>
-                            <p>Struktur organisasi kami dibangun berdasarkan prinsip transparansi, akuntabilitas, dan profesionalisme dalam menjalankan amanah pendidikan dan dakwah sesuai dengan nilai-nilai Islam.</p>
+                            <p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->governance_principles ?? 'Struktur organisasi kami dibangun berdasarkan prinsip transparansi, akuntabilitas, dan profesionalisme dalam menjalankan amanah pendidikan dan dakwah sesuai dengan nilai-nilai Islam.') !!}</p>
                             
                             <div class="quote-box">
                                 <p>
                                     <i class="fa fa-quote-left"></i>
-                                    "Dan jadikanlah di antara mereka itu pemimpin-pemimpin yang memberi petunjuk dengan perintah Kami ketika mereka sabar. Dan adalah mereka meyakini ayat-ayat Kami." 
-                                    <strong>(QS. As-Sajdah: 24)</strong>
+                                    {!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->quran_quote ?? '') !!}
                                 </p>
                             </div>
                         </div>
@@ -470,7 +472,7 @@
                 <div class="welcome-one_image-column col-lg-6 col-md-12 col-sm-12">
                     <div class="welcome-two_image-inner">
                         <div class="welcome-two_image-outer">
-                            <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
+                            <img src="{{ $imageUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
                         </div>
                     </div>
                 </div>
@@ -490,41 +492,21 @@
             </div>
             
             <div class="row clearfix">
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-mosque"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Dewan Pembina</a></h5>
-                        <div class="institute-block_one-text">Organ tertinggi yayasan yang memberikan arahan strategis, visi jangka panjang, dan pengawasan umum terhadap jalannya organisasi sesuai dengan tujuan pendirian yayasan.</div>
+                @if(isset($leadershipStructures) && $leadershipStructures->count())
+                    @foreach($leadershipStructures as $index => $item)
+                        <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
+                            <div class="institute-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
+                                <div class="institute-block_one-icon {{ $item->icon ?? 'flaticon-mosque' }}"></div>
+                                <h5 class="institute-block_one-heading"><a href="#">{{ $item->title }}</a></h5>
+                                <div class="institute-block_one-text">{{ $item->description }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="col-12">
+                        <div class="text-center" style="color:#666;">Belum ada struktur kepemimpinan ditambahkan.</div>
                     </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-education"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Dewan Pengawas</a></h5>
-                        <div class="institute-block_one-text">Melakukan pengawasan dan evaluasi terhadap pelaksanaan program, pengelolaan keuangan, dan memastikan kepatuhan terhadap peraturan yang berlaku.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-user"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Dewan Pengurus</a></h5>
-                        <div class="institute-block_one-text">Menjalankan operasional harian yayasan, bertanggung jawab atas pencapaian program kerja, dan mengkoordinasikan seluruh kegiatan organisasi.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-globe"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Unit Operasional</a></h5>
-                        <div class="institute-block_one-text">Tim pelaksana program yang menjalankan kegiatan pendidikan, dakwah, sosial kemasyarakatan, dan program-program strategis yayasan di lapangan.</div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -541,41 +523,21 @@
             </div>
             
             <div class="row clearfix">
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-mosque"></div>
-                        <div class="counter-block_one-title">Amanah</div>
-                        <div class="counter-block_one-text">Menjalankan tugas dan tanggung jawab dengan penuh kepercayaan, kejujuran, dan integritas sesuai ajaran Islam</div>
+                @if(isset($leadershipValues) && $leadershipValues->count())
+                    @foreach($leadershipValues as $index => $value)
+                        <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
+                            <div class="counter-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
+                                <div class="counter-block_one-icon {{ $value->icon ?? 'flaticon-mosque' }}"></div>
+                                <div class="counter-block_one-title">{{ $value->title }}</div>
+                                <div class="counter-block_one-text">{{ $value->description }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="col-12">
+                        <div class="text-center" style="color:#666;">Belum ada nilai kepemimpinan ditambahkan.</div>
                     </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-education"></div>
-                        <div class="counter-block_one-title">Profesional</div>
-                        <div class="counter-block_one-text">Menjalankan tugas dengan kompetensi tinggi, standar kualitas terbaik, dan komitmen pada keunggulan</div>
-                    </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-give"></div>
-                        <div class="counter-block_one-title">Transparan</div>
-                        <div class="counter-block_one-text">Keterbukaan dan akuntabilitas dalam setiap proses pengambilan keputusan dan pengelolaan organisasi</div>
-                    </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-globe"></div>
-                        <div class="counter-block_one-title">Kolaboratif</div>
-                        <div class="counter-block_one-text">Membangun kerjasama yang harmonis, sinergis, dan produktif antar seluruh unit organisasi</div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>

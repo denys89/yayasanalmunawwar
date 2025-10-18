@@ -6,12 +6,12 @@
 
 @section('content')
 <!-- Page Title -->
-<section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
+<section class="page-title" style="background-image:url({{ $bannerUrl ?? asset('images/background/page-title.jpg') }})">
     <div class="auto-container">
-        <h2>Visi & Misi</h2>
+        <h2>{{ $visionMission->name ?? 'Visi & Misi' }}</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>Visi & Misi</li>
+            <li>{{ $visionMission->name ?? 'Visi & Misi' }}</li>
         </ul>
     </div>
 </section>
@@ -387,26 +387,29 @@
     <!-- Welcome One -->
     <section class="welcome-one">
         <div class="auto-container">
+            @if(!empty($errorMessage))
+                <div class="alert alert-warning" role="alert">{{ $errorMessage }}</div>
+            @endif
             <div class="row clearfix">
                 <!-- Content Column -->
                 <div class="welcome-one_content-column col-lg-6 col-md-12 col-sm-12">
                     <div class="welcome-one_content-inner">
                         <!-- Sec Title -->
                         <div class="sec-title">
-                            <div class="sec-title_title">Visi & Misi Yayasan</div>
-                            <h2 class="sec-title_heading">Membangun Generasi <span>Islami</span> yang Berkualitas</h2>
-                            <div class="sec-title_text">Yayasan Al-Munawwar berkomitmen untuk menciptakan generasi muslim yang berakhlak mulia, berilmu, dan bermanfaat bagi umat.</div>
+                            <div class="sec-title_title">{{ $visionMission->name ?? 'Visi & Misi Yayasan' }}</div>
+                            <h2 class="sec-title_heading">{{ $visionMission->title ?? 'Membangun Generasi Islami yang Berkualitas' }}</h2>
+                            <div class="sec-title_text">{!! \App\Helpers\TinyMCEHelper::sanitizeContent($visionMission->description ?? '') !!}</div>
                         </div>
                         
                         <div class="welcome-one_text">
                             <h4>Visi Kami</h4>
-                            <p>Menjadi lembaga pendidikan Islam terdepan yang menghasilkan generasi muslim yang beriman, bertakwa, berakhlak mulia, cerdas, dan berdaya saing global dengan landasan nilai-nilai Al-Quran dan As-Sunnah.</p>
+                            <p>{{ $visionMission->our_vision ?? 'Menjadi lembaga pendidikan Islam terdepan yang menghasilkan generasi muslim yang beriman, bertakwa, berakhlak mulia, cerdas, dan berdaya saing global dengan landasan nilai-nilai Al-Quran dan As-Sunnah.' }}</p>
                             
                             <div class="quote-box">
                                 <p>
                                     <i class="fa fa-quote-left"></i>
-                                    "Dan hendaklah ada di antara kamu segolongan umat yang menyeru kepada kebajikan, menyuruh kepada yang ma'ruf dan mencegah dari yang munkar; merekalah orang-orang yang beruntung." 
-                                    <strong>(QS. Ali Imran: 104)</strong>
+                                    {{ $visionMission->quran_quote ?? 'Dan hendaklah ada di antara kamu segolongan umat yang menyeru kepada kebajikan, menyuruh kepada yang ma\'ruf dan mencegah dari yang munkar; merekalah orang-orang yang beruntung.' }}
+                                    <strong>{{ $visionMission->quran_quote ? '' : '(QS. Ali Imran: 104)' }}</strong>
                                 </p>
                             </div>
                         </div>
@@ -417,7 +420,7 @@
                 <div class="welcome-one_image-column col-lg-6 col-md-12 col-sm-12">
                     <div class="welcome-two_image-inner">
                         <div class="welcome-two_image-outer">
-                            <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Visi Misi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-2.jpg') }}'" />
+                            <img src="{{ $imageUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="Visi Misi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-2.jpg') }}'" />
                         </div>
                     </div>
                 </div>
@@ -437,77 +440,21 @@
             </div>
             
             <div class="row clearfix">
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-mosque"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Pendidikan Agama Berkualitas</a></h5>
-                        <div class="institute-block_one-text">Menyelenggarakan pendidikan agama Islam yang komprehensif, berkualitas tinggi, dan sesuai dengan perkembangan zaman.</div>
+                @if($missions && $missions->count())
+                    @foreach($missions as $index => $mission)
+                        <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
+                            <div class="institute-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
+                                <div class="institute-block_one-icon {{ $mission->icon ?? 'flaticon-education' }}"></div>
+                                <h5 class="institute-block_one-heading"><a href="#">{{ $mission->title }}</a></h5>
+                                <div class="institute-block_one-text">{{ $mission->description }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="col-12">
+                        <div class="text-center" style="color:#666;">Belum ada misi ditambahkan.</div>
                     </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-quran-1"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Program Tahfidz Unggul</a></h5>
-                        <div class="institute-block_one-text">Mengembangkan program tahfidz Al-Quran dengan metode yang efektif, menyenangkan, dan menghasilkan hafidz berkualitas.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-education"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Pendidikan Umum Terintegrasi</a></h5>
-                        <div class="institute-block_one-text">Memberikan pendidikan umum yang seimbang dan terintegrasi dengan nilai-nilai Islam dalam setiap aspek pembelajaran.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-give"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Pemberdayaan Masyarakat</a></h5>
-                        <div class="institute-block_one-text">Memberdayakan masyarakat melalui program-program sosial, ekonomi, dan pendidikan yang berkelanjutan.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-user"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Pengembangan SDM Profesional</a></h5>
-                        <div class="institute-block_one-text">Mengembangkan sumber daya manusia yang profesional, kompeten, dan berakhlak mulia di bidangnya.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-book"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Penelitian & Inovasi</a></h5>
-                        <div class="institute-block_one-text">Melakukan penelitian dan pengembangan inovasi dalam bidang pendidikan Islam dan teknologi pembelajaran.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-globe"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Kerjasama Strategis</a></h5>
-                        <div class="institute-block_one-text">Membangun kerjasama strategis dengan berbagai pihak untuk kemajuan pendidikan dan dakwah Islam.</div>
-                    </div>
-                </div>
-                
-                <!-- Institute Block One -->
-                <div class="institute-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="institute-block_one-inner">
-                        <div class="institute-block_one-icon flaticon-pray"></div>
-                        <h5 class="institute-block_one-heading"><a href="#">Dakwah & Syiar Islam</a></h5>
-                        <div class="institute-block_one-text">Menyebarkan nilai-nilai Islam melalui kegiatan dakwah, syiar, dan program-program keagamaan yang inspiratif.</div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -524,41 +471,21 @@
             </div>
             
             <div class="row clearfix">
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-mosque"></div>
-                        <div class="counter-block_one-title">Religius</div>
-                        <div class="counter-block_one-text">Menjadikan nilai-nilai agama Islam sebagai dasar dan panduan dalam setiap aktivitas dan keputusan</div>
+                @if($coreValues && $coreValues->count())
+                    @foreach($coreValues as $index => $value)
+                        <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
+                            <div class="counter-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
+                                <div class="counter-block_one-icon {{ $value->icon ?? 'flaticon-education' }}"></div>
+                                <div class="counter-block_one-title">{{ $value->title }}</div>
+                                <div class="counter-block_one-text">{{ $value->description }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="col-12">
+                        <div class="text-center" style="color:#666;">Belum ada nilai yayasan ditambahkan.</div>
                     </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-education"></div>
-                        <div class="counter-block_one-title">Berkualitas</div>
-                        <div class="counter-block_one-text">Mengutamakan kualitas dan keunggulan dalam setiap program, layanan, dan hasil yang diberikan</div>
-                    </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-give"></div>
-                        <div class="counter-block_one-title">Peduli</div>
-                        <div class="counter-block_one-text">Memiliki kepedulian tinggi terhadap sesama, lingkungan, dan kemajuan umat Islam</div>
-                    </div>
-                </div>
-                
-                <!-- Counter Column -->
-                <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="counter-block_one-inner">
-                        <div class="counter-block_one-icon flaticon-globe"></div>
-                        <div class="counter-block_one-title">Kolaboratif</div>
-                        <div class="counter-block_one-text">Membangun kerjasama yang sinergis dan produktif dengan berbagai pihak untuk kemajuan bersama</div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>

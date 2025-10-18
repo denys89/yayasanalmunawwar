@@ -54,10 +54,29 @@
                                     </li>
                                     <li class="dropdown"><a href="#">Explore</a>
                                         <ul>
-                                            <li><a href="{{ route('explore.fasilitas') }}">Facilities</a></li>
-                                            <li><a href="{{ route('explore.extrakurikuler') }}">Extracurricular</a></li>
-                                            <li><a href="{{ route('explore.islamic-life') }}">Islamic Life</a></li>
-                                            <li><a href="{{ route('explore.school-life') }}">School Life</a></li>
+                                            @php
+                                                // Get all unique categories from the database
+                                                $dbCategories = App\Models\Explore::select('category')
+                                                    ->where('status', 'published')
+                                                    ->distinct()
+                                                    ->get();
+                                            @endphp
+                                            
+                                            @foreach($dbCategories as $cat)
+                                                @php
+                                                    // Get the first explore item in this category to use its slug
+                                                    $firstItem = App\Models\Explore::where('category', $cat->category)
+                                                        ->where('status', 'published')
+                                                        ->orderBy('order')
+                                                        ->first();
+                                                    
+                                                    $categoryTitle = $firstItem->title ?? ucfirst(str_replace('_', ' ', $cat->category));
+                                                    
+                                                    // Use the same slug format as in the homepage
+                                                    $urlSlug = $firstItem ? $firstItem->slug : str_replace('_', '-', $cat->category);
+                                                @endphp
+                                                <li><a href="{{ route('explore.show', $urlSlug) }}">{{ $categoryTitle }}</a></li>
+                                            @endforeach
                                         </ul>
                                     </li>
                                     <li class="dropdown"><a href="#">Unit Sekolah</a>

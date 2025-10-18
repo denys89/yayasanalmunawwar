@@ -52,10 +52,10 @@
 <!-- Page Title -->
 <section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
     <div class="auto-container">
-        <h2>Facilities</h2>
+        <h2>{{ $title }}</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>Facilities</li>
+            <li>{{ $title }}</li>
         </ul>
     </div>
 </section>
@@ -68,16 +68,16 @@
             <div class="col-12">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('explore.fasilitas') }}">Facilities</a>
+                        <a class="nav-link {{ request()->routeIs('explore.fasilitas') ? 'active' : '' }}" href="{{ route('explore.fasilitas') }}">Facilities</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
+                        <a class="nav-link {{ request()->routeIs('explore.extrakurikuler') ? 'active' : '' }}" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.islamic-life') ? 'active' : '' }}" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.school-life') }}">School Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.school-life') ? 'active' : '' }}" href="{{ route('explore.school-life') }}">School Life</a>
                     </li>
                 </ul>
             </div>
@@ -85,96 +85,63 @@
     </div>
 </div>
 
-<!-- Extracurricular Content Section -->
-<section class="extracurricular-section explore-section ">
+<!-- Explore Content Section -->
+<section class="extracurricular-section explore-section">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="section-title mb-4">
-                    <h2>Facilities</h2>
+                    <h2>{{ $title }}</h2>
                 </div>
+                @if($explores->isNotEmpty() && $explores->first()->content)
                 <div class="extracurricular-content">
-                    <p class="mb-4">Our extracurricular program is designed to develop students' talents and interests outside the academic curriculum. We offer a wide range of activities that help students discover their passions, build character, and develop important life skills.</p>
+                    {!! $explores->first()->content !!}
                 </div>
+                @else
+                <div class="extracurricular-content">
+                    <p class="mb-4">Explore our facilities and resources designed to enhance the educational experience of our students.</p>
+                </div>
+                @endif
             </div>
         </div>
 
-        <!-- Extracurricular Activities Gallery -->
+        <!-- Explore Gallery -->
         <div class="gallery-section mt-4">
             <div class="swiper-container gallery-one_carousel">
                 <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/1.jpg" class="img-fluid" alt="Music Room">
-                            <div class="gallery-caption">
-                                <p>A creative space designed to nurture musical expression through hands-on learning.</p>
+                    @forelse($explores as $explore)
+                        @if($explore->images->isNotEmpty())
+                            @foreach($explore->images as $image)
+                            <div class="swiper-slide">
+                                <div class="gallery-item">
+                                    <img src="{{ asset('storage/' . $image->image_path) }}" class="img-fluid" alt="{{ $explore->title }}">
+                                    <div class="gallery-caption">
+                                        <p>{{ $explore->title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        @else
+                            <div class="swiper-slide">
+                                <div class="gallery-item">
+                                    <img src="{{ asset('assets/images/gallery/' . ($loop->index % 5 + 1) . '.jpg') }}" class="img-fluid" alt="{{ $explore->title }}">
+                                    <div class="gallery-caption">
+                                        <p>{{ $explore->title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @empty
+                        <!-- Fallback slides if no explores are available -->
+                        <div class="swiper-slide">
+                            <div class="gallery-item">
+                                <img src="/assets/images/gallery/1.jpg" class="img-fluid" alt="Facility">
+                                <div class="gallery-caption">
+                                    <p>Our modern facilities support student learning and development.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/2.jpg" class="img-fluid" alt="Science Lab">
-                            <div class="gallery-caption">
-                                <p>Well-equipped science labs for hands-on learning, curiosity, and critical thinking.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 3 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/3.jpg" class="img-fluid" alt="Dormitory">
-                            <div class="gallery-caption">
-                                <p>A safe, faith-driven living space that supports students' learning and character growth.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 4 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/4.jpg" class="img-fluid" alt="Sports Hall">
-                            <div class="gallery-caption">
-                                <p>A spacious, multi-purpose facility designed to support students' physical development, teamwork, and sportsmanship.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 5 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/5.jpg" class="img-fluid" alt="Art Studio">
-                            <div class="gallery-caption">
-                                <p>A vibrant art studio where students explore creativity through various mediums and techniques.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 6 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/6.jpg" class="img-fluid" alt="Computer Lab">
-                            <div class="gallery-caption">
-                                <p>Modern computer facilities equipped with the latest technology for digital learning.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 7 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/7.jpg" class="img-fluid" alt="Library">
-                            <div class="gallery-caption">
-                                <p>A comprehensive library with extensive resources to support research and reading.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 8 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/8.jpg" class="img-fluid" alt="Outdoor Activities">
-                            <div class="gallery-caption">
-                                <p>Outdoor learning spaces that encourage exploration and connection with nature.</p>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
                 
                 <!-- Navigation buttons -->

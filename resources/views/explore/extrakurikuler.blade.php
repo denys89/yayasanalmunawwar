@@ -52,10 +52,10 @@
 <!-- Page Title -->
 <section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
     <div class="auto-container">
-        <h2>Extracurricular</h2>
+        <h2>{{ $title ?? 'Extracurricular' }}</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>Extracurricular</li>
+            <li>{{ $title ?? 'Extracurricular' }}</li>
         </ul>
     </div>
 </section>
@@ -68,16 +68,16 @@
             <div class="col-12">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.fasilitas') }}">Facilities</a>
+                        <a class="nav-link {{ request()->routeIs('explore.fasilitas') ? 'active' : '' }}" href="{{ route('explore.fasilitas') }}">Facilities</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
+                        <a class="nav-link {{ request()->routeIs('explore.extrakurikuler') ? 'active' : '' }}" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.islamic-life') ? 'active' : '' }}" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.school-life') }}">School Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.school-life') ? 'active' : '' }}" href="{{ route('explore.school-life') }}">School Life</a>
                     </li>
                 </ul>
             </div>
@@ -91,10 +91,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-title mb-4">
-                    <h2>Extracurricular Activities</h2>
+                    <h2>{{ $title ?? 'Extracurricular Activities' }}</h2>
                 </div>
                 <div class="extracurricular-content">
-                    <p class="mb-4">Our extracurricular program is designed to develop students' talents and interests outside the academic curriculum. We offer a wide range of activities that help students discover their passions, build character, and develop important life skills.</p>
+                    @if(isset($explores) && $explores->isNotEmpty() && $explores->first()->content)
+                        {!! $explores->first()->content !!}
+                    @else
+                        <p class="mb-4">Our extracurricular program is designed to develop students' talents and interests outside the academic curriculum. We offer a wide range of activities that help students discover their passions, build character, and develop important life skills.</p>
+                    @endif
                 </div>
             </div>
         </div>

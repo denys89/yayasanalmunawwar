@@ -52,10 +52,10 @@
 <!-- Page Title -->
 <section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
     <div class="auto-container">
-        <h2>School Life</h2>
+        <h2>{{ $title }}</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>School Life</li>
+            <li>{{ $title }}</li>
         </ul>
     </div>
 </section>
@@ -68,16 +68,16 @@
             <div class="col-12">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link " href="{{ route('explore.fasilitas') }}">Facilities</a>
+                        <a class="nav-link {{ request()->routeIs('explore.fasilitas') ? 'active' : '' }}" href="{{ route('explore.fasilitas') }}">Facilities</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
+                        <a class="nav-link {{ request()->routeIs('explore.extrakurikuler') ? 'active' : '' }}" href="{{ route('explore.extrakurikuler') }}">Extracurricular</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.islamic-life') ? 'active' : '' }}" href="{{ route('explore.islamic-life') }}">Islamic Life</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('explore.school-life') }}">School Life</a>
+                        <a class="nav-link {{ request()->routeIs('explore.school-life') ? 'active' : '' }}" href="{{ route('explore.school-life') }}">School Life</a>
                     </li>
                 </ul>
             </div>
@@ -85,107 +85,80 @@
     </div>
 </div>
 
-<!-- Extracurricular Content Section -->
-<section class="extracurricular-section explore-section ">
+<!-- School Life Content Section -->
+<section class="school-life-section">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="section-title mb-4">
-                    <h2>School Life</h2>
+                    <h2>{{ $title }}</h2>
                 </div>
-                <div class="extracurricular-content">
-                    <p class="mb-4">Our extracurricular program is designed to develop students' talents and interests outside the academic curriculum. We offer a wide range of activities that help students discover their passions, build character, and develop important life skills.</p>
+                <div class="school-life-content">
+                    @if($explores->isNotEmpty() && $explores->first()->content)
+                        {!! $explores->first()->content !!}
+                    @else
+                        <p class="mb-4">At Al Munawwar, we believe that education extends beyond the classroom. Our school life is designed to provide a holistic experience that nurtures academic excellence, character development, and personal growth in a supportive and engaging environment.</p>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Extracurricular Activities Gallery -->
-        <div class="gallery-section mt-4">
-            <div class="swiper-container gallery-one_carousel">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/1.jpg" class="img-fluid" alt="Music Room">
-                            <div class="gallery-caption">
-                                <p>A creative space designed to nurture musical expression through hands-on learning.</p>
-                            </div>
+        <!-- School Life Timeline -->
+        <div class="timeline-section mt-5">
+            <div class="timeline-header">
+                <h3>A Day in the Life of an Al Munawwar Student</h3>
+            </div>
+            <div class="timeline">
+                @forelse($explores as $index => $explore)
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>{{ $explore->title }}</h4>
+                            <p>{{ $explore->excerpt ?? Str::limit(strip_tags($explore->content), 150) }}</p>
                         </div>
                     </div>
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/2.jpg" class="img-fluid" alt="Science Lab">
-                            <div class="gallery-caption">
-                                <p>Well-equipped science labs for hands-on learning, curiosity, and critical thinking.</p>
-                            </div>
+                @empty
+                    <!-- Fallback timeline items if no explores are available -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>7:30 AM - Morning Assembly</h4>
+                            <p>Students start their day with morning prayers and assembly, setting a positive tone for the day ahead.</p>
                         </div>
                     </div>
-                    <!-- Slide 3 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/3.jpg" class="img-fluid" alt="Dormitory">
-                            <div class="gallery-caption">
-                                <p>A safe, faith-driven living space that supports students' learning and character growth.</p>
-                            </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>8:00 AM - 12:00 PM - Academic Classes</h4>
+                            <p>Students engage in core academic subjects taught by experienced teachers using interactive and innovative teaching methods.</p>
                         </div>
                     </div>
-                    <!-- Slide 4 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/4.jpg" class="img-fluid" alt="Sports Hall">
-                            <div class="gallery-caption">
-                                <p>A spacious, multi-purpose facility designed to support students' physical development, teamwork, and sportsmanship.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 5 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/5.jpg" class="img-fluid" alt="Art Studio">
-                            <div class="gallery-caption">
-                                <p>A vibrant art studio where students explore creativity through various mediums and techniques.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 6 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/6.jpg" class="img-fluid" alt="Computer Lab">
-                            <div class="gallery-caption">
-                                <p>Modern computer facilities equipped with the latest technology for digital learning.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 7 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/7.jpg" class="img-fluid" alt="Library">
-                            <div class="gallery-caption">
-                                <p>A comprehensive library with extensive resources to support research and reading.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slide 8 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="/assets/images/gallery/8.jpg" class="img-fluid" alt="Outdoor Activities">
-                            <div class="gallery-caption">
-                                <p>Outdoor learning spaces that encourage exploration and connection with nature.</p>
-                            </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- School Life Image Gallery -->
+        @if($explores->isNotEmpty() && $explores->flatMap->images->isNotEmpty())
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="section-subtitle mb-4">
+                    <h3>School Life in Pictures</h3>
+                </div>
+            </div>
+            <!-- Gallery Images -->
+            @foreach($explores->flatMap->images->take(6) as $image)
+                <div class="col-md-4 mb-4">
+                    <div class="gallery-item">
+                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="School Life" class="img-fluid">
+                        <div class="gallery-caption">
+                            <p>{{ $image->explore->title ?? 'School Life' }}</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Navigation buttons -->
-                <div class="swiper-button-next gallery-one_next"></div>
-                <div class="swiper-button-prev gallery-one_prev"></div>
-                
-                <!-- Pagination -->
-                <div class="swiper-pagination gallery-one_pagination"></div>
-            </div>
+            @endforeach
         </div>
-        </div>
+        @endif
     </div>
 </section>
 

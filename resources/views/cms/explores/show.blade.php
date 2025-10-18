@@ -133,7 +133,7 @@
 
         <!-- Upload Image Modal overlay centered -->
         <div id="exploreImageUploadModal" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-            <div class="w-full max-w-[36rem] max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
+            <div class="w-full max-w-md max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Upload Image</h3>
                     <button type="button" onclick="closeExploreImageUpload()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
@@ -145,23 +145,38 @@
                 <form action="{{ route('cms.explores.images.store', $explore) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     <div>
-                        <label for="upload-image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image (jpg, jpeg, png, webp)</label>
-                        <input id="upload-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+                        <label for="upload-image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="upload-image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                        <span>Upload a file</span>
+                                        <input id="upload-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" required>
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG, WEBP up to 5MB</p>
+                            </div>
+                        </div>
                         @error('image')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         <div class="mt-3">
-                            <img id="upload-image-preview" src="#" alt="Preview" class="hidden max-h-48 rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                            <img id="upload-image-preview" src="#" alt="Preview" class="hidden max-h-48 mx-auto rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
                         </div>
                     </div>
                     <div>
-                        <label for="upload-caption" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption (optional, max 300 chars)</label>
-                        <textarea id="upload-caption" name="caption" rows="3" maxlength="300" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Write a description..."></textarea>
+                        <label for="upload-caption" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption</label>
+                        <textarea id="upload-caption" name="caption" rows="2" maxlength="300" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Write a description..."></textarea>
+                        <p class="mt-1 text-xs text-gray-500">Optional, maximum 300 characters</p>
                         @error('caption')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="flex justify-end gap-2">
+                    <div class="flex justify-end gap-2 pt-2">
                         <button type="button" onclick="closeExploreImageUpload()" class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Cancel</button>
                         <button type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700">Upload</button>
                     </div>
@@ -188,7 +203,7 @@
 
             <!-- Edit Modal -->
             <div id="exploreImageEdit-{{ $image->id }}" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-                <div class="w-full max-w-[36rem] max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
+                <div class="w-full max-w-md max-h-[90vh] overflow-y-auto p-5 border shadow-lg rounded-md bg-white dark:bg-gray-800">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">Edit Image</h3>
                         <button type="button" onclick="closeExploreImageEditModal({{ $image->id }})" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
@@ -201,15 +216,37 @@
                         @csrf
                         @method('PATCH')
                         <div>
-                            <label for="edit-image-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Replace Image (optional)</label>
-                            <input id="edit-image-{{ $image->id }}" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
-                            <img src="#" alt="Preview" class="hidden mt-2 max-h-40 rounded-md border border-gray-200 dark:border-gray-700 js-edit-preview" loading="lazy">
+                            <label for="edit-image-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Image</label>
+                            <div class="mt-2 flex justify-center">
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Current Image" class="max-h-40 rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Replace Image</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="edit-image-{{ $image->id }}" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-600 hover:text-yellow-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-yellow-500">
+                                                <span>Upload a new file</span>
+                                                <input id="edit-image-{{ $image->id }}" name="image" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">JPG, PNG, WEBP up to 5MB (optional)</p>
+                                    </div>
+                                </div>
+                                <img src="#" alt="Preview" class="hidden mt-2 max-h-40 mx-auto rounded-md border border-gray-200 dark:border-gray-700 js-edit-preview" loading="lazy">
+                            </div>
                         </div>
                         <div>
                             <label for="edit-caption-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption</label>
                             <textarea id="edit-caption-{{ $image->id }}" name="caption" rows="2" maxlength="300" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-yellow-500 focus:ring-yellow-500" placeholder="Update description...">{{ old('caption', $image->caption) }}</textarea>
+                            <p class="mt-1 text-xs text-gray-500">Optional, maximum 300 characters</p>
                         </div>
-                        <div class="flex justify-end gap-2">
+                        <div class="flex justify-end gap-2 pt-2">
                             <button type="button" onclick="closeExploreImageEditModal({{ $image->id }})" class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Cancel</button>
                             <button type="submit" class="rounded-md bg-yellow-600 px-3 py-2 text-sm text-white hover:bg-yellow-700">Update</button>
                         </div>
@@ -265,91 +302,184 @@
 <!-- Image modal controls and previews -->
 @push('scripts')
 <script>
-    function openExploreImageUpload() {
-        const modal = document.getElementById('exploreImageUploadModal');
-        if (modal) modal.classList.remove('hidden');
-    }
-    function closeExploreImageUpload() {
-        const modal = document.getElementById('exploreImageUploadModal');
-        if (modal) {
-            // Hide the modal overlay
-            modal.classList.add('hidden');
+function openExploreImageUpload() {
+    const modal = document.getElementById('exploreImageUploadModal');
+    if (modal) modal.classList.remove('hidden');
+}
+function closeExploreImageUpload() {
+    const modal = document.getElementById('exploreImageUploadModal');
+    if (modal) {
+        // Hide the modal overlay
+        modal.classList.add('hidden');
 
-            const form = modal.querySelector('form');
-            if (form) form.reset();
-            const preview = document.getElementById('upload-image-preview');
-            if (preview) {
-                preview.src = '#';
-                preview.classList.add('hidden');
+        const form = modal.querySelector('form');
+        if (form) form.reset();
+        const preview = document.getElementById('upload-image-preview');
+        if (preview) {
+            preview.src = '#';
+            preview.classList.add('hidden');
+        }
+    }
+}
+
+function openExploreImageViewModal(id) {
+    const modal = document.getElementById(`exploreImageView-${id}`);
+    if (modal) modal.classList.remove('hidden');
+}
+function closeExploreImageViewModal(id) {
+    const modal = document.getElementById(`exploreImageView-${id}`);
+    if (modal) modal.classList.add('hidden');
+}
+
+function openExploreImageEditModal(id) {
+    const modal = document.getElementById(`exploreImageEdit-${id}`);
+    if (modal) modal.classList.remove('hidden');
+}
+function closeExploreImageEditModal(id) {
+    const modal = document.getElementById(`exploreImageEdit-${id}`);
+    if (modal) modal.classList.add('hidden');
+}
+
+// Preview for upload modal with drag & drop support
+const uploadInput = document.getElementById('upload-image');
+const uploadPreview = document.getElementById('upload-image-preview');
+const uploadDropArea = document.querySelector('.border-dashed');
+
+if (uploadInput && uploadPreview) {
+    uploadInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const url = URL.createObjectURL(this.files[0]);
+            uploadPreview.src = url;
+            uploadPreview.classList.remove('hidden');
+        }
+    });
+    
+    // Add drag and drop support
+    if (uploadDropArea) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadDropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadDropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadDropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            uploadDropArea.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        }
+        
+        function unhighlight() {
+            uploadDropArea.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        }
+        
+        uploadDropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files && files.length) {
+                uploadInput.files = files;
+                
+                // Trigger change event
+                const event = new Event('change', { bubbles: true });
+                uploadInput.dispatchEvent(event);
             }
         }
     }
+}
 
-    function openExploreImageViewModal(id) {
-        const modal = document.getElementById(`exploreImageView-${id}`);
-        if (modal) modal.classList.remove('hidden');
-    }
-    function closeExploreImageViewModal(id) {
-        const modal = document.getElementById(`exploreImageView-${id}`);
-        if (modal) modal.classList.add('hidden');
-    }
-
-    function openExploreImageEditModal(id) {
-        const modal = document.getElementById(`exploreImageEdit-${id}`);
-        if (modal) modal.classList.remove('hidden');
-    }
-    function closeExploreImageEditModal(id) {
-        const modal = document.getElementById(`exploreImageEdit-${id}`);
-        if (modal) modal.classList.add('hidden');
-    }
-
-    // Preview for upload modal
-    const uploadInput = document.getElementById('upload-image');
-    const uploadPreview = document.getElementById('upload-image-preview');
-    if (uploadInput && uploadPreview) {
-        uploadInput.addEventListener('change', function () {
-            if (this.files && this.files[0]) {
-                const url = URL.createObjectURL(this.files[0]);
-                uploadPreview.src = url;
-                uploadPreview.classList.remove('hidden');
-            }
-        });
-    }
-
-    // Preview for edit modals
-    document.querySelectorAll('input[type=file][name="image"]').forEach(function (input) {
+// Preview for edit modals with drag & drop support
+document.querySelectorAll('input[type=file][name="image"]').forEach(function (input) {
+    const form = input.closest('form');
+    const preview = form ? form.querySelector('.js-edit-preview') : null;
+    const dropArea = form ? form.querySelector('.border-dashed') : null;
+    
+    if (input && preview) {
         input.addEventListener('change', function () {
-            const preview = this.closest('form').querySelector('.js-edit-preview');
-            if (this.files && this.files[0] && preview) {
+            if (this.files && this.files[0]) {
                 const url = URL.createObjectURL(this.files[0]);
                 preview.src = url;
                 preview.classList.remove('hidden');
             }
         });
-    });
-
-    // Close modals when clicking outside
-    window.addEventListener('click', function (event) {
-        const id = event.target.id || '';
-        if (id === 'exploreImageUploadModal') {
-            closeExploreImageUpload();
-        } else if (id.startsWith('exploreImageView-')) {
-            const imgId = id.replace('exploreImageView-', '');
-            closeExploreImageViewModal(imgId);
-        } else if (id.startsWith('exploreImageEdit-')) {
-            const imgId = id.replace('exploreImageEdit-', '');
-            closeExploreImageEditModal(imgId);
+        
+        // Add drag and drop support for edit forms
+        if (dropArea) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('border-yellow-500', 'bg-yellow-50', 'dark:bg-yellow-900/20');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('border-yellow-500', 'bg-yellow-50', 'dark:bg-yellow-900/20');
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files && files.length) {
+                    input.files = files;
+                    
+                    // Trigger change event
+                    const event = new Event('change', { bubbles: true });
+                    input.dispatchEvent(event);
+                }
+            }
         }
-    });
+    }
+});
 
-    // ESC key closes any open explore modals
-    window.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            closeExploreImageUpload();
-            document.querySelectorAll('[id^="exploreImageView-"]').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('[id^="exploreImageEdit-"]').forEach(el => el.classList.add('hidden'));
-        }
-    });
+// Close modals when clicking outside
+window.addEventListener('click', function (event) {
+    const id = event.target.id || '';
+    if (id === 'exploreImageUploadModal') {
+        closeExploreImageUpload();
+    } else if (id.startsWith('exploreImageView-')) {
+        const imgId = id.replace('exploreImageView-', '');
+        closeExploreImageViewModal(imgId);
+    } else if (id.startsWith('exploreImageEdit-')) {
+        const imgId = id.replace('exploreImageEdit-', '');
+        closeExploreImageEditModal(imgId);
+    }
+});
+
+// ESC key closes any open explore modals
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeExploreImageUpload();
+        document.querySelectorAll('[id^="exploreImageView-"]').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('[id^="exploreImageEdit-"]').forEach(el => el.classList.add('hidden'));
+    }
+});
 </script>
 @endpush
 @endsection

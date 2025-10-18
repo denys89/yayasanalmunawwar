@@ -58,10 +58,8 @@ Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('berit
 Route::get('/acara', [PublicEventController::class, 'index'])->name('acara');
 Route::get('/acara/{event}', [PublicEventController::class, 'show'])->name('acara.detail');
 
-Route::get('/explore/fasilitas', [ExploreController::class, 'fasilitas'])->name('explore.fasilitas');
-Route::get('/explore/extrakurikuler', [ExploreController::class, 'extrakurikuler'])->name('explore.extrakurikuler');
-Route::get('/explore/islamic-life', [ExploreController::class, 'islamicLife'])->name('explore.islamic-life');
-Route::get('/explore/school-life', [ExploreController::class, 'schoolLife'])->name('explore.school-life');
+// Single dynamic route for all explore pages
+Route::get('/explore/{slug}', [ExploreController::class, 'show'])->name('explore.show');
 
 // Web Dashboard route (for default Laravel UI components)
 Route::middleware('auth')->group(function () {

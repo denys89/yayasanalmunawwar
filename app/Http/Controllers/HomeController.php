@@ -7,6 +7,8 @@ use App\Models\News;
 use App\Models\Homepage;
 use App\Models\FoundationValue;
 use App\Models\Program;
+use App\Models\Explore;
+use App\Helpers\TinyMCEHelper;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -82,7 +84,42 @@ class HomeController extends Controller
                 return collect();
             }
         });
+        
+        // Fetch explores data for Program Sekolah section
+        $explores = Cache::remember('home_explores', 300, function () {
+            try {
+                // Get all explore categories
+                $facilities = Explore::facilities()->where('status', 'published')->orderBy('order')->get();
+                $extracurriculars = Explore::extracurriculars()->where('status', 'published')->orderBy('order')->get();
+                $islamicLife = Explore::where('category', 'islamic_life')->where('status', 'published')->orderBy('order')->get();
+                $schoolLife = Explore::where('category', 'school_life')->where('status', 'published')->orderBy('order')->get();
+                
+                // Process content to clean HTML tags
+                $collections = [$facilities, $extracurriculars, $islamicLife, $schoolLife];
+                foreach ($collections as $collection) {
+                    foreach ($collection as $item) {
+                        // Use TinyMCEHelper to sanitize content
+                        $item->clean_content = TinyMCEHelper::sanitizeContent($item->content ?? '');
+                    }
+                }
+                
+                return [
+                    'facilities' => $facilities,
+                    'extracurriculars' => $extracurriculars,
+                    'islamic_life' => $islamicLife,
+                    'school_life' => $schoolLife
+                ];
+            } catch (\Throwable $e) {
+                Log::warning('Failed to load explores for homepage: ' . $e->getMessage());
+                return [
+                    'facilities' => collect(),
+                    'extracurriculars' => collect(),
+                    'islamic_life' => collect(),
+                    'school_life' => collect()
+                ];
+            }
+        });
 
-        return view('home', compact('banners', 'latestNews', 'homepage', 'foundationValues', 'programs'));
+        return view('home', compact('banners', 'latestNews', 'homepage', 'foundationValues', 'programs', 'explores'));
     }
 }

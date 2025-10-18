@@ -274,142 +274,84 @@
 				<!-- Tab Navigation -->
 				<div class="tabs-nav">
 					<div class="tab-btns tab-buttons clearfix">
-						<div class="tab-btn active-btn" data-tab="#facilities-tab">Facilities</div>
-						<div class="tab-btn" data-tab="#extracurricular-tab">Extracurricular</div>
-						<div class="tab-btn" data-tab="#islamic-life-tab">Islamic Life</div>
-						<div class="tab-btn" data-tab="#school-life-tab">School Life</div>
+						@php
+							$categories = [
+								'facilities' => 'facilities-tab',
+								'extracurriculars' => 'extracurricular-tab',
+								'islamic_life' => 'islamic-life-tab',
+								'school_life' => 'school-life-tab'
+							];
+							$first = true;
+						@endphp
+						
+						@foreach($categories as $key => $tabId)
+							@if(isset($explores[$key]) && $explores[$key]->count() > 0)
+								@php 
+									$explore = $explores[$key]->first();
+									$activeClass = $first ? 'active-btn' : '';
+									$first = false;
+								@endphp
+								<div class="tab-btn {{ $activeClass }}" data-tab="#{{ $tabId }}">{{ $explore->title }}</div>
+							@endif
+						@endforeach
 					</div>
 				</div>
 				
 				<!-- Tabs Content -->
 				<div class="tabs-content">
-					<!-- Facilities Tab -->
-					<div class="tab active-tab" id="facilities-tab">
-						<div class="tab-inner">
-							<div class="row clearfix">
-								<div class="image-column col-lg-6 col-md-12 col-sm-12">
-									<div class="image">
-										<img src="{{ asset('assets/images/resource/facilities-tab.jpg') }}" alt="Facilities" />
-									</div>
-								</div>
-								<div class="content-column col-lg-6 col-md-12 col-sm-12">
-									<div class="inner-column">
-										<h3>Fasilitas Lengkap</h3>
-										<p>At Sekolah Insan cendekia Madani, Students are not only provided with the best academic resources but also an amazing student life experience, supported with well-maintained and impressive facilities.</p>
-										<ul class="list">
-											<li>Ruang kelas modern dengan AC</li>
-											<li>Perpustakaan lengkap</li>
-											<li>Laboratorium sains dan komputer</li>
-											<li>Fasilitas olahraga</li>
-											<li>Kantin sehat</li>
-										</ul>
-										<a href="#" class="theme-btn btn-style-two">
-											<span class="btn-wrap">
-												<span class="text-one">Learn more</span>
-												<span class="text-two">Learn more</span>
-											</span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					@php
+						$categories = [
+							'facilities' => 'facilities-tab',
+							'extracurriculars' => 'extracurricular-tab',
+							'islamic_life' => 'islamic-life-tab',
+							'school_life' => 'school-life-tab'
+						];
+						$first = true;
+					@endphp
 					
-					<!-- Extracurricular Tab -->
-					<div class="tab" id="extracurricular-tab">
-						<div class="tab-inner">
-							<div class="row clearfix">
-								<div class="image-column col-lg-6 col-md-12 col-sm-12">
-									<div class="image">
-										<img src="{{ asset('assets/images/resource/extracurricular-tab.jpg') }}" alt="Extracurricular" />
-									</div>
-								</div>
-								<div class="content-column col-lg-6 col-md-12 col-sm-12">
-									<div class="inner-column">
-										<h3>Kegiatan Ekstrakurikuler</h3>
-										<p>Kami menyediakan berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat dan minat siswa di luar jam pelajaran reguler.</p>
-										<ul class="list">
-											<li>Pramuka</li>
-											<li>Seni dan Budaya</li>
-											<li>Olahraga</li>
-											<li>Robotika</li>
-											<li>Public Speaking</li>
-										</ul>
-										<a href="#" class="theme-btn btn-style-two">
-											<span class="btn-wrap">
-												<span class="text-one">Learn more</span>
-												<span class="text-two">Learn more</span>
-											</span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<!-- Islamic Life Tab -->
-					<div class="tab" id="islamic-life-tab">
-						<div class="tab-inner">
-							<div class="row clearfix">
-								<div class="image-column col-lg-6 col-md-12 col-sm-12">
-									<div class="image">
-										<img src="{{ asset('assets/images/resource/islamic-life-tab.jpg') }}" alt="Islamic Life" />
-									</div>
-								</div>
-								<div class="content-column col-lg-6 col-md-12 col-sm-12">
-									<div class="inner-column">
-										<h3>Kehidupan Islami</h3>
-										<p>Kami menerapkan nilai-nilai Islam dalam kehidupan sehari-hari di sekolah untuk membentuk karakter dan akhlak mulia siswa.</p>
-										<ul class="list">
-											<li>Sholat berjamaah</li>
-											<li>Tahfidz Al-Qur'an</li>
-											<li>Pembelajaran Hadits</li>
-											<li>Peringatan hari besar Islam</li>
-											<li>Pembiasaan adab Islami</li>
-										</ul>
-										<a href="#" class="theme-btn btn-style-two">
-											<span class="btn-wrap">
-												<span class="text-one">Learn more</span>
-												<span class="text-two">Learn more</span>
-											</span>
-										</a>
+					@foreach($categories as $key => $tabId)
+						@if(isset($explores[$key]) && $explores[$key]->count() > 0)
+							@php 
+								$explore = $explores[$key]->first();
+								$activeClass = $first ? 'active-tab' : '';
+								$first = false;
+								$fallbackImage = 'assets/images/resource/' . $tabId . '.jpg';
+							@endphp
+							
+							<!-- {{ ucfirst(str_replace('_', ' ', $key)) }} Tab -->
+							<div class="tab {{ $activeClass }}" id="{{ $tabId }}">
+								<div class="tab-inner">
+									<div class="row clearfix">
+										<div class="image-column col-lg-6 col-md-12 col-sm-12">
+											<div class="image">
+												@if($explore->image_url)
+													<img src="{{ asset('storage/' . $explore->image_url) }}" alt="{{ $explore->title }}" />
+												@else
+													<img src="{{ asset($fallbackImage) }}" alt="{{ $explore->title }}" />
+												@endif
+											</div>
+										</div>
+										<div class="content-column col-lg-6 col-md-12 col-sm-12">
+											<div class="inner-column">
+												<h3>{{ $explore->title }}</h3>
+												<p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->summary ?? '') !!} </p>
+												<div class="list-container">
+													<p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->clean_content ?? '') !!} </p>
+												</div>
+												<a href="{{ route('explore.show', $explore->slug) }}" class="theme-btn btn-style-two">
+													<span class="btn-wrap">
+														<span class="text-one">Learn more</span>
+														<span class="text-two">Learn more</span>
+													</span>
+												</a>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					
-					<!-- School Life Tab -->
-					<div class="tab" id="school-life-tab">
-						<div class="tab-inner">
-							<div class="row clearfix">
-								<div class="image-column col-lg-6 col-md-12 col-sm-12">
-									<div class="image">
-										<img src="{{ asset('assets/images/resource/school-life-tab.jpg') }}" alt="School Life" />
-									</div>
-								</div>
-								<div class="content-column col-lg-6 col-md-12 col-sm-12">
-									<div class="inner-column">
-										<h3>Kehidupan Sekolah</h3>
-										<p>Kami menciptakan lingkungan belajar yang menyenangkan dan kondusif untuk perkembangan akademik dan sosial siswa.</p>
-										<ul class="list">
-											<li>Field trip edukatif</li>
-											<li>Kegiatan sosial</li>
-											<li>Kompetisi akademik</li>
-											<li>Pekan kreativitas</li>
-											<li>Pentas seni tahunan</li>
-										</ul>
-										<a href="#" class="theme-btn btn-style-two">
-											<span class="btn-wrap">
-												<span class="text-one">Learn more</span>
-												<span class="text-two">Learn more</span>
-											</span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+						@endif
+					@endforeach
+				</div>
 				</div>
 			</div>
 		</div>

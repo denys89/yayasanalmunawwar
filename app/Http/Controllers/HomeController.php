@@ -46,14 +46,22 @@ class HomeController extends Controller
         $programs = Cache::remember('home_programs', 300, function () {
             try {
                 return Program::query()
+                    ->where('status', 'published')
                     ->orderBy('created_at', 'desc')
                     ->take(4)
-                    ->get(['id','title','name','slug','description','photo_url']);
+                    ->get(['id','title','name','slug','description','photo_url','program_type','brochure_url']);
             } catch (\Throwable $e) {
                 Log::warning('Failed to load programs for homepage: ' . $e->getMessage());
                 return collect();
             }
         });
+
+        $brosure_url = [];
+        foreach ($programs as $program) {
+            if ($program->program_type == 'education') {
+                $brosure_url[$program->id] = $program->brochure_url;
+            }
+        }
 
         // Homepage general info and foundation values
         $homepage = Cache::remember('public_homepage', 300, function () {
@@ -120,6 +128,6 @@ class HomeController extends Controller
             }
         });
 
-        return view('home', compact('banners', 'latestNews', 'homepage', 'foundationValues', 'programs', 'explores'));
+        return view('home', compact('banners', 'latestNews', 'homepage', 'foundationValues', 'programs', 'explores', 'brosure_url'));
     }
 }

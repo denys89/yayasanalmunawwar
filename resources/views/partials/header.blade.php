@@ -81,10 +81,10 @@
                                     </li>
                                     <li class="dropdown"><a href="#">Unit Sekolah</a>
                                         <ul>
-                                            <li><a href="{{ route('tk-al-munawwar') }}">TK Islam Al Munawwar</a></li>
-                                            <li><a href="{{ route('sd-al-munawwar') }}">SD Islam Al Munawwar</a></li>
-                                            <li><a href="{{ route('panti-al-munawwar') }}">Panti Al Munawwar</a></li>
-                                            <li><a href="{{ route('masjid-al-munawwar') }}">Masjid Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'tk-al-munawwar']) }}">TK Islam Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'sd-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'panti-al-munawwar']) }}">Panti Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'masjid-al-munawwar']) }}">Masjid Al Munawwar</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown"><a href="#">News & Events</a>

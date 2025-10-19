@@ -2,13 +2,12 @@
 
 @section('title', ($program->title ?? $program->name) . ' - Yayasan Al-Munawwar')
 @section('description', $program->summary ?? Str::limit(strip_tags($program->description ?? ''), 160))
-@section('keywords', $program->name . ', masjid, kegiatan, dakwah, donasi, Yayasan Al-Munawwar')
 
-@section('content')
 @push('styles')
 <link rel="stylesheet" href="{{ asset('style/custom.css') }}">
 @endpush
 
+@section('content')
 <!-- Page Title -->
 <section class="page-title" style="background-image: url({{ $bannerUrl ?? asset('images/background/page-title.jpg') }});">
     <div class="auto-container">
@@ -20,19 +19,14 @@
     </div>
 </section>
 
-
-
 <div class="green-theme">
 
-<!-- Masjid Al Munawwar Section -->
+<!-- Welcome / Intro -->
 <section class="welcome-two" style="padding: 120px 0; position: relative;">
-    <div class="pattern-layer" style="background-image: url({{ asset('assets/images/icons/pattern-1.png') }});"></div>
-    <div class="pattern-layer-two" style="background-image: url({{ asset('assets/images/icons/pattern-2.png') }});"></div>
-    
+    <div class="pattern-layer" style="background-image:url({{ asset('assets/images/background/pattern-1.png') }});"></div>
+    <div class="pattern-layer-two" style="background-image:url({{ asset('assets/images/background/pattern-2.png') }});"></div>
     <div class="auto-container">
         <div class="row clearfix">
-            
-            <!-- Image Column -->
             <div class="welcome-two_image-column col-lg-6 col-md-12 col-sm-12">
                 <div class="welcome-two_image-outer">
                     <div class="welcome-two_image">
@@ -40,11 +34,8 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Content Column -->
             <div class="welcome-two_content-column col-lg-6 col-md-12 col-sm-12">
                 <div class="welcome-two_content-outer">
-                    <!-- Sec Title -->
                     <div class="sec-title">
                         <div class="sec-title_title">{{ strtoupper($program->name) }}</div>
                         <h2 class="sec-title_heading">{{ $program->title ?? $program->name }}</h2>
@@ -52,80 +43,93 @@
                     </div>
                 </div>
             </div>
-            
         </div>
-        
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="service-one" style="background-image: url({{ asset('assets/images/background/service-bg.png') }}); padding: 120px 0;">
-    <div class="auto-container">
-        <!-- Sec Title -->
-        <div class="sec-title centered">
-            <div class="sec-title_title">KEGIATAN & LAYANAN</div>
-            <h2 class="sec-title_heading">Program Ibadah & Dakwah <br> {{ $program->name }}</h2>
-            <div class="sec-title_text">{!! $program->description ?? 'Berbagai kegiatan dan layanan yang tersedia untuk memenuhi kebutuhan spiritual dan sosial umat Islam.' !!}</div>
-        </div>
-        
-        <div class="row clearfix">
-            
-            @forelse($activities as $idx => $activity)
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="{{ $activity->icon }}" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">{{ $activity->name }}</h5>
-                    <div class="service-block_one-text">{{ $activity->description }}</div>
-                </div>
+<!-- CTA: Brochure -->
+@if($brochureUrl)
+<section class="cta-one">
+    <div class="auto-container mt-4">
+        <div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
+            <div class="cta-one_bg" style="background-image:url({{ asset('assets/images/background/cta-one_bg.png') }})"></div>
+            <h3 class="cta-one_heading">Unduh brosur untuk informasi lengkap.</h3>
+            <div class="cta-one_button">
+                <a href="{{ $brochureUrl }}" class="theme-btn btn-style-one" target="_blank" rel="noopener">
+                    <span class="btn-wrap">
+                        <span class="text-one">Unduh Brosur</span>
+                        <span class="text-two">Unduh Brosur</span>
+                    </span>
+                </a>
             </div>
+        </div>
+    </div>
+</section>
+@endif
+
+<!-- Program Educations -->
+<section class="service-one" style="background-image:url({{ asset('assets/images/background/service-bg.png') }}); padding: 120px 0;">
+    <div class="auto-container">
+        <div class="sec-title centered">
+            <div class="sec-title_title">PROGRAM UNGGULAN</div>
+            <h2 class="sec-title_heading">Program Pendidikan</h2>
+            @if(!empty($program->description))
+                <div class="sec-title_text">{!! $program->description !!}</div>
+            @endif
+        </div>
+        <div class="row clearfix">
+            @forelse($educations as $idx => $education)
+                <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                    <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
+                        <div class="service-block_one-upper">
+                            <div class="service-block_one-icon">
+                                <i class="{{ $education->icon }}" style="font-size: 24px; color: #28a745;"></i>
+                            </div>
+                            <h4 class="service-block_one-heading"><a href="#">{{ $education->name }}</a></h4>
+                            <div class="service-block_one-text">{{ $education->description }}</div>
+                        </div>
+                    </div>
+                </div>
             @empty
-            <div class="col-12 text-center text-muted">Belum ada kegiatan terdaftar.</div>
+                <div class="col-12 text-center text-muted">Belum ada program pendidikan terdaftar.</div>
             @endforelse
-            
         </div>
     </div>
 </section>
 
-<!-- Donation Section -->
+<!-- Facilities -->
 <section class="featured-one" style="padding: 120px 0;">
     <div class="auto-container">
-        <!-- Sec Title -->
         <div class="sec-title centered">
-            <div class="sec-title_title">CARA BERDONASI</div>
-            <h2 class="sec-title_heading">{{ $program->name }}</h2>
-            <div class="sec-title_text">Dukungan Anda sangat berarti bagi keberlangsungan kegiatan ibadah dan dakwah.</div>
+            <div class="sec-title_title">FASILITAS</div>
+            <h2 class="sec-title_heading">Fasilitas Pendukung Pembelajaran</h2>
+            <div class="sec-title_text">Fasilitas modern untuk mendukung proses pembelajaran yang optimal dan menyenangkan.</div>
         </div>
         <div class="row clearfix">
-
-            @forelse($donations as $idx => $donation)
-            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="{{ $donation->order ?? $idx * 150 }}ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="{{ $donation->fa_icon ?? $donation->icon }}" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
-                    <div class="featured-block_one-text">{{ $donation->description }}</div>
+            @forelse($facilities as $idx => $facility)
+                <div class="featured-block_one col-lg-3 col-md-6 col-sm-12">
+                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
+                        <div class="featured-block_one-icon"><i class="{{ $facility->icon }}" style="font-size: 48px; color: #28a745;"></i></div>
+                        <h5 class="featured-block_one-heading">{{ $facility->name }}</h5>
+                        <div class="featured-block_one-text">{{ $facility->description }}</div>
+                    </div>
                 </div>
-            </div>
             @empty
-            <div class="col-12 text-center text-muted">Belum ada informasi donasi.</div>
+                <div class="col-12 text-center text-muted">Belum ada fasilitas terdaftar.</div>
             @endforelse
-
         </div>
     </div>
 </section>
 
-<!-- Contact Section -->
+<!-- Contact Info -->
 <section class="contact-one" style="padding: 120px 0;">
     <div class="auto-container">
-        <!-- Sec Title -->
         <div class="sec-title centered">
             <div class="sec-title_title">HUBUNGI KAMI</div>
-            <h2 class="sec-title_heading">Informasi Kontak <br> {{ $program->name }}</h2>
-            <div class="sec-title_text">Untuk informasi lebih lanjut tentang kegiatan, jadwal sholat, atau program dakwah, silakan hubungi kami.</div>
+            <h2 class="sec-title_heading">Informasi Kontak</h2>
+            <div class="sec-title_text">Hubungi kami untuk informasi pendaftaran atau konsultasi.</div>
         </div>
-        
         <div class="row clearfix">
-            
-            <!-- Contact Info Block -->
             @if($program->phone)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
@@ -137,8 +141,6 @@
                 </div>
             </div>
             @endif
-            
-            <!-- Contact Info Block -->
             @if($program->email)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
@@ -150,8 +152,6 @@
                 </div>
             </div>
             @endif
-            
-            <!-- Contact Info Block -->
             @if($program->address)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
@@ -161,11 +161,9 @@
                 </div>
             </div>
             @endif
-            
         </div>
     </div>
 </section>
 
 </div>
-
 @endsection

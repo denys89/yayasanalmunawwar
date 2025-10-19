@@ -10,6 +10,7 @@ use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\PublicHistoryController;
 use App\Http\Controllers\PublicVisionMissionController;
 use App\Http\Controllers\PublicOrganizationalStructureController;
+use App\Http\Controllers\PublicProgramController;
 // Removed model and cache imports from routes; moved to HomeController
 use Illuminate\Support\Facades\Route;
 
@@ -30,22 +31,7 @@ Route::get('/visi-misi', [PublicVisionMissionController::class, 'show'])->name('
 
 Route::get('/struktur-organisasi', [PublicOrganizationalStructureController::class, 'show'])->name('struktur-organisasi');
 
-// Individual Unit Pages
-Route::get('/tk-al-munawwar', function () {
-    return view('tk-al-munawwar');
-})->name('tk-al-munawwar');
-
-Route::get('/sd-al-munawwar', function () {
-    return view('sd-al-munawwar');
-})->name('sd-al-munawwar');
-
-Route::get('/panti-al-munawwar', function () {
-    return view('panti-al-munawwar');
-})->name('panti-al-munawwar');
-
-Route::get('/masjid-al-munawwar', function () {
-    return view('masjid-al-munawwar');
-})->name('masjid-al-munawwar');
+// Legacy unit routes removed; use /programs/{slug}
 
 Route::get('/berita', [PublicNewsController::class, 'index'])->name('berita');
 
@@ -75,3 +61,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Individual Unit Pages via dynamic slug
+Route::get('/programs/{slug}', [PublicProgramController::class, 'show'])->name('programs.show');

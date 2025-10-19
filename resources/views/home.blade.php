@@ -117,12 +117,36 @@
 									<small class="text-muted">Brosur penerimaan siswa baru</small>
 								</div>
 							</div>
-							<a href="{{ asset('storage/programs/brochures/tk-al-munawwar.pdf') }}" target="_blank" download class="theme-btn btn-style-four w-100">
-								<span class="btn-wrap">
-									<span class="text-one">Unduh Brosur TK</span>
-									<span class="text-two">Unduh Brosur TK</span>
+							@php
+								$tkUrl = $brosure_url[1] ?? null;
+								$tkHref = null;
+								if (!empty($tkUrl)) {
+									if (str_starts_with($tkUrl, 'http')) {
+										$tkHref = $tkUrl;
+									} else {
+										try {
+											$tkHref = \Illuminate\Support\Facades\Storage::disk('public')->url($tkUrl);
+										} catch (\Throwable $e) {
+											$tkHref = null;
+										}
+									}
+								}
+							@endphp
+							@if($tkHref)
+								<a href="{{ $tkHref }}" target="_blank" rel="noopener noreferrer" download class="theme-btn btn-style-four w-100">
+									<span class="btn-wrap">
+										<span class="text-one">Unduh Brosur TK</span>
+										<span class="text-two">Unduh Brosur TK</span>
+									</span>
+								</a>
+							@else
+								<span class="theme-btn btn-style-four w-100 disabled" aria-disabled="true" title="Brosur belum tersedia">
+									<span class="btn-wrap">
+										<span class="text-one">Unduh Brosur TK</span>
+										<span class="text-two">Unduh Brosur TK</span>
+									</span>
 								</span>
-							</a>
+							@endif
 						</div>
 					</div>
 
@@ -136,12 +160,36 @@
 									<small class="text-muted">Brosur penerimaan siswa baru</small>
 								</div>
 							</div>
-							<a href="{{ asset('storage/programs/brochures/sd-al-munawwar.pdf') }}" target="_blank" download class="theme-btn btn-style-one w-100">
-								<span class="btn-wrap">
-									<span class="text-one">Unduh Brosur SD</span>
-									<span class="text-two">Unduh Brosur SD</span>
+							@php
+								$sdUrl = $brosure_url[2] ?? null;
+								$sdHref = null;
+								if (!empty($sdUrl)) {
+									if (str_starts_with($sdUrl, 'http')) {
+										$sdHref = $sdUrl;
+									} else {
+										try {
+											$sdHref = \Illuminate\Support\Facades\Storage::disk('public')->url($sdUrl);
+										} catch (\Throwable $e) {
+											$sdHref = null;
+										}
+									}
+								}
+							@endphp
+							@if($sdHref)
+								<a href="{{ $sdHref }}" target="_blank" rel="noopener noreferrer" download class="theme-btn btn-style-one w-100">
+									<span class="btn-wrap">
+										<span class="text-one">Unduh Brosur SD</span>
+										<span class="text-two">Unduh Brosur SD</span>
+									</span>
+								</a>
+							@else
+								<span class="theme-btn btn-style-one w-100 disabled" aria-disabled="true" title="Brosur belum tersedia">
+									<span class="btn-wrap">
+										<span class="text-one">Unduh Brosur SD</span>
+										<span class="text-two">Unduh Brosur SD</span>
+									</span>
 								</span>
-							</a>
+							@endif
 						</div>
 					</div>
 				</div>
@@ -234,17 +282,17 @@
 					<div class="course-block_one-inner wow fadeInLeft" data-wow-delay="{{ 150 * ($loop->index + 1) }}ms" data-wow-duration="1000ms">
 						<div class="course-block_one-image">
 							@php $photo = $program->photo_url; $isExternal = $photo && Str::startsWith($photo, 'http'); @endphp
-							<a href="#" data-slug="{{ $program->slug }}">
+							<a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">
 								<img src="{{ $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png') }}" alt="{{ $program->title ?? $program->name }}" />
 							</a>
 						</div>
 						<div class="course-block_one-content">
 							<h4 class="course-block_one-heading">
-								<a href="#" data-slug="{{ $program->slug }}">{{ $program->title ?? $program->name }}</a>
+								<a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">{{ $program->title ?? $program->name }}</a>
 							</h4>
 							<div class="course-block_one-text">{{ Str::limit(strip_tags($program->description), 160) }}</div>
 							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="" data-slug="{{ $program->slug }}">Lihat Detail</a>
+								<a class="theme-btn course-block_one-study" href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">Lihat Detail</a>
 							</div>
 						</div>
 					</div>
@@ -411,7 +459,6 @@
 		</div>
 	</section>
 	<!-- End News One -->
-
 
 	<!-- CTA One -->
 	<section class="cta-two">

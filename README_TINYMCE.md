@@ -308,6 +308,11 @@ For issues or questions:
 
 ---
 
+### Build Pipeline Sync
+- `public/js/tinymce-config.js` is the canonical served asset loaded by `x-tinymce-scripts`.
+- The build pipeline copies `resources/js/tinymce-config.js` to `public/js/tinymce-config.js` via `postbuild`.
+- Manual sync: run `npm run sync:tinymce`.
+
 **Last Updated**: January 2025  
 **Version**: 1.0.0  
 **TinyMCE Version**: 6.x

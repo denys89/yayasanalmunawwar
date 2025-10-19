@@ -5,6 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
+        "postbuild": "node scripts/copy-tinymce-config.js",
+        "sync:tinymce": "node scripts/copy-tinymce-config.js",
         "preview": "vite preview"
     },
     "devDependencies": {

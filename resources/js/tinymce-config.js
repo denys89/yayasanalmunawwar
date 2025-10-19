@@ -34,7 +34,6 @@ const TINYMCE_CONFIG = {
         // Content styling
         content_style: `
             body { 
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
                 font-size: 14px; 
                 line-height: 1.6;
                 color: #333;
@@ -67,7 +66,6 @@ const TINYMCE_CONFIG = {
                 background-color: #f8f9fa;
                 padding: 2px 4px;
                 border-radius: 3px;
-                font-family: 'Monaco', 'Consolas', monospace;
                 font-size: 0.9em;
             }
             pre {

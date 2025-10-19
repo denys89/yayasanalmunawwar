@@ -133,7 +133,32 @@
                             <div class="swiper-slide">
                                 <div class="gallery-one_item">
                                     <div class="gallery-one_image">
-                                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption ?? $explores->first()->title }}">
+                                        @php
+                                            $raw = $image->image_url ?? null;
+                                            $placeholder = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="18">Image unavailable</text></svg>');
+                                            $valid = false;
+                                            $resolved = null;
+
+                                            if ($raw) {
+                                                if (\Illuminate\Support\Str::startsWith($raw, ['http://', 'https://'])) {
+                                                    $valid = filter_var($raw, FILTER_VALIDATE_URL) !== false;
+                                                    $resolved = $valid ? $raw : null;
+                                                } else {
+                                                    $valid = \Illuminate\Support\Facades\Storage::disk('public')->exists($raw);
+                                                    $resolved = $valid ? asset('storage/' . $raw) : null;
+                                                }
+                                            }
+
+                                            if (!$valid) {
+                                                \Illuminate\Support\Facades\Log::warning('Explore page image invalid or missing', [
+                                                    'explore_id' => $explores->first()->id ?? null,
+                                                    'image_id' => $image->id ?? null,
+                                                    'image_url' => $raw
+                                                ]);
+                                                $resolved = $placeholder;
+                                            }
+                                        @endphp
+                                        <img src="{{ $resolved }}" alt="{{ $image->caption ?? $explores->first()->title }}" loading="lazy" onerror="console.warn('Image failed to load:', this.src); this.onerror=null; this.src='{{ $placeholder }}';">
                                         <div class="gallery-one_content">
                                             <h3>{{ $image->caption ?? $explores->first()->title }}</h3>
                                         </div>

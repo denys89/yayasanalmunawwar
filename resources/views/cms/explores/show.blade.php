@@ -39,11 +39,27 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Featured Image:</label>
                     <div class="mt-2">
                         @php
-                            $src = \Illuminate\Support\Str::startsWith($explore->image_url, ['http://', 'https://'])
-                                ? $explore->image_url
-                                : asset('storage/' . $explore->image_url);
+                            $placeholderSvg = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="18">Image unavailable</text></svg>');
+                            $raw = $explore->image_url;
+                            $resolved = null;
+                            $valid = false;
+
+                            if ($raw) {
+                                if (\Illuminate\Support\Str::startsWith($raw, ['http://', 'https://'])) {
+                                    $valid = filter_var($raw, FILTER_VALIDATE_URL) !== false;
+                                    $resolved = $valid ? $raw : null;
+                                } else {
+                                    $valid = \Illuminate\Support\Facades\Storage::disk('public')->exists($raw);
+                                    $resolved = $valid ? asset('storage/' . $raw) : null;
+                                }
+                            }
+
+                            if (!$valid) {
+                                \Illuminate\Support\Facades\Log::warning('CMS Explore featured image invalid or missing', ['explore_id' => $explore->id, 'image_url' => $raw]);
+                                $resolved = $placeholderSvg;
+                            }
                         @endphp
-                        <img src="{{ $src }}" alt="{{ $explore->title }}" class="max-h-72 w-auto rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                        <img src="{{ $resolved }}" alt="{{ $explore->title }}" class="max-h-72 w-auto rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" onerror="console.warn('Image failed to load:', this.src); this.onerror=null; this.src='{{ $placeholderSvg }}';" loading="lazy">
                     </div>
                 </div>
                 @endif
@@ -103,7 +119,28 @@
                             @forelse($explore->images as $image)
                                 <tr>
                                     <td class="px-4 py-3">
-                                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                                        @php
+                                            $thumbRaw = $image->image_url;
+                                            $thumbPlaceholder = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="10">No image</text></svg>');
+                                            $thumbValid = false;
+                                            $thumbResolved = null;
+
+                                            if ($thumbRaw) {
+                                                if (\Illuminate\Support\Str::startsWith($thumbRaw, ['http://', 'https://'])) {
+                                                    $thumbValid = filter_var($thumbRaw, FILTER_VALIDATE_URL) !== false;
+                                                    $thumbResolved = $thumbValid ? $thumbRaw : null;
+                                                } else {
+                                                    $thumbValid = \Illuminate\Support\Facades\Storage::disk('public')->exists($thumbRaw);
+                                                    $thumbResolved = $thumbValid ? asset('storage/' . $thumbRaw) : null;
+                                                }
+                                            }
+
+                                            if (!$thumbValid) {
+                                                \Illuminate\Support\Facades\Log::warning('CMS Explore image thumbnail invalid or missing', ['explore_id' => $explore->id, 'image_id' => $image->id, 'image_url' => $thumbRaw]);
+                                                $thumbResolved = $thumbPlaceholder;
+                                            }
+                                        @endphp
+                                        <img src="{{ $thumbResolved }}" alt="Image" class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700" loading="lazy" onerror="console.warn('Thumbnail failed:', this.src); this.onerror=null; this.src='{{ $thumbPlaceholder }}';">
                                     </td>
                                     <td class="px-4 py-3 align-top">
                                         <p class="text-sm text-gray-700 dark:text-gray-300">{{ $image->caption ?? '—' }}</p>
@@ -197,7 +234,28 @@
                             </svg>
                         </button>
                     </div>
-                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" class="max-h-[70vh] w-auto mx-auto rounded-lg border border-gray-200 dark:border-gray-700" loading="lazy">
+                    @php
+                        $modalRaw = $image->image_url;
+                        $modalPlaceholder = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="16">Preview unavailable</text></svg>');
+                        $modalValid = false;
+                        $modalResolved = null;
+
+                        if ($modalRaw) {
+                            if (\Illuminate\Support\Str::startsWith($modalRaw, ['http://', 'https://'])) {
+                                $modalValid = filter_var($modalRaw, FILTER_VALIDATE_URL) !== false;
+                                $modalResolved = $modalValid ? $modalRaw : null;
+                            } else {
+                                $modalValid = \Illuminate\Support\Facades\Storage::disk('public')->exists($modalRaw);
+                                $modalResolved = $modalValid ? asset('storage/' . $modalRaw) : null;
+                            }
+                        }
+
+                        if (!$modalValid) {
+                            \Illuminate\Support\Facades\Log::warning('CMS Explore image modal invalid or missing', ['explore_id' => $explore->id, 'image_id' => $image->id, 'image_url' => $modalRaw]);
+                            $modalResolved = $modalPlaceholder;
+                        }
+                    @endphp
+                    <img src="{{ $modalResolved }}" alt="Image" class="max-h-[70vh] w-auto mx-auto rounded-lg border border-gray-200 dark:border-gray-700" loading="lazy" onerror="console.warn('Modal preview failed:', this.src); this.onerror=null; this.src='{{ $modalPlaceholder }}';">
                 </div>
             </div>
 
@@ -218,7 +276,26 @@
                         <div>
                             <label for="edit-image-{{ $image->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Image</label>
                             <div class="mt-2 flex justify-center">
-                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Current Image" class="max-h-40 rounded-md border border-gray-200 dark:border-gray-700" loading="lazy">
+                                @php
+                                    $editRaw = $image->image_url;
+                                    $editPlaceholder = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="160"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="14">Current image unavailable</text></svg>');
+                                    $editValid = false;
+                                    $editResolved = null;
+                                    if ($editRaw) {
+                                        if (\Illuminate\Support\Str::startsWith($editRaw, ['http://', 'https://'])) {
+                                            $editValid = filter_var($editRaw, FILTER_VALIDATE_URL) !== false;
+                                            $editResolved = $editValid ? $editRaw : null;
+                                        } else {
+                                            $editValid = \Illuminate\Support\Facades\Storage::disk('public')->exists($editRaw);
+                                            $editResolved = $editValid ? asset('storage/' . $editRaw) : null;
+                                        }
+                                    }
+                                    if (!$editValid) {
+                                        \Illuminate\Support\Facades\Log::warning('CMS Explore edit modal current image invalid or missing', ['explore_id' => $explore->id, 'image_id' => $image->id, 'image_url' => $editRaw]);
+                                        $editResolved = $editPlaceholder;
+                                    }
+                                @endphp
+                                <img src="{{ $editResolved }}" alt="Current Image" class="max-h-40 rounded-md border border-gray-200 dark:border-gray-700" loading="lazy" onerror="console.warn('Edit modal current image failed:', this.src); this.onerror=null; this.src='{{ $editPlaceholder }}';">
                             </div>
                             
                             <div class="mt-4">

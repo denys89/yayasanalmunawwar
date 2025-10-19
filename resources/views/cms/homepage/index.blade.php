@@ -154,12 +154,22 @@
                                         <td class="p-2 border">{{ $value->title }}</td>
                                         <td class="p-2 border">{{ $value->description }}</td>
                                         <td class="p-2 border">
-                                            <button class="px-2 py-1 bg-yellow-500 text-white rounded" onclick="openEditValue({{ $value->id }}, {!! json_encode($value->icon) !!}, {!! json_encode($value->title) !!}, {!! json_encode($value->description) !!})">Edit</button>
-                                            <form action="{{ route('cms.homepage.foundation_values.destroy', $value) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="px-2 py-1 bg-red-600 text-white rounded" onclick="return confirm('Delete this value?')">Delete</button>
-                                            </form>
+                                            <div class="flex items-center space-x-2">
+                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $value->id }}" data-icon="{{ $value->icon }}" data-title="{{ $value->title }}" data-description="{{ $value->description }}" onclick="openEditValueFromButton(this)" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <form action="{{ route('cms.homepage.foundation_values.destroy', $value) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="inline-flex items-center p-2 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200" onclick="return confirm('Delete this value?')" title="Delete">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
@@ -194,7 +204,7 @@
                 
                     
                     <!-- Icon Selection Button -->
-                    <button type="button" onclick="openIconSelector('add-value')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                    <button type="button" onclick="IconSelector.open('addValueIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
                         <div id="add-value-selected-icon" class="hidden">
                             <i id="add-value-icon-preview" class="text-3xl mb-2"></i>
                             <p class="text-sm text-gray-600">Click to change icon</p>
@@ -238,7 +248,7 @@
                     <input type="text" id="edit-value-icon-search" class="w-full border rounded p-2 mb-2" placeholder="Search icons..." oninput="filterIconGrid('edit-value')">
                     
                     <!-- Icon Selection Button -->
-                    <button type="button" onclick="openIconSelector('edit-value')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                    <button type="button" onclick="IconSelector.open('editValueIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
                         <div id="edit-value-selected-icon" class="hidden">
                             <i id="edit-value-icon-preview" class="text-3xl mb-2"></i>
                             <p class="text-sm text-gray-600">Click to change icon</p>
@@ -334,44 +344,9 @@
             modal.classList.remove('flex');
         }
 
-        // New icon selector functions
-        function openIconSelector(type) {
-            let modalId;
-            if (type === 'add-value') {
-                modalId = 'addValueIconSelectorModal';
-            } else if (type === 'edit-value') {
-                modalId = 'editValueIconSelectorModal';
-            }
-            
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                // Add body class to prevent scrolling
-                document.body.classList.add('modal-open');
-                
-                // Remove hidden class and add flex
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
+        // IconSelector.open is used directly; removed local openIconSelector.
 
-        function closeIconSelector(type) {
-            let modalId;
-            if (type === 'add-value') {
-                modalId = 'addValueIconSelectorModal';
-            } else if (type === 'edit-value') {
-                modalId = 'editValueIconSelectorModal';
-            }
-            
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                // Remove body class to restore scrolling
-                document.body.classList.remove('modal-open');
-                
-                // Hide the modal
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
+        // IconSelector.close is available; removed local closeIconSelector.
 
         function selectIcon(type, iconClass, iconName, closeModal = true) {
             // Set the hidden input value
@@ -387,22 +362,22 @@
             
             // Close the modal if requested
             if (closeModal) {
-                closeIconSelector(type);
+                const modalId = type === 'add-value' ? 'addValueIconSelectorModal' : (type === 'edit-value' ? 'editValueIconSelectorModal' : null);
+                if (modalId) {
+                    IconSelector.close(modalId);
+                }
             }
         }
 
         function filterIconGrid(type) {
-            const searchInput = document.getElementById(type + '-icon-filter') || document.getElementById(type + '-icon-search');
-            const query = searchInput.value.toLowerCase();
-            const grid = document.getElementById(type + '-icon-grid');
-            const icons = grid.querySelectorAll('.icon-option');
-            
-            icons.forEach(icon => {
-                const iconName = icon.getAttribute('data-name').toLowerCase();
-                const iconClass = icon.getAttribute('data-icon').toLowerCase();
-                const matches = iconName.includes(query) || iconClass.includes(query);
-                icon.style.display = matches ? 'block' : 'none';
-            });
+            const modalId = type === 'add-value' ? 'addValueIconSelectorModal' : (type === 'edit-value' ? 'editValueIconSelectorModal' : null);
+            if (!modalId) return;
+            const externalInput = document.getElementById(type + '-icon-search') || document.getElementById(type + '-icon-filter');
+            const modalInput = document.getElementById(modalId + '-search');
+            if (externalInput && modalInput) {
+                modalInput.value = externalInput.value;
+                IconSelector.filter(modalId);
+            }
         }
 
         function getIconName(iconClass) {
@@ -451,6 +426,14 @@
             // Show selected icon, hide no-icon placeholder
             document.getElementById('edit-value-selected-icon').classList.remove('hidden');
             document.getElementById('edit-value-no-icon').classList.add('hidden');
+        }
+
+        function openEditValueFromButton(btn) {
+            const id = btn.getAttribute('data-id');
+            const icon = btn.getAttribute('data-icon');
+            const title = btn.getAttribute('data-title');
+            const description = btn.getAttribute('data-description');
+            openEditValue(id, icon, title, description);
         }
     </script>
 @endsection

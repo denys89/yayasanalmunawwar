@@ -153,12 +153,22 @@
                                         <td class="p-2 border">{{ $milestone->title }}</td>
                                         <td class="p-2 border">{{ $milestone->description }}</td>
                                         <td class="p-2 border">
-                                            <button class="px-2 py-1 bg-yellow-500 text-white rounded" onclick="openEditMilestone({{ $milestone->id }}, {!! json_encode($milestone->icon) !!}, {!! json_encode($milestone->title) !!}, {!! json_encode($milestone->description) !!})">Edit</button>
-                                            <form action="{{ route('cms.history.milestones.destroy', $milestone) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="px-2 py-1 bg-red-600 text-white rounded" onclick="return confirm('Delete this milestone?')">Delete</button>
-                                            </form>
+                                            <div class="flex items-center space-x-2">
+                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $milestone->id }}" data-icon="{{ $milestone->icon }}" data-title="{{ $milestone->title }}" data-description="{{ $milestone->description }}" onclick="openEditMilestoneFromButton(this)" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <form action="{{ route('cms.history.milestones.destroy', $milestone) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="inline-flex items-center p-2 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200" onclick="return confirm('Delete this milestone?')" title="Delete">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
@@ -191,7 +201,7 @@
                         <input type="hidden" id="add-milestone-icon" name="icon" required>
                         
                         <!-- Icon Selection Button -->
-                        <button type="button" onclick="openIconSelector('addMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                        <button type="button" onclick="IconSelector.open('addMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
                             <div id="add-milestone-selected-icon" class="hidden">
                                 <i id="add-milestone-icon-preview" class="text-3xl mb-2"></i>
                                 <p class="text-sm text-gray-600">Click to change icon</p>
@@ -233,7 +243,7 @@
                         <input type="hidden" id="edit-milestone-icon" name="icon" required>
                         
                         <!-- Icon Selection Button -->
-                        <button type="button" onclick="openIconSelector('editMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                        <button type="button" onclick="IconSelector.open('editMilestoneIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
                             <div id="edit-milestone-selected-icon" class="hidden">
                                 <i id="edit-milestone-icon-preview" class="text-3xl mb-2"></i>
                                 <p class="text-sm text-gray-600">Click to change icon</p>
@@ -295,29 +305,9 @@
         }
 
         // Icon selector modal functions
-        function openIconSelector(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                // Add body class to prevent scrolling
-                document.body.classList.add('modal-open');
-                
-                // Remove hidden class and add flex
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
+        // IconSelector.open is used directly; removed local openIconSelector.
 
-        function closeIconSelector(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                // Remove body class to restore scrolling
-                document.body.classList.remove('modal-open');
-                
-                // Hide the modal
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
+        // IconSelector.close is available; removed local closeIconSelector.
 
         // Icon selector callback functions
         function handleAddMilestoneIconSelect(iconClass) {
@@ -366,6 +356,14 @@
         function closeEditMilestone() {
             document.getElementById('editMilestoneModal').classList.add('hidden');
             document.getElementById('editMilestoneModal').classList.remove('flex');
+        }
+
+        function openEditMilestoneFromButton(btn) {
+            const id = btn.getAttribute('data-id');
+            const icon = btn.getAttribute('data-icon');
+            const title = btn.getAttribute('data-title');
+            const description = btn.getAttribute('data-description');
+            openEditMilestone(id, icon, title, description);
         }
 
         // Default open General tab

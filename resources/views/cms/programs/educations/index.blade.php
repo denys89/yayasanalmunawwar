@@ -59,13 +59,20 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label for="edu_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="edu_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-graduation-cap', 'fa-chalkboard-teacher', 'fa-book', 'fa-book-open', 'fa-laptop-code', 'fa-microscope' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="eduIconPreview" class="fa fa-graduation-cap"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="add-education-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('addEducationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-education-selected-icon" class="hidden">
+                                <i id="add-education-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-education-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="edu_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -96,13 +103,20 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label for="edit_edu_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="edit_edu_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-graduation-cap', 'fa-chalkboard-teacher', 'fa-book', 'fa-book-open', 'fa-laptop-code', 'fa-microscope' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editEduIconPreview" class="fa fa-graduation-cap"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="edit-education-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('editEducationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-education-selected-icon" class="hidden">
+                                <i id="edit-education-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-education-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="edit_edu_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -121,19 +135,60 @@
         </div>
     </div>
 
+    <!-- Icon Selector Modals -->
+    <x-icon-selector 
+        modal-id="addEducationIconSelectorModal" 
+        title="Select Icon for Education" 
+        on-select-callback="handleAddEducationIconSelect" />
+    <x-icon-selector 
+        modal-id="editEducationIconSelectorModal" 
+        title="Select Icon for Education" 
+        on-select-callback="handleEditEducationIconSelect" />
+
     <script>
-        document.getElementById('edu_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('eduIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
-        document.getElementById('edit_edu_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('editEduIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
+        // Icon selector callback functions
+        function handleAddEducationIconSelect(iconClass, iconName) {
+            // Set the hidden input value
+            document.getElementById('add-education-icon').value = iconClass;
+            
+            // Update the preview
+            const preview = document.getElementById('add-education-icon-preview');
+            preview.className = iconClass + ' text-3xl mb-2';
+            
+            // Show selected icon, hide no-icon placeholder
+            document.getElementById('add-education-selected-icon').classList.remove('hidden');
+            document.getElementById('add-education-no-icon').classList.add('hidden');
+        }
+
+        function handleEditEducationIconSelect(iconClass, iconName) {
+            // Set the hidden input value
+            document.getElementById('edit-education-icon').value = iconClass;
+            
+            // Update the preview
+            const preview = document.getElementById('edit-education-icon-preview');
+            preview.className = iconClass + ' text-3xl mb-2';
+            
+            // Show selected icon, hide no-icon placeholder
+            document.getElementById('edit-education-selected-icon').classList.remove('hidden');
+            document.getElementById('edit-education-no-icon').classList.add('hidden');
+        }
+
+        // Legacy dropdown change handlers (removed)
+        
         window.openEditEducation = function(id, icon, name, description) {
             document.getElementById('educationEditModal').classList.remove('hidden');
-            document.getElementById('edit_edu_icon').value = icon;
-            document.getElementById('editEduIconPreview').className = 'fa ' + icon;
+            
+            // Set the icon value and update display
+            document.getElementById('edit-education-icon').value = icon;
+            if (icon) {
+                document.getElementById('edit-education-icon-preview').className = icon + ' text-3xl mb-2';
+                document.getElementById('edit-education-selected-icon').classList.remove('hidden');
+                document.getElementById('edit-education-no-icon').classList.add('hidden');
+            } else {
+                document.getElementById('edit-education-selected-icon').classList.add('hidden');
+                document.getElementById('edit-education-no-icon').classList.remove('hidden');
+            }
+            
             document.getElementById('edit_edu_name').value = name;
             document.getElementById('edit_edu_description').value = description;
             const form = document.getElementById('educationEditForm');

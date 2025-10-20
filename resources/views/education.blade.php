@@ -50,7 +50,7 @@
 <!-- CTA: Brochure -->
 @if($brochureUrl)
 <section class="cta-one">
-    <div class="auto-container mt-4">
+    <div class="auto-container mb-4">
         <div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
             <div class="cta-one_bg" style="background-image:url({{ asset('assets/images/background/cta-one_bg.png') }})"></div>
             <h3 class="cta-one_heading">Unduh brosur untuk informasi lengkap.</h3>

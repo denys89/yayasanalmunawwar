@@ -59,13 +59,20 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label for="icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-book-open', 'fa-child', 'fa-chalkboard-teacher', 'fa-dumbbell', 'fa-microscope', 'fa-music', 'fa-futbol', 'fa-laptop-code' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="iconPreview" class="fa fa-book-open"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="add-facility-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('addFacilityIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-facility-selected-icon" class="hidden">
+                                <i id="add-facility-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-facility-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -96,13 +103,20 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label for="edit_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="edit_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-book-open', 'fa-child', 'fa-chalkboard-teacher', 'fa-dumbbell', 'fa-microscope', 'fa-music', 'fa-futbol', 'fa-laptop-code' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editIconPreview" class="fa fa-book-open"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="edit-facility-icon" name="icon" required>
+                        
+                        <!-- Icon Selection Button -->
+                        <button type="button" onclick="IconSelector.open('editFacilityIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-facility-selected-icon" class="hidden">
+                                <i id="edit-facility-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-facility-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="edit_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -121,23 +135,72 @@
         </div>
     </div>
 
+    <!-- Icon Selector Modals -->
+    <x-icon-selector 
+        modal-id="addFacilityIconSelectorModal" 
+        modal-type="add" 
+        title="Select Icon for Facility" 
+        on-select-callback="handleAddFacilityIconSelect" 
+    />
+
+    <x-icon-selector 
+        modal-id="editFacilityIconSelectorModal" 
+        modal-type="edit" 
+        title="Select Icon for Facility" 
+        on-select-callback="handleEditFacilityIconSelect" 
+    />
+
     <script>
-        document.getElementById('icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('iconPreview');
-            preview.className = 'fa ' + this.value;
-        });
-        document.getElementById('edit_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('editIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
+        // Handle icon selection for Add Facility
+        function handleAddFacilityIconSelect(iconClass) {
+            document.getElementById('add-facility-icon').value = iconClass;
+            
+            // Update the display
+            const selectedDiv = document.getElementById('add-facility-selected-icon');
+            const noIconDiv = document.getElementById('add-facility-no-icon');
+            const iconPreview = document.getElementById('add-facility-icon-preview');
+            
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
+        // Handle icon selection for Edit Facility
+        function handleEditFacilityIconSelect(iconClass) {
+            document.getElementById('edit-facility-icon').value = iconClass;
+            
+            // Update the display
+            const selectedDiv = document.getElementById('edit-facility-selected-icon');
+            const noIconDiv = document.getElementById('edit-facility-no-icon');
+            const iconPreview = document.getElementById('edit-facility-icon-preview');
+            
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
         window.openEditFacility = function(id, icon, name, description) {
             document.getElementById('facilityEditModal').classList.remove('hidden');
-            document.getElementById('edit_icon').value = icon;
-            document.getElementById('editIconPreview').className = 'fa ' + icon;
+            
+            // Set the icon
+            document.getElementById('edit-facility-icon').value = icon;
+            
+            // Update icon display
+            if (icon) {
+                const selectedDiv = document.getElementById('edit-facility-selected-icon');
+                const noIconDiv = document.getElementById('edit-facility-no-icon');
+                const iconPreview = document.getElementById('edit-facility-icon-preview');
+                
+                selectedDiv.classList.remove('hidden');
+                noIconDiv.classList.add('hidden');
+                iconPreview.className = icon + ' text-3xl mb-2';
+            }
+            
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_description').value = description;
+            
             const form = document.getElementById('facilityEditForm');
-            form.action = '{{ url('/cms/programs/' . $program->id . '/facilities') }}/' + id;
+            form.action = `/cms/programs/{{ $program->id }}/facilities/${id}`;
         };
-    </script>
-</div>
+     </script>
+ </div>

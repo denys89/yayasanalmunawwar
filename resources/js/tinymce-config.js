@@ -13,6 +13,9 @@ const TINYMCE_CONFIG = {
     
     // Base configuration for all editors
     baseConfig: {
+        // GPL License - Required for TinyMCE 7+ when self-hosting
+        license_key: 'gpl',
+        
         height: 400,
         menubar: false,
         branding: false,

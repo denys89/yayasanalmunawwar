@@ -296,6 +296,10 @@
 	-webkit-transition:all 500ms ease;
 	-ms-transition:all 500ms ease;
 	-o-transition:all 500ms ease;
+}
+
+/* Apply Flaticon font only to Flaticon classes within featured-block_one-icon */
+.feature-block_one-icon [class*="flaticon-"] {
 	font-family: "flaticon_afbd3404a2e1104832d0";
 }
 
@@ -598,6 +602,10 @@
 	-ms-transition:all 500ms ease;
 	-o-transition:all 500ms ease;
 	background-color: var(--color-seven);
+}
+
+/* Apply Flaticon font only to Flaticon classes */
+.service-block_one-icon [class*="flaticon-"]{
 	font-family: "flaticon_afbd3404a2e1104832d0";
 }
 

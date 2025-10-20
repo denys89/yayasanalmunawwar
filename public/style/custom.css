@@ -250,7 +250,7 @@
 .explore-section{
     padding: 60px 0;
 }
-.whiteText{
+.whiteText,.whiteText p{
     color: #fff !important;
 }
 .swiper-pagination{

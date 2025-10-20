@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', ($program->title ?? $program->name) . ' - Yayasan Al-Munawwar')
-@section('description', $program->summary ?? Str::limit(strip_tags($program->description ?? ''), 160))
-@section('keywords', $program->name . ', program sosial, layanan, donasi, Yayasan Al-Munawwar')
+@section('title', 'Panti Al Munawwar - Yayasan Al-Munawwar')
+@section('description', 'Panti Al Munawwar adalah lembaga sosial yang memberikan pelayanan dan pendampingan kepada anak-anak yatim piatu dan dhuafa.')
+@section('keywords', 'Panti Al Munawwar, panti asuhan, yatim piatu, dhuafa, sosial, Yayasan Al-Munawwar')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('style/custom.css') }}">
@@ -14,12 +14,12 @@
 <div class="green-theme">
 
 <!-- Page Title -->
-<section class="page-title" style="background-image: url({{ $bannerUrl ?? asset('images/background/page-title.jpg') }});">
+<section class="page-title" style="background-image: url({{ asset('images/background/page-title.jpg') }});">
     <div class="auto-container">
-        <h2>{{ $program->name }}</h2>
+        <h2>Panti Al Munawwar</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>{{ $program->name }}</li>
+            <li>Panti Al Munawwar</li>
         </ul>
     </div>
 </section>
@@ -32,7 +32,7 @@
             <div class="welcome-two_image-column col-lg-6 col-md-12 col-sm-12">
                 <div class="welcome-two_image-outer">
                     <div class="welcome-two_image">
-                        <img src="{{ $photoUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="{{ $program->name }}" />
+                        <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Panti Al Munawwar" />
                     </div>
                 </div>
             </div>
@@ -42,9 +42,9 @@
                 <div class="welcome-two_content-outer">
                     <!-- Sec Title -->
                     <div class="sec-title">
-                        <div class="sec-title_title">{{ strtoupper($program->name) }}</div>
-                        <h2 class="sec-title_heading">{{ $program->title ?? $program->name }}</h2>
-                        <div class="sec-title_text">{!! $program->summary ?? $program->description !!}</div>
+                        <div class="sec-title_title">PANTI AL MUNAWWAR</div>
+                        <h2 class="sec-title_heading">Rumah Kasih Sayang <br> untuk Anak Yatim</h2>
+                        <div class="sec-title_text">Panti Al Munawwar adalah lembaga sosial yang memberikan pelayanan dan pendampingan kepada anak-anak yatim piatu dan dhuafa dengan kasih sayang, pendidikan, dan pembinaan karakter yang Islami.</div>
                     </div>
                     
                 </div>
@@ -62,21 +62,69 @@
         <div class="sec-title centered">
             <div class="sec-title_title">LAYANAN KAMI</div>
             <h2 class="sec-title_heading">Pelayanan Terpadu <br> untuk Anak Asuh</h2>
-            <div class="sec-title_text">{!! $program->description ?? 'Berbagai layanan komprehensif yang kami berikan untuk memastikan kesejahteraan, pendidikan, dan perkembangan optimal anak-anak asuh.' !!}</div>
+            <div class="sec-title_text">Berbagai layanan komprehensif yang kami berikan untuk memastikan kesejahteraan, pendidikan, dan perkembangan optimal anak-anak asuh.</div>
         </div>
         <div class="row clearfix">
 
-            @forelse($services as $idx => $service)
+            <!-- Service Block One -->
             <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="{{ $service->icon }}" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading"><a href="#">{{ $service->name }}</a></h5>
-                    <div class="service-block_one-text">{{ $service->description }}</div>
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-home" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Tempat Tinggal<br /> Nyaman</a></h5>
+                    <div class="service-block_one-text">Menyediakan tempat tinggal yang nyaman, aman, dan layak dengan fasilitas lengkap untuk kehidupan sehari-hari anak asuh.</div>
+                    
                 </div>
             </div>
-            @empty
-            <div class="col-12 text-center text-muted">Belum ada layanan terdaftar.</div>
-            @endforelse
+
+            <!-- Service Block One -->
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-book" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Pendidikan<br/>Formal</a></h5>
+                    <div class="service-block_one-text">Memfasilitasi pendidikan formal dari SD hingga SMA serta pendidikan agama dan tahfidz Al-Quran untuk masa depan cerah.</div>
+                    
+                </div>
+            </div>
+
+            <!-- Service Block One -->
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-stethoscope" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Layanan<br/>Kesehatan</a></h5>
+                    <div class="service-block_one-text">Pelayanan kesehatan rutin dan pengobatan komprehensif untuk menjaga kesehatan fisik dan mental anak asuh.</div>
+                    
+                </div>
+            </div>
+
+            <!-- Service Block One -->
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="450ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-utensils" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Gizi & Makanan</a></h5>
+                    <div class="service-block_one-text">Menyediakan makanan bergizi seimbang dan halal untuk mendukung tumbuh kembang optimal anak asuh.</div>
+                    
+                </div>
+            </div>
+
+            <!-- Service Block One -->
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="600ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-tools" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Pelatihan<br /> Keterampilan</a></h5>
+                    <div class="service-block_one-text">Pelatihan keterampilan hidup dan vokasional untuk mempersiapkan kemandirian dan masa depan anak asuh.</div>
+                    
+                </div>
+            </div>
+
+            <!-- Service Block One -->
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="750ms" data-wow-duration="1000ms">
+                    <div class="service-block_one-icon"><i class="fas fa-comments" style="font-size: 24px; color: #28a745;"></i></div>
+                    <h5 class="service-block_one-heading"><a href="#">Bimbingan<br />Konseling</a></h5>
+                    <div class="service-block_one-text">Bimbingan konseling profesional untuk perkembangan psikologis, emosional, dan spiritual anak asuh.</div>
+                    
+                </div>
+            </div>
 
         </div>
     </div>
@@ -89,21 +137,48 @@
         <div class="sec-title centered">
             <div class="sec-title_title">CARA BERDONASI</div>
             <h2 class="sec-title_heading">Bergabunglah Membantu <br> Anak Yatim Piatu</h2>
-            <div class="sec-title_text">Dukungan Anda sangat berarti bagi keberlangsungan program dan kesejahteraan anak asuh.</div>
+            <div class="sec-title_text">Berbagai cara mudah untuk berdonasi dan membantu anak-anak yatim piatu dan dhuafa melalui Panti Al Munawwar.</div>
         </div>
         <div class="row clearfix">
 
-            @forelse($donations as $idx => $donation)
+            <!-- Featured Block One -->
             <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="{{ $donation->fa_icon ?? $donation->icon }}" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
-                    <div class="featured-block_one-text">{{ $donation->description }}</div>
+                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
+                    <div class="featured-block_one-icon"><i class="fas fa-university" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">Transfer Bank</h5>
+                    <div class="featured-block_one-text">
+                        Bank Mandiri<br>
+                        No. Rek: 123-456-789<br>
+                        a.n. Yayasan Al-Munawwar
+                    </div>
                 </div>
             </div>
-            @empty
-            <div class="col-12 text-center text-muted">Belum ada informasi donasi.</div>
-            @endforelse
+
+            <!-- Featured Block One -->
+            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1000ms">
+                    <div class="featured-block_one-icon"><i class="fas fa-wallet" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">E-Wallet Digital</h5>
+                    <div class="featured-block_one-text">
+                        GoPay: 0812-3456-7890<br>
+                        OVO: 0812-3456-7890<br>
+                        DANA: 0812-3456-7890
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Block One -->
+            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
+                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">
+                    <div class="featured-block_one-icon"><i class="fas fa-hand-holding-heart" style="font-size: 48px; color: #28a745;"></i></div>
+                    <h5 class="featured-block_one-heading">Donasi Langsung</h5>
+                    <div class="featured-block_one-text">
+                        Kunjungi langsung kantor<br>
+                        Yayasan Al-Munawwar<br>
+                        Setiap hari kerja 08:00-16:00
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -115,48 +190,48 @@
         <!-- Sec Title -->
         <div class="sec-title centered">
             <div class="sec-title_title">HUBUNGI KAMI</div>
-            <h2 class="sec-title_heading">Informasi Kontak <br> {{ $program->name }}</h2>
-            <div class="sec-title_text">Untuk informasi lebih lanjut tentang program, donasi, atau kunjungan, silakan hubungi kami melalui kontak di bawah ini.</div>
+            <h2 class="sec-title_heading">Informasi Kontak <br> Panti Al Munawwar</h2>
+            <div class="sec-title_text">Untuk informasi lebih lanjut tentang program, donasi, atau kunjungan ke Panti Al Munawwar, silakan hubungi kami melalui kontak di bawah ini.</div>
         </div>
         
         <div class="row clearfix">
             
             <!-- Contact Info Block -->
-            @if($program->phone)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-phone" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Telepon</h4>
                     <div class="contact-info-block_text">
-                        <a href="tel:{{ preg_replace('/\s+/', '', $program->phone) }}">{{ $program->phone }}</a>
+                        <a href="tel:+62123456791">(021) 8765-433</a><br>
+                        <a href="tel:+628123456791">0812-3456-791</a>
                     </div>
                 </div>
             </div>
-            @endif
             
             <!-- Contact Info Block -->
-            @if($program->email)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-envelope" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Email</h4>
                     <div class="contact-info-block_text">
-                        <a href="mailto:{{ $program->email }}">{{ $program->email }}</a>
+                        <a href="mailto:panti@almunawwar.sch.id">panti@almunawwar.sch.id</a><br>
+                        <a href="mailto:info@almunawwar.sch.id">info@almunawwar.sch.id</a>
                     </div>
                 </div>
             </div>
-            @endif
             
             <!-- Contact Info Block -->
-            @if($program->address)
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-map-marker-alt" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Alamat</h4>
-                    <div class="contact-info-block_text">{!! nl2br(e($program->address)) !!}</div>
+                    <div class="contact-info-block_text">
+                        Jl. Sosial No. 127<br>
+                        Bogor Raya, Jawa Barat 40123<br>
+                        Indonesia 12345
+                    </div>
                 </div>
             </div>
-            @endif
             
         </div>
         <!-- Contact Form Box -->

@@ -33,6 +33,15 @@ Route::get('/struktur-organisasi', [PublicOrganizationalStructureController::cla
 
 // Legacy unit routes removed; use /programs/{slug}
 
+// TK and SD Al-Munawwar routes
+Route::get('/tk-al-munawwar', function () {
+    return view('tk-al-munawwar');
+})->name('tk-al-munawwar');
+
+Route::get('/sd-al-munawwar', function () {
+    return view('sd-al-munawwar');
+})->name('sd-al-munawwar');
+
 Route::get('/berita', [PublicNewsController::class, 'index'])->name('berita');
 
 Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('berita.detail');

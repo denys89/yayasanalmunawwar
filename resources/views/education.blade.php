@@ -71,10 +71,10 @@
 <section class="service-one" style="background-image:url({{ asset('assets/images/background/service-bg.png') }}); padding: 120px 0;">
     <div class="auto-container">
         <div class="sec-title centered">
-            <div class="sec-title_title">PROGRAM UNGGULAN</div>
-            <h2 class="sec-title_heading">Program Pendidikan</h2>
+            <div class="sec-title_title ">PROGRAM UNGGULAN</div>
+            <h2 class="sec-title_heading whiteText">Program Pendidikan</h2>
             @if(!empty($program->description))
-                <div class="sec-title_text">{!! $program->description !!}</div>
+                <div class="sec-title_text whiteText">{!! $program->description !!}</div>
             @endif
         </div>
         <div class="row clearfix">
@@ -83,7 +83,7 @@
                     <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
                         <div class="service-block_one-upper">
                             <div class="service-block_one-icon">
-                                <i class="{{ $education->icon }}" style="font-size: 24px; color: #28a745;"></i>
+                                <i class="{{ $education->icon }}"></i>
                             </div>
                             <h4 class="service-block_one-heading"><a href="#">{{ $education->name }}</a></h4>
                             <div class="service-block_one-text">{{ $education->description }}</div>

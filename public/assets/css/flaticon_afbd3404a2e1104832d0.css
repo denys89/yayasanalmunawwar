@@ -17,20 +17,6 @@
   }
 }
 
-/* Base class for all flaticon elements */
-[class^="flaticon-"]:before, 
-[class*=" flaticon-"]:before {
-  font-family: "flaticon_afbd3404a2e1104832d0" !important;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: inline-block;
-}
-
 .flaticon-up-right-arrow:before {
     content: "\f101";
 }

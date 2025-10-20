@@ -166,7 +166,7 @@
                     </table>
                 </div>
             </div>
-        </div
+        </div>
 
         <!-- Upload Image Modal overlay centered -->
         <div id="exploreImageUploadModal" class="fixed inset-0 z-50 hidden bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">

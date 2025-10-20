@@ -484,7 +484,7 @@
 <style>
 .school-programs-tabs {
     position: relative;
-    padding: 90px 0;
+    padding: 60px 0;
     background-color: #f7f7f7;
 }
 

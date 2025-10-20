@@ -253,3 +253,9 @@
 .whiteText{
     color: #fff !important;
 }
+.swiper-pagination{
+    width: 100%;
+}
+.swiper-pagination-bullet{
+    margin: 0 5px;
+}

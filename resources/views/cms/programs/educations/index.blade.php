@@ -59,16 +59,13 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <input type="hidden" id="add-education-icon" name="icon" value="fa-graduation-cap" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('addEducationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="add-education-selected-icon">
-                                <i id="add-education-icon-preview" class="fa fa-graduation-cap text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                        </button>
+                        <label for="edu_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <select id="edu_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            @foreach([ 'fa-graduation-cap', 'fa-chalkboard-teacher', 'fa-book', 'fa-book-open', 'fa-laptop-code', 'fa-microscope' ] as $icon)
+                                <option value="{{ $icon }}">{{ $icon }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="eduIconPreview" class="fa fa-graduation-cap"></i></div>
                     </div>
                     <div>
                         <label for="edu_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -99,16 +96,13 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <input type="hidden" id="edit-education-icon" name="icon" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('editEducationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="edit-education-selected-icon">
-                                <i id="edit-education-icon-preview" class="text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                        </button>
+                        <label for="edit_edu_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <select id="edit_edu_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            @foreach([ 'fa-graduation-cap', 'fa-chalkboard-teacher', 'fa-book', 'fa-book-open', 'fa-laptop-code', 'fa-microscope' ] as $icon)
+                                <option value="{{ $icon }}">{{ $icon }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editEduIconPreview" class="fa fa-graduation-cap"></i></div>
                     </div>
                     <div>
                         <label for="edit_edu_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -138,39 +132,12 @@
         });
         window.openEditEducation = function(id, icon, name, description) {
             document.getElementById('educationEditModal').classList.remove('hidden');
-            document.getElementById('edit-education-icon').value = icon;
-            document.getElementById('edit-education-icon-preview').className = 'fa ' + icon;
+            document.getElementById('edit_edu_icon').value = icon;
+            document.getElementById('editEduIconPreview').className = 'fa ' + icon;
             document.getElementById('edit_edu_name').value = name;
             document.getElementById('edit_edu_description').value = description;
             const form = document.getElementById('educationEditForm');
             form.action = '{{ url('/cms/programs/' . $program->id . '/educations') }}/' + id;
         };
-        
-        // Icon selector callback function
-function selectIcon(iconClass, iconName, modalId) {
-    if (modalId === 'addEducationIconSelectorModal') {
-        document.getElementById('add-education-icon').value = iconClass;
-        document.getElementById('add-education-icon-preview').className = 'fa ' + iconClass;
-        document.getElementById('add-education-selected-icon').classList.remove('hidden');
-    } else if (modalId === 'editEducationIconSelectorModal') {
-        document.getElementById('edit-education-icon').value = iconClass;
-        document.getElementById('edit-education-icon-preview').className = 'fa ' + iconClass;
-        document.getElementById('edit-education-selected-icon').classList.remove('hidden');
-    }
-    
-    // Close the modal after selection
-    IconSelector.close(modalId);
-}
     </script>
-
-    <!-- Icon Selector Modals -->
-    <x-icon-selector 
-        modal-id="addEducationIconSelectorModal"
-        onSelectCallback="selectIcon"
-    />
-    
-    <x-icon-selector 
-        modal-id="editEducationIconSelectorModal"
-        onSelectCallback="selectIcon"
-    />
 </div>

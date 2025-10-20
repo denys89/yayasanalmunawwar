@@ -59,16 +59,13 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <input type="hidden" id="add-facility-icon" name="icon" value="fa-book-open" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('addFacilityIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="add-facility-selected-icon">
-                                <i id="add-facility-icon-preview" class="fa fa-book-open text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                        </button>
+                        <label for="icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <select id="icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            @foreach([ 'fa-book-open', 'fa-child', 'fa-chalkboard-teacher', 'fa-dumbbell', 'fa-microscope', 'fa-music', 'fa-futbol', 'fa-laptop-code' ] as $icon)
+                                <option value="{{ $icon }}">{{ $icon }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="iconPreview" class="fa fa-book-open"></i></div>
                     </div>
                     <div>
                         <label for="name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -99,16 +96,13 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <input type="hidden" id="edit-facility-icon" name="icon" value="fa-book-open" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('editFacilityIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="edit-facility-selected-icon">
-                                <i id="edit-facility-icon-preview" class="fa fa-book-open text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                        </button>
+                        <label for="edit_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <select id="edit_icon" name="icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            @foreach([ 'fa-book-open', 'fa-child', 'fa-chalkboard-teacher', 'fa-dumbbell', 'fa-microscope', 'fa-music', 'fa-futbol', 'fa-laptop-code' ] as $icon)
+                                <option value="{{ $icon }}">{{ $icon }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editIconPreview" class="fa fa-book-open"></i></div>
                     </div>
                     <div>
                         <label for="edit_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -128,28 +122,22 @@
     </div>
 
     <script>
+        document.getElementById('icon')?.addEventListener('change', function() {
+            const preview = document.getElementById('iconPreview');
+            preview.className = 'fa ' + this.value;
+        });
+        document.getElementById('edit_icon')?.addEventListener('change', function() {
+            const preview = document.getElementById('editIconPreview');
+            preview.className = 'fa ' + this.value;
+        });
         window.openEditFacility = function(id, icon, name, description) {
             document.getElementById('facilityEditModal').classList.remove('hidden');
-            document.getElementById('edit-facility-icon').value = icon;
-            document.getElementById('edit-facility-icon-preview').className = 'fa ' + icon;
+            document.getElementById('edit_icon').value = icon;
+            document.getElementById('editIconPreview').className = 'fa ' + icon;
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_description').value = description;
             const form = document.getElementById('facilityEditForm');
             form.action = '{{ url('/cms/programs/' . $program->id . '/facilities') }}/' + id;
         };
-        
-        window.selectFacilityIcon = function(iconClass, iconName, modalId) {
-            if (modalId === 'addFacilityIconSelectorModal') {
-                document.getElementById('add-facility-icon').value = iconClass;
-                document.getElementById('add-facility-icon-preview').className = 'fa ' + iconClass;
-            } else if (modalId === 'editFacilityIconSelectorModal') {
-                document.getElementById('edit-facility-icon').value = iconClass;
-                document.getElementById('edit-facility-icon-preview').className = 'fa ' + iconClass;
-            }
-            IconSelector.close(modalId);
-        };
     </script>
-    
-    <x-icon-selector modal-id="addFacilityIconSelectorModal" onSelectCallback="selectFacilityIcon" />
-    <x-icon-selector modal-id="editFacilityIconSelectorModal" onSelectCallback="selectFacilityIcon" />
 </div>

@@ -4,11 +4,9 @@ namespace App\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Page;
-use App\Models\Program;
-use App\Models\News;
-use App\Models\Media;
-use App\Models\User;
+use App\Models\StudentRegistration;
+use App\Models\ContactUs;
+use Illuminate\Http\Response;
 
 class DashboardController extends Controller
 {
@@ -18,15 +16,11 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'pages' => Page::count(),
-            'programs' => Program::count(),
-            'news' => News::count(),
-            'media' => Media::count(),
-            'users' => User::count(),
+            'student_registrations' => StudentRegistration::count(),
+            'contact_messages' => ContactUs::count(),
         ];
 
-        $recentNews = News::latest()->take(5)->get();
-        return view('cms.dashboard.index', compact('stats', 'recentNews'));
+        return view('cms.dashboard.index', compact('stats'));
     }
 
     /**
@@ -35,13 +29,32 @@ class DashboardController extends Controller
     public function content()
     {
         $stats = [
-            'pages' => Page::count(),
-            'news' => News::count(),
-            'media' => Media::count(),
+            'student_registrations' => StudentRegistration::count(),
+            'contact_messages' => ContactUs::count(),
         ];
 
-        $recentNews = News::latest()->take(5)->get();
+        return view('cms.dashboard.content', compact('stats'));
+    }
 
-        return view('cms.dashboard.content', compact('stats', 'recentNews'));
+    /**
+     * Export dashboard report
+     */
+    public function exportReport()
+    {
+        $stats = [
+            'student_registrations' => StudentRegistration::count(),
+            'contact_messages' => ContactUs::count(),
+        ];
+
+        // Generate CSV content
+        $csvContent = "Report Type,Count\n";
+        $csvContent .= "Student Registrations,{$stats['student_registrations']}\n";
+        $csvContent .= "Contact Messages,{$stats['contact_messages']}\n";
+
+        $filename = 'dashboard_report_' . now()->format('Y-m-d_H-i-s') . '.csv';
+
+        return response($csvContent)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }

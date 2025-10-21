@@ -14,12 +14,12 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create additional editor for testing
-        User::create([
-            'name' => 'Test Editor',
-            'email' => 'test.editor@yayasanalmunawwar.org',
-            'role' => 'editor',
-            'password' => Hash::make('editor123'),
-            'email_verified_at' => now(),
-        ]);
+        // User::create([
+        //     'name' => 'Test Editor',
+        //     'email' => 'test.editor@yayasanalmunawwar.org',
+        //     'role' => 'editor',
+        //     'password' => Hash::make('editor123'),
+        //     'email_verified_at' => now(),
+        // ]);
     }
 }

@@ -50,6 +50,9 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // CMS Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     
+    // Reports Export
+    Route::get('/reports/export', [DashboardController::class, 'exportReport'])->name('reports.export');
+    
     // Pages Management
     Route::resource('pages', PageController::class);
     

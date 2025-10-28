@@ -79,47 +79,54 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Brochure</label>
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div>
-                                <label for="brochure_url" class="sr-only">Brochure URL</label>
-                                <input type="url" id="brochure_url" name="brochure_url" value="{{ old('brochure_url') }}" placeholder="https://example.com/brochure.pdf"
-                                       class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('brochure_url') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                                @error('brochure_url')
-                                    <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="brochure_file" class="sr-only">Upload Brochure File</label>
-                                <input type="file" id="brochure_file" name="brochure_file"
-                                       accept=".pdf,.doc,.docx,.odt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.oasis.opendocument.text"
-                                       class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('brochure_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
-                                @error('brochure_file')
-                                    <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter a brochure URL or upload a file (PDF, DOC, DOCX, ODT). Uploaded file overrides URL. Max size 10MB.</p>
-                    </div>
+                    <label for="brochure_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Brochure</label>
+                    <input type="file" id="brochure_file" name="brochure_file"
+                           accept=".pdf,.doc,.docx,.odt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.oasis.opendocument.text"
+                           class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('brochure_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror"
+                           onchange="validateFileSize(this, 50)">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a brochure file (PDF, DOC, DOCX, ODT). Max size 50MB.</p>
+                    @error('brochure_file')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                    <div id="brochure_file_error" class="mt-1 text-sm text-rose-600 hidden"></div>
+                </div>
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label for="banner_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Banner Image</label>
                             <input type="file" id="banner_file" name="banner_file" accept="image/*"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('banner_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('banner_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror"
+                                   onchange="previewImage(this, 'banner_preview')">
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a banner image (max 5MB).</p>
                             @error('banner_file')
                                 <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                             @enderror
+                            
+                            <!-- Image Preview -->
+                            <div id="banner_preview" class="mt-3 hidden">
+                                <div class="relative inline-block">
+                                    <img id="banner_preview_img" src="" alt="Banner Preview" class="max-w-xs max-h-32 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" onclick="openImageModal(this.src)">
+                                    <button type="button" onclick="removeImagePreview('banner_preview', 'banner_file')" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">×</button>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <label for="photo_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo</label>
                             <input type="file" id="photo_file" name="photo_file" accept="image/*"
-                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('photo_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror">
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 @error('photo_file') border-rose-500 focus:border-rose-500 focus:ring-rose-500 @enderror"
+                                   onchange="previewImage(this, 'photo_preview')">
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a photo (max 5MB).</p>
                             @error('photo_file')
                                 <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                             @enderror
+                            
+                            <!-- Image Preview -->
+                            <div id="photo_preview" class="mt-3 hidden">
+                                <div class="relative inline-block">
+                                    <img id="photo_preview_img" src="" alt="Photo Preview" class="max-w-xs max-h-32 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" onclick="openImageModal(this.src)">
+                                    <button type="button" onclick="removeImagePreview('photo_preview', 'photo_file')" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">×</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -229,5 +236,77 @@
             slugField.value = slug;
         }
     });
+
+    // Image preview functionality
+    function previewImage(input, previewId) {
+        const file = input.files[0];
+        const preview = document.getElementById(previewId);
+        const previewImg = document.getElementById(previewId + '_img');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.classList.add('hidden');
+        }
+    }
+
+    // Remove image preview
+    function removeImagePreview(previewId, inputId) {
+        const preview = document.getElementById(previewId);
+        const input = document.getElementById(inputId);
+        
+        preview.classList.add('hidden');
+        input.value = '';
+    }
+
+    // Open image in modal for larger view
+     function openImageModal(src) {
+         // Create modal
+         const modal = document.createElement('div');
+         modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75';
+         modal.innerHTML = `
+             <div class="relative max-w-4xl max-h-full p-4">
+                 <img src="${src}" alt="Image Preview" class="max-w-full max-h-full rounded-lg">
+                 <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200">×</button>
+             </div>
+         `;
+         
+         // Close modal on background click
+         modal.addEventListener('click', function(e) {
+             if (e.target === modal) {
+                 modal.remove();
+             }
+         });
+         
+         document.body.appendChild(modal);
+     }
+     
+     // File size validation
+     function validateFileSize(input, maxSizeMB) {
+         const file = input.files[0];
+         const errorDiv = document.getElementById(input.id + '_error');
+         
+         if (file) {
+             const fileSizeMB = file.size / (1024 * 1024);
+             
+             if (fileSizeMB > maxSizeMB) {
+                 errorDiv.textContent = `文件大小超过限制。最大允许 ${maxSizeMB}MB，当前文件大小 ${fileSizeMB.toFixed(2)}MB。`;
+                 errorDiv.classList.remove('hidden');
+                 input.value = '';
+                 return false;
+             } else {
+                 errorDiv.classList.add('hidden');
+                 return true;
+             }
+         }
+         
+         errorDiv.classList.add('hidden');
+         return true;
+     }
 </script>
 @endpush

@@ -116,6 +116,20 @@
                                 <label class="block text-sm font-medium mb-1">Description (Rich Text)</label>
                                 <textarea id="description" name="description" class="w-full border rounded p-2" rows="6">{{ old('description', $homepage->description) }}</textarea>
                                 @error('description')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                                @if($homepage->youtube_embed)
+                                    <div class="mt-4">
+                                        {!! $homepage->youtube_embed !!}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium mb-1">YouTube Video URL</label>
+                                <input type="url" id="youtube_url" name="youtube_url" value="{{ old('youtube_url') }}" class="w-full border rounded p-2" placeholder="https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID" oninput="validateYoutubeUrl()">
+                                <p id="youtube_help" class="text-xs text-gray-500 mt-1">Only YouTube links are allowed. Paste a full video URL.</p>
+                                @error('youtube_url')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
                             </div>
                         </div>
 
@@ -284,6 +298,32 @@
         title="Select an Icon" 
         on-select-callback="handleEditValueIconSelect" />
     <script>
+        function validateYoutubeUrl() {
+            const input = document.getElementById('youtube_url');
+            const help = document.getElementById('youtube_help');
+            const value = (input.value || '').trim();
+            if (!value) {
+                input.setCustomValidity('');
+                help.classList.remove('text-red-600');
+                help.classList.add('text-gray-500');
+                help.textContent = 'Only YouTube links are allowed. Paste a full video URL.';
+                return true;
+            }
+            const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|m\.youtube\.com|youtu\.be)\//i;
+            if (!pattern.test(value)) {
+                input.setCustomValidity('Please enter a valid YouTube URL.');
+                help.classList.add('text-red-600');
+                help.classList.remove('text-gray-500');
+                help.textContent = 'Invalid YouTube URL. Examples: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID';
+                return false;
+            }
+            input.setCustomValidity('');
+            help.classList.remove('text-red-600');
+            help.classList.add('text-gray-500');
+            help.textContent = 'Looks good. This will embed the video on save.';
+            return true;
+        }
+
         function openTab(tab) {
             const generalBtn = document.getElementById('tab-general');
             const valuesBtn = document.getElementById('tab-values');

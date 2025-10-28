@@ -38,8 +38,7 @@ class ProgramController extends Controller
             'summary' => 'nullable|string',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
-            'brochure_url' => 'nullable|url',
-            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:51200',
             'banner_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'photo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'photo_description' => 'nullable|string|max:255',
@@ -64,7 +63,8 @@ class ProgramController extends Controller
                 ->replace('</script>', '&lt;/script>');
         }
 
-        $validated['slug'] = Str::slug($validated['name']);
+        // 注意：slug字段在编辑时不允许修改，以保持URL稳定性和SEO优化
+        // 移除了 $validated['slug'] = Str::slug($validated['name']); 这一行
 
         // Handle brochure file upload (takes precedence over URL if both provided)
         if ($request->hasFile('brochure_file')) {
@@ -122,8 +122,7 @@ class ProgramController extends Controller
             'summary' => 'nullable|string',
             'description' => 'required|string',
             'curriculum' => 'nullable|string',
-            'brochure_url' => 'nullable|url',
-            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:10240',
+            'brochure_file' => 'nullable|file|mimes:pdf,doc,docx,odt|max:51200',
             'banner_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'photo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'photo_description' => 'nullable|string|max:255',

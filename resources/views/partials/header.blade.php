@@ -54,36 +54,18 @@
                                     </li>
                                     <li class="dropdown"><a href="#">Explore</a>
                                         <ul>
-                                            @php
-                                                // Get all unique categories from the database
-                                                $dbCategories = App\Models\Explore::select('category')
-                                                    ->where('status', 'published')
-                                                    ->distinct()
-                                                    ->get();
-                                            @endphp
-                                            
-                                            @foreach($dbCategories as $cat)
-                                                @php
-                                                    // Get the first explore item in this category to use its slug
-                                                    $firstItem = App\Models\Explore::where('category', $cat->category)
-                                                        ->where('status', 'published')
-                                                        ->orderBy('order')
-                                                        ->first();
-                                                    
-                                                    $categoryTitle = $firstItem->title ?? ucfirst(str_replace('_', ' ', $cat->category));
-                                                    
-                                                    // Use the same slug format as in the homepage
-                                                    $urlSlug = $firstItem ? $firstItem->slug : str_replace('_', '-', $cat->category);
-                                                @endphp
-                                                <li><a href="{{ route('explore.show', $urlSlug) }}">{{ $categoryTitle }}</a></li>
-                                            @endforeach
+                                            @if(isset($exploreNavigation) && $exploreNavigation->isNotEmpty())
+                                                @foreach($exploreNavigation as $category => $item)
+                                                    <li><a href="{{ route('explore.show', $item->slug) }}">{{ $item->title }}</a></li>
+                                                @endforeach
+                                            @endif
                                         </ul>
                                     </li>
                                     <li class="dropdown"><a href="#">Unit Sekolah</a>
                                         <ul>
-                                            <li><a href="{{ route('programs.show', ['slug' => 'tk-al-munawwar']) }}">TK Islam Al Munawwar</a></li>
-                                            <li><a href="{{ route('programs.show', ['slug' => 'sd-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
-                                            <li><a href="{{ route('programs.show', ['slug' => 'panti-al-munawwar']) }}">Panti Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'kb-tk-islam-al-munawwar']) }}">TK Islam Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'sd-islam-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
+                                            <li><a href="{{ route('programs.show', ['slug' => 'rumah-kasih-sayang-untuk-anak-yatim']) }}">Panti Al Munawwar</a></li>
                                             <li><a href="{{ route('programs.show', ['slug' => 'masjid-al-munawwar']) }}">Masjid Al Munawwar</a></li>
                                         </ul>
                                     </li>

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Masjid Al Munawwar - Yayasan Al-Munawwar')
-@section('description', 'Masjid Al Munawwar adalah pusat kegiatan ibadah dan dakwah yang melayani masyarakat dengan berbagai program keagamaan dan sosial.')
-@section('keywords', 'Masjid Al Munawwar, ibadah, dakwah, kajian Islam, sholat, Yayasan Al-Munawwar')
+@section('title', ($program->title ?? $program->name) . ' - Yayasan Al-Munawwar')
+@section('description', $program->summary ?? Str::limit(strip_tags($program->description ?? ''), 160))
+@section('keywords', ($program->name ?? 'Masjid Al Munawwar') . ', ibadah, dakwah, kajian Islam, sholat, Yayasan Al-Munawwar')
 
 @section('content')
 @push('styles')
@@ -10,12 +10,12 @@
 @endpush
 
 <!-- Page Title -->
-<section class="page-title" style="background-image: url({{ asset('images/background/page-title.jpg') }});">
+<section class="page-title" style="background-image: url({{ $bannerUrl ?? asset('images/background/page-title.jpg') }});">
     <div class="auto-container">
-        <h2>Masjid Al Munawwar</h2>
+        <h2>{{ $program->name }}</h2>
         <ul class="bread-crumb clearfix">
             <li><a href="{{ route('home') }}">Beranda</a></li>
-            <li>Masjid Al Munawwar</li>
+            <li>{{ $program->name }}</li>
         </ul>
     </div>
 </section>
@@ -36,7 +36,7 @@
             <div class="welcome-two_image-column col-lg-6 col-md-12 col-sm-12">
                 <div class="welcome-two_image-outer">
                     <div class="welcome-two_image">
-                        <img src="{{ asset('images/resource/welcome-1.jpg') }}" alt="Panti Al Munawwar" />
+                        <img src="{{ $photoUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="{{ $program->name }}" />
                     </div>
                 </div>
             </div>
@@ -46,9 +46,9 @@
                 <div class="welcome-two_content-outer">
                     <!-- Sec Title -->
                     <div class="sec-title">
-                        <div class="sec-title_title">MASJID AL MUNAWWAR</div>
-                        <h2 class="sec-title_heading">Pusat Ibadah & Dakwah <br> Umat Islam</h2>
-                        <div class="sec-title_text">Masjid Al Munawwar adalah pusat kegiatan ibadah dan dakwah yang melayani masyarakat dengan berbagai program keagamaan, sosial, dan pendidikan untuk memperkuat ukhuwah Islamiyah dan membangun generasi yang beriman dan bertakwa.</div>
+                        <div class="sec-title_title">{{ strtoupper($program->name) }}</div>
+                        <h2 class="sec-title_heading">{{ $program->title ?? $program->name }}</h2>
+                        <div class="sec-title_text">{!! $program->summary ?? $program->description !!}</div>
                     </div>
                 </div>
             </div>
@@ -69,67 +69,20 @@
         </div>
         
         <div class="row clearfix">
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-praying-hands" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">Sholat Berjamaah</h5>
-                    <div class="service-block_one-text">Sholat lima waktu berjamaah dengan imam yang berpengalaman dan suara yang merdu dalam suasana yang khusyuk.</div>
-                   
+            @forelse(($activities ?? []) as $activity)
+                <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+                    <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
+                        <div class="service-block_one-icon">
+                            @php $icon = $activity->fa_icon ?? 'fa-praying-hands'; @endphp
+                            <i class="fas {{ $icon }}" style="font-size: 24px; color: #28a745;"></i>
+                        </div>
+                        <h5 class="service-block_one-heading">{{ $activity->name }}</h5>
+                        <div class="service-block_one-text">{!! $activity->description !!}</div>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-quran" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">Kajian Al-Quran</h5>
-                    <div class="service-block_one-text">Kajian tafsir Al-Quran dan hadits yang diselenggarakan rutin untuk memperdalam pemahaman agama.</div>
-                    
-                </div>
-            </div>
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-moon" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">Program Ramadhan</h5>
-                    <div class="service-block_one-text">Kegiatan khusus bulan Ramadhan untuk meningkatkan ketakwaan dan kebersamaan umat.</div>
-                   
-                </div>
-            </div>
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="450ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-graduation-cap" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">TPA/TPQ</h5>
-                    <div class="service-block_one-text">Taman Pendidikan Al-Quran untuk anak-anak belajar membaca Al-Quran dengan metode yang menyenangkan.</div>
-                    
-                </div>
-            </div>
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="600ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-ring" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">Akad Nikah</h5>
-                    <div class="service-block_one-text">Pelayanan akad nikah dengan prosedur yang sesuai syariat Islam dalam suasana yang sakral.</div>
-                    
-                </div>
-            </div>
-            
-            <!-- Service Block One -->
-            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="750ms" data-wow-duration="1000ms">
-                    <div class="service-block_one-icon"><i class="fas fa-hand-holding-heart" style="font-size: 24px; color: #28a745;"></i></div>
-                    <h5 class="service-block_one-heading">Zakat & Infaq</h5>
-                    <div class="service-block_one-text">Pengelolaan zakat, infaq, dan sedekah untuk disalurkan kepada yang berhak dengan transparan.</div>
-                    
-                </div>
-            </div>
-            
+            @empty
+                <div class="col-12 centered"><p>Belum ada kegiatan yang ditampilkan.</p></div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -182,46 +135,20 @@
             <div class="sec-title_text">Berbagai cara mudah untuk berdonasi ke Masjid Al Munawwar.</div>
         </div>
         <div class="row clearfix">
-
-            <!-- Featured Block One -->
-            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-university" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">Transfer Bank</h5>
-                    <div class="featured-block_one-text">
-                        Bank Mandiri<br>
-                        No. Rek: 123-456-789<br>
-                        a.n. Yayasan Al-Munawwar
+            @forelse(($donations ?? []) as $donation)
+                <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
+                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
+                        <div class="featured-block_one-icon">
+                            @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                            <i class="fas {{ $icon }}" style="font-size: 48px; color: #28a745;"></i>
+                        </div>
+                        <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
+                        <div class="featured-block_one-text">{!! $donation->description !!}</div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Featured Block One -->
-            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-wallet" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">E-Wallet Digital</h5>
-                    <div class="featured-block_one-text">
-                        GoPay: 0812-3456-7890<br>
-                        OVO: 0812-3456-7890<br>
-                        DANA: 0812-3456-7890
-                    </div>
-                </div>
-            </div>
-
-            <!-- Featured Block One -->
-            <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1000ms">
-                    <div class="featured-block_one-icon"><i class="fas fa-hand-holding-heart" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h5 class="featured-block_one-heading">Donasi Langsung</h5>
-                    <div class="featured-block_one-text">
-                        Kunjungi langsung kantor<br>
-                        Yayasan Al-Munawwar<br>
-                        Setiap hari kerja 08:00-16:00
-                    </div>
-                </div>
-            </div>
-
+            @empty
+                <div class="col-12 centered"><p>Belum ada informasi donasi.</p></div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -238,44 +165,42 @@
         
         <div class="row clearfix">
             
-            <!-- Contact Info Block -->
+            @if(!empty($program->phone))
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-phone" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Telepon</h4>
                     <div class="contact-info-block_text">
-                        <a href="tel:+62123456792">(021) 8765-434</a><br>
-                        <a href="tel:+628123456792">0812-3456-792</a>
+                        <a href="tel:{{ preg_replace('/\s+/', '', $program->phone) }}">{{ $program->phone }}</a>
                     </div>
                 </div>
             </div>
+            @endif
             
-            <!-- Contact Info Block -->
+            @if(!empty($program->email))
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-envelope" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Email</h4>
                     <div class="contact-info-block_text">
-                        <a href="mailto:masjid@almunawwar.sch.id">masjid@almunawwar.sch.id</a><br>
-                        <a href="mailto:takmir@almunawwar.sch.id">takmir@almunawwar.sch.id</a>
+                        <a href="mailto:{{ $program->email }}">{{ $program->email }}</a>
                     </div>
                 </div>
             </div>
+            @endif
             
-            <!-- Contact Info Block -->
+            @if(!empty($program->address))
             <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
                 <div class="contact-info-block_inner">
                     <div class="contact-info-block_icon"><i class="fas fa-map-marker-alt" style="font-size: 48px; color: #28a745;"></i></div>
                     <h4 class="contact-info-block_heading">Alamat</h4>
-                    <div class="contact-info-block_text">
-                        Jl. Masjid Raya No. 129<br>
-                        Bogor Raya, Jawa Barat 40123<br>
-                        Indonesia 12345
-                    </div>
+                    <div class="contact-info-block_text">{!! nl2br(e($program->address)) !!}</div>
                 </div>
             </div>
+            @endif
             
         </div>
+
         <!-- Contact Form Box -->
         <div class="contact-form_box">
             <div class="auto-container">
@@ -283,24 +208,70 @@
 
                 <!-- Contact Form -->
                 <div class="contact-form">
-                    <form method="post" action="sendemail.php" id="contact-form">
-                        
-                        <div class="form-group">
-                            <input type="text" name="username" placeholder="Nama Lengkap" required="">
+                    @if (session('status'))
+                        <div class="alert alert-success" style="padding: 12px; border: 1px solid #d4edda; background-color: #dff0d8; color: #155724; border-radius: 6px; margin-bottom: 16px;">
+                            {{ session('status') }}
                         </div>
-                        
-                        <div class="form-group">
-                            <input type="text" name="email" placeholder="Alamat Email" required="">
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger" style="padding: 12px; border: 1px solid #f5c6cb; background-color: #f8d7da; color: #721c24; border-radius: 6px; margin-bottom: 16px;">
+                            <ul style="margin: 0; padding-left: 18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
-                        
+                    @endif
+
+                    <form method="post" action="{{ route('hubungi-kami.submit') }}" id="contact-form" accept-charset="UTF-8" autocomplete="on" novalidate>
+                        @csrf
+
+                        <!-- Honeypot (anti-spam) -->
+                        <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute; left:-10000px; opacity:0; height:0; width:0;" aria-hidden="true">
+
+                        <!-- Fixed Destination -->
+                        <input type="hidden" name="destination" value="masjid">
+
                         <div class="form-group">
-                            <textarea class="" name="message" placeholder="Ketik pesanmu di sini"></textarea>
+                            <input type="text" name="name" id="name" placeholder="Nama Lengkap" required maxlength="100" value="{{ old('name') }}" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                            @error('name')
+                                <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                            @enderror
                         </div>
-                        
+
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" placeholder="Alamat Email" required maxlength="255" value="{{ old('email') }}" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                            @error('email')
+                                <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="subject" id="subject" placeholder="Subjek" required maxlength="255" value="{{ old('subject') }}" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                            @error('subject')
+                                <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="phone_number" id="phone_number" placeholder="Nomor Telepon (opsional)" maxlength="20" value="{{ old('phone_number') }}" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff;">
+                            @error('phone_number')
+                                <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <textarea name="message" id="message" placeholder="Ketik pesanmu di sini" required maxlength="5000" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background-color: #fff; height: 160px;">{{ old('message') }}</textarea>
+                            @error('message')
+                                <div class="invalid-feedback" style="color:#dc3545; font-size: 14px; margin-top: 6px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="form-group">
                             <!-- Button Box -->
                             <div class="button-box">
-                                <button type="submit" class="theme-btn btn-style-four">
+                                <button type="submit" class="theme-btn btn-style-four" id="submit-btn">
                                     <span class="btn-wrap">
                                         <span class="text-one">Kirim Pesan</span>
                                         <span class="text-two">Kirim Pesan</span>
@@ -308,7 +279,6 @@
                                 </button>
                             </div>
                         </div>
-                        
                     </form>
                 </div>
                 <!-- End Comment Form -->
@@ -316,6 +286,7 @@
             </div>
         </div>
         <!-- End Contact Form Box -->
+         
     </div>
 </section>
 </div>

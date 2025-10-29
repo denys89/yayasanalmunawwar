@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use App\Mail\ContactUsSubmitted;
 
 class ContactController extends Controller
 {
@@ -39,9 +40,17 @@ class ContactController extends Controller
         // Persist contact submission
         $contact = ContactUs::create($validated);
 
-        // Optional: send notification email (configure mail settings)
-        // Mail::to(config('mail.from.address'))
-        //     ->send(new \App\Mail\ContactUsSubmitted($contact));
+        // Send notification email (configure mail settings)
+        try {
+            $recipient = config('mail.from.address');
+            if (!empty($recipient)) {
+                Mail::to($recipient)->send(new ContactUsSubmitted($contact));
+            }
+        } catch (\Throwable $e) {
+            Log::error('Failed to send ContactUsSubmitted email', [
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return back()->with('status', 'Terima kasih, pesan Anda telah dikirim.');
     }

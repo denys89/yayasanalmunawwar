@@ -241,6 +241,33 @@
 	</section>
 	<!-- End Welcome One -->
 
+	<!-- Video One -->
+	<section class="video-one">
+		<div class="auto-container">
+			<!-- Sec Title -->
+			<div class="sec-title centered">
+				<div class="sec-title_title">Video Profil</div>
+				<h2 class="sec-title_heading">Sekilas Tentang Yayasan</h2>
+			</div>
+
+			{{--
+				Menampilkan video YouTube yang telah disanitasi dan disimpan pada kolom `homepage.youtube_embed`.
+				Embed HTML dibuat di sisi server (CMS HomepageController) untuk keamanan dan konsistensi.
+			--}}
+			@if(!empty($homepage?->youtube_embed))
+				<div class="video-one_player" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;">
+					<style>
+						.video-one_player iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+					</style>
+					{!! $homepage->youtube_embed !!}
+				</div>
+			@else
+				<div class="text-center text-muted py-3">Video belum tersedia.</div>
+			@endif
+		</div>
+	</section>
+	<!-- End Video One -->
+
 	<!-- Featured One -->
 	<section class="featured-one">
 		<div class="auto-container mb-5 mt-5">
@@ -252,7 +279,6 @@
 							<div class="feature-block_one-inner">
 								<div class="feature-block_one-icon {{ $value->icon }}"></div>
 								<h4 class="feature-block_one-heading">{{ $value->title }}</h4>
-								<div class="feature-block_one-text">{{ $value->description }}</div>
 							</div>
 						</div>
 					@empty

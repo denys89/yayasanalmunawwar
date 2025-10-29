@@ -59,13 +59,18 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label for="svc_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="svc_icon" name="fa_icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-hand-holding-heart', 'fa-briefcase-medical', 'fa-stethoscope', 'fa-users', 'fa-hands-helping', 'fa-truck-medical', 'fa-user-shield', 'fa-people-carry' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="svcIconPreview" class="fa fa-hand-holding-heart"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="add-service-icon" name="fa_icon" required>
+                        <button type="button" onclick="IconSelector.open('addServiceIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-service-selected-icon" class="hidden">
+                                <i id="add-service-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-service-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="svc_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -96,13 +101,18 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label for="edit_svc_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="edit_svc_icon" name="fa_icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-hand-holding-heart', 'fa-briefcase-medical', 'fa-stethoscope', 'fa-users', 'fa-hands-helping', 'fa-truck-medical', 'fa-user-shield', 'fa-people-carry' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editSvcIconPreview" class="fa fa-hand-holding-heart"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="edit-service-icon" name="fa_icon" required>
+                        <button type="button" onclick="IconSelector.open('editServiceIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-service-selected-icon" class="hidden">
+                                <i id="edit-service-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-service-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="edit_svc_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -121,19 +131,53 @@
         </div>
     </div>
 
+    <!-- Icon Selector Modals -->
+    <x-icon-selector 
+        modal-id="addServiceIconSelectorModal" 
+        modal-type="add" 
+        title="Select Icon for Service" 
+        on-select-callback="handleAddServiceIconSelect" 
+    />
+
+    <x-icon-selector 
+        modal-id="editServiceIconSelectorModal" 
+        modal-type="edit" 
+        title="Select Icon for Service" 
+        on-select-callback="handleEditServiceIconSelect" 
+    />
+
     <script>
-        document.getElementById('svc_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('svcIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
-        document.getElementById('edit_svc_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('editSvcIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
+        function handleAddServiceIconSelect(iconClass) {
+            document.getElementById('add-service-icon').value = iconClass;
+            const selectedDiv = document.getElementById('add-service-selected-icon');
+            const noIconDiv = document.getElementById('add-service-no-icon');
+            const iconPreview = document.getElementById('add-service-icon-preview');
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
+        function handleEditServiceIconSelect(iconClass) {
+            document.getElementById('edit-service-icon').value = iconClass;
+            const selectedDiv = document.getElementById('edit-service-selected-icon');
+            const noIconDiv = document.getElementById('edit-service-no-icon');
+            const iconPreview = document.getElementById('edit-service-icon-preview');
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
         window.openEditService = function(id, icon, name, description) {
             document.getElementById('serviceEditModal').classList.remove('hidden');
-            document.getElementById('edit_svc_icon').value = icon;
-            document.getElementById('editSvcIconPreview').className = 'fa ' + icon;
+            document.getElementById('edit-service-icon').value = icon;
+            if (icon) {
+                const selectedDiv = document.getElementById('edit-service-selected-icon');
+                const noIconDiv = document.getElementById('edit-service-no-icon');
+                const iconPreview = document.getElementById('edit-service-icon-preview');
+                selectedDiv.classList.remove('hidden');
+                noIconDiv.classList.add('hidden');
+                iconPreview.className = icon + ' text-3xl mb-2';
+            }
             document.getElementById('edit_svc_name').value = name;
             document.getElementById('edit_svc_description').value = description;
             const form = document.getElementById('serviceEditForm');

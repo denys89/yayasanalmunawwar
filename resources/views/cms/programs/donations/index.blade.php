@@ -59,13 +59,18 @@
                 @csrf
                 <div class="space-y-3">
                     <div>
-                        <label for="don_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="don_icon" name="fa_icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-donate', 'fa-hand-holding-usd', 'fa-money-bill', 'fa-coins', 'fa-piggy-bank', 'fa-gift', 'fa-hand-holding-heart' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="donIconPreview" class="fa fa-donate"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="add-donation-icon" name="fa_icon" required>
+                        <button type="button" onclick="IconSelector.open('addDonationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="add-donation-selected-icon" class="hidden">
+                                <i id="add-donation-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="add-donation-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="don_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -96,13 +101,18 @@
                 @method('PATCH')
                 <div class="space-y-3">
                     <div>
-                        <label for="edit_don_icon" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
-                        <select id="edit_don_icon" name="fa_icon" class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-amber-500 focus:ring-amber-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                            @foreach([ 'fa-donate', 'fa-hand-holding-usd', 'fa-money-bill', 'fa-coins', 'fa-piggy-bank', 'fa-gift', 'fa-hand-holding-heart' ] as $icon)
-                                <option value="{{ $icon }}">{{ $icon }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Preview: <i id="editDonIconPreview" class="fa fa-donate"></i></div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Icon</label>
+                        <input type="hidden" id="edit-donation-icon" name="fa_icon" required>
+                        <button type="button" onclick="IconSelector.open('editDonationIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
+                            <div id="edit-donation-selected-icon" class="hidden">
+                                <i id="edit-donation-icon-preview" class="text-3xl mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to change icon</p>
+                            </div>
+                            <div id="edit-donation-no-icon" class="text-gray-500">
+                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                                <p class="text-sm">Click to select an icon</p>
+                            </div>
+                        </button>
                     </div>
                     <div>
                         <label for="edit_don_name" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
@@ -121,19 +131,53 @@
         </div>
     </div>
 
+    <!-- Icon Selector Modals -->
+    <x-icon-selector 
+        modal-id="addDonationIconSelectorModal" 
+        modal-type="add" 
+        title="Select Icon for Donation" 
+        on-select-callback="handleAddDonationIconSelect" 
+    />
+
+    <x-icon-selector 
+        modal-id="editDonationIconSelectorModal" 
+        modal-type="edit" 
+        title="Select Icon for Donation" 
+        on-select-callback="handleEditDonationIconSelect" 
+    />
+
     <script>
-        document.getElementById('don_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('donIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
-        document.getElementById('edit_don_icon')?.addEventListener('change', function() {
-            const preview = document.getElementById('editDonIconPreview');
-            preview.className = 'fa ' + this.value;
-        });
+        function handleAddDonationIconSelect(iconClass) {
+            document.getElementById('add-donation-icon').value = iconClass;
+            const selectedDiv = document.getElementById('add-donation-selected-icon');
+            const noIconDiv = document.getElementById('add-donation-no-icon');
+            const iconPreview = document.getElementById('add-donation-icon-preview');
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
+        function handleEditDonationIconSelect(iconClass) {
+            document.getElementById('edit-donation-icon').value = iconClass;
+            const selectedDiv = document.getElementById('edit-donation-selected-icon');
+            const noIconDiv = document.getElementById('edit-donation-no-icon');
+            const iconPreview = document.getElementById('edit-donation-icon-preview');
+            selectedDiv.classList.remove('hidden');
+            noIconDiv.classList.add('hidden');
+            iconPreview.className = iconClass + ' text-3xl mb-2';
+        }
+
         window.openEditDonation = function(id, icon, name, description) {
             document.getElementById('donationEditModal').classList.remove('hidden');
-            document.getElementById('edit_don_icon').value = icon;
-            document.getElementById('editDonIconPreview').className = 'fa ' + icon;
+            document.getElementById('edit-donation-icon').value = icon;
+            if (icon) {
+                const selectedDiv = document.getElementById('edit-donation-selected-icon');
+                const noIconDiv = document.getElementById('edit-donation-no-icon');
+                const iconPreview = document.getElementById('edit-donation-icon-preview');
+                selectedDiv.classList.remove('hidden');
+                noIconDiv.classList.add('hidden');
+                iconPreview.className = icon + ' text-3xl mb-2';
+            }
             document.getElementById('edit_don_name').value = name;
             document.getElementById('edit_don_description').value = description;
             const form = document.getElementById('donationEditForm');

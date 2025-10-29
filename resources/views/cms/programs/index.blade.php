@@ -47,9 +47,6 @@
                                     @if($program->title)
                                         <div class="text-xs text-gray-500 dark:text-gray-400">Title: {{ Str::limit($program->title, 60) }}</div>
                                     @endif
-                                    @if($program->description)
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">{!! \App\Helpers\TinyMCEHelper::sanitizeContent($program->description ?? '') !!}</div>
-                                    @endif
                                 </div>
                             </div>
                         </td>

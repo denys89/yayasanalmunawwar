@@ -56,4 +56,9 @@ class Program extends Model
     {
         return $this->hasMany(ProgramActivity::class);
     }
+
+    public function testimonies()
+    {
+        return $this->hasMany(ProgramTestimony::class);
+    }
 }

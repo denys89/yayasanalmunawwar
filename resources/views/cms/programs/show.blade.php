@@ -128,6 +128,7 @@
                 $tabs = [
                     ['key' => 'services', 'label' => 'Services'],
                     ['key' => 'donations', 'label' => 'Donations'],
+                    ['key' => 'testimonies', 'label' => 'Testimonies'],
                 ];
             } elseif ($type === 'religious') {
                 $tabs = [
@@ -165,6 +166,8 @@
                         @include('cms.programs.donations.index')
                     @elseif($tab['key'] === 'activities')
                         @include('cms.programs.activities.index')
+                    @elseif($tab['key'] === 'testimonies')
+                        @include('cms.programs.testimonies.index')
                     @endif
                 </div>
             @endforeach

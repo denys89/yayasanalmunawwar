@@ -53,7 +53,11 @@ class PublicProgramController extends Controller
             case 'social':
                 $services = $program->services()->orderBy('created_at', 'desc')->get();
                 $donations = $program->donations()->orderBy('created_at', 'desc')->get();
-                return view('panti-al-munawwar', compact('program', 'services', 'donations', 'bannerUrl', 'photoUrl', 'brochureUrl'));
+                $testimonies = $program->testimonies()
+                    ->where('is_visible', true)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return view('panti-al-munawwar', compact('program', 'services', 'donations', 'testimonies', 'bannerUrl', 'photoUrl', 'brochureUrl'));
 
             case 'religious':
                 $activities = $program->activities()->orderBy('created_at', 'desc')->get();

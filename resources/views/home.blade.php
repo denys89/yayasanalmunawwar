@@ -269,7 +269,7 @@
 	<!-- End Video One -->
 
 	<!-- Featured One -->
-	<section class="featured-one">
+	<section class="featured-one mt-0">
 		<div class="auto-container mb-5 mt-5">
 			<div class="inner-container" style="background-image:url(assets/images/icons/featured.png)">
 				<div class="row clearfix">

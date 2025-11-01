@@ -22,6 +22,7 @@ use App\Http\Controllers\CMS\ProgramEducationController;
 use App\Http\Controllers\CMS\ProgramServiceController;
 use App\Http\Controllers\CMS\ProgramDonationController;
 use App\Http\Controllers\CMS\ProgramActivityController;
+use App\Http\Controllers\CMS\ProgramTestimonyController;
 use App\Http\Controllers\CMS\HistoryController;
 use App\Http\Controllers\CMS\MilestoneController;
 use App\Http\Controllers\CMS\VisionMissionController;
@@ -88,6 +89,13 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
         Route::post('activities', [ProgramActivityController::class, 'store'])->name('activities.store');
         Route::patch('activities/{activity}', [ProgramActivityController::class, 'update'])->name('activities.update');
         Route::delete('activities/{activity}', [ProgramActivityController::class, 'destroy'])->name('activities.destroy');
+
+        // Program Testimonies
+        Route::get('testimonies', [ProgramTestimonyController::class, 'index'])->name('testimonies.index');
+        Route::post('testimonies', [ProgramTestimonyController::class, 'store'])->name('testimonies.store');
+        Route::patch('testimonies/{testimony}', [ProgramTestimonyController::class, 'update'])->name('testimonies.update');
+        Route::patch('testimonies/{testimony}/toggle-visibility', [ProgramTestimonyController::class, 'toggleVisibility'])->name('testimonies.toggle-visibility');
+        Route::delete('testimonies/{testimony}', [ProgramTestimonyController::class, 'destroy'])->name('testimonies.destroy');
     });
     
     // Explore Management

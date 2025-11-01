@@ -100,7 +100,8 @@ class ProgramController extends Controller
         $services = $program->services()->latest()->get();
         $donations = $program->donations()->latest()->get();
         $activities = $program->activities()->latest()->get();
-        return view('cms.programs.show', compact('program', 'facilities', 'educations', 'services', 'donations', 'activities'));
+        $testimonies = $program->testimonies()->latest()->get();
+        return view('cms.programs.show', compact('program', 'facilities', 'educations', 'services', 'donations', 'activities', 'testimonies'));
     }
 
     /**

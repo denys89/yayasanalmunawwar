@@ -17,9 +17,9 @@
                                     <div class="footer-logo" style="max-width: 100px;"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-tk-almunawwar.png') }}" alt="" title=""></a></div>
                                     <!-- Footer List -->
                                     <div class="footer_list">
-                                        <li>Jl. Pendidikan No. 123, Kota Bogor <br> Jawa Barat 40123</li>
-                                        <li>(022) 123-4567</li>
-                                        <li>info@yayasanalmunawwar.org</li>
+                                        <li>Jln. Pemuda no. 42, 43<br> Bogor,  Jawa Barat<br> Indonesia 16161</li>
+                                        <li>0896-3954-5861</li>
+                                        <!-- <li>info@yayasanalmunawwar.org</li> -->
                                     </div>
                                     <!-- Social Box -->
                                     <div class="footer_socials">

@@ -87,7 +87,7 @@
         <div class="footer_bottom-bg" style="background-image: url({{ asset('assets/images/background/footer-bg_2.jpg') }})"></div>
         <div class="auto-container">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <div class="copyright">All rights reserved 2025 &copy; template_mr</div>
+                <div class="copyright">All rights reserved {{ date('Y') }} &copy; Yayasan Pendidikan Islam Al Munawwar</div>
                 <ul class="footer-nav">
                     <li><a href="#">Terms of use</a></li>
                     <li><a href="#">Privacy Policy</a></li>

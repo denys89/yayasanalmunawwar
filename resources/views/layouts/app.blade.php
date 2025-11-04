@@ -13,6 +13,8 @@
     <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/swiper.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/flaticon_afbd3404a2e1104832d0.css') }}" rel="stylesheet">
+    <!-- Site-wide custom utilities -->
+    <link href="{{ asset('style/custom.css') }}" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">

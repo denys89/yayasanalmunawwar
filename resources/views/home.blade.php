@@ -300,29 +300,44 @@
                 <div class="sec-title_title">Program Yayasan (KB, SD, Panti, Masjid)</div>
                 <h2 class="sec-title_heading">{{ $homepage?->program_title ?? 'Program Pendidikan Kami' }}</h2>
             </div>
-			<div class="row clearfix">
+
+            <!--
+                NOTE: Utilities for image, typography, card, and button styling
+                have been moved to global stylesheet `public/style/custom.css`.
+                Classes used below:
+                - util-thumb, util-heading, util-text, util-card, btn-solid-green
+            -->
+            <div class="row clearfix">
 
 				@forelse(($programs ?? []) as $program)
 				<!-- Course Block One -->
-				<div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="course-block_one-inner wow fadeInLeft" data-wow-delay="{{ 150 * ($loop->index + 1) }}ms" data-wow-duration="1000ms">
-						<div class="course-block_one-image">
-							@php $photo = $program->photo_url; $isExternal = $photo && Str::startsWith($photo, 'http'); @endphp
-							<a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">
-								<img src="{{ $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png') }}" alt="{{ $program->title ?? $program->name }}" />
+                <div class="course-block_one col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                    <div class="course-block_one-inner wow fadeInLeft util-card" data-wow-delay="{{ 150 * ($loop->index + 1) }}ms" data-wow-duration="1000ms">
+                        <div class="course-block_one-image">
+                            @php $photo = $program->photo_url; $isExternal = $photo && Str::startsWith($photo, 'http'); @endphp
+                            <!-- Standardized thumbnail image -->
+                            <a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">
+                                <img class="util-thumb" src="{{ $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png') }}" alt="{{ $program->title ?? $program->name }}" />
+                            </a>
+                        </div>
+                        <div class="course-block_one-content">
+                            <!-- Unified heading and body text styles -->
+                            <h4 class="course-block_one-heading util-heading">
+                                <a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">{{ $program->title ?? $program->name }}</a>
+                            </h4>
+                            <div class="course-block_one-text util-text">{{ Str::limit(strip_tags($program->description), 160) }}</div>
+                            <div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
+                                <!-- Consistent button styling -->
+								<a href="{{ route('programs.show', $program->slug) }}" class="theme-btn btn-style-two">
+								<span class="btn-wrap">
+									<span class="text-one">Lihat Detail</span>
+									<span class="text-two">Lihat Detail</span>
+								</span>
 							</a>
-						</div>
-						<div class="course-block_one-content">
-							<h4 class="course-block_one-heading">
-								<a href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">{{ $program->title ?? $program->name }}</a>
-							</h4>
-							<div class="course-block_one-text">{{ Str::limit(strip_tags($program->description), 160) }}</div>
-							<div class="course-block_one-buttons d-flex justify-content-between flex-wrap">
-								<a class="theme-btn course-block_one-study" href="{{ route('programs.show', $program->slug) }}" data-slug="{{ $program->slug }}">Lihat Detail</a>
-							</div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				@empty
 				<div class="col-12">
 					<div class="text-center text-muted py-3">Belum ada program ditambahkan.</div>
@@ -409,13 +424,10 @@
 											<div class="inner-column">
 												<h3>{{ $explore->title }}</h3>
 												<p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->summary ?? '') !!} </p>
-												<div class="list-container">
-													<p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($explore->clean_content ?? '') !!} </p>
-												</div>
 												<a href="{{ route('explore.show', $explore->slug) }}" class="theme-btn btn-style-two">
 													<span class="btn-wrap">
-														<span class="text-one">Learn more</span>
-														<span class="text-two">Learn more</span>
+														<span class="text-one">Lihat Detail</span>
+														<span class="text-two">Lihat Detail</span>
 													</span>
 												</a>
 											</div>

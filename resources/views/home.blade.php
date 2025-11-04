@@ -294,12 +294,12 @@
 
 	<!-- Courses One -->
 	<section class="courses-one" style="background-image:url(assets/images/background/courses-one_bg.png)">
-		<div class="auto-container">
-			<!-- Sec Title -->
-			<div class="sec-title centered">
-				<div class="sec-title_title">Program Yayasan (KB, SD, Panti, Masjid)</div>
-				<h2 class="sec-title_heading">Program Pendidikan Kami</h2>
-			</div>
+        <div class="auto-container">
+            <!-- Sec Title -->
+            <div class="sec-title centered">
+                <div class="sec-title_title">Program Yayasan (KB, SD, Panti, Masjid)</div>
+                <h2 class="sec-title_heading">{{ $homepage?->program_title ?? 'Program Pendidikan Kami' }}</h2>
+            </div>
 			<div class="row clearfix">
 
 				@forelse(($programs ?? []) as $program)
@@ -336,12 +336,12 @@
 
 	<!-- School Programs Tabs Section -->
 	<section class="school-programs-tabs">
-		<div class="auto-container">
-			<!-- Sec Title -->
-			<div class="sec-title centered">
-				<div class="sec-title_title">Program unggulan sekolah kami</div>
-				<h2 class="sec-title_heading">Program Sekolah</h2>
-			</div>
+        <div class="auto-container">
+            <!-- Sec Title -->
+            <div class="sec-title centered">
+                <div class="sec-title_title">Program unggulan sekolah kami</div>
+                <h2 class="sec-title_heading">{{ $homepage?->explore_title ?? 'Program Sekolah' }}</h2>
+            </div>
 			
 			<!-- Tabs Container -->
 			<div class="tabs-container">
@@ -434,12 +434,12 @@
 
 	<!-- News One -->
 	<section class="news-one">
-		<div class="auto-container">
-			<!-- Sec Title -->
-			<div class="sec-title centered">
-				<div class="sec-title_title">Ikuti informasi terbaru mengenai kegiatan, lomba, pengumuman pendaftaran, dan agenda sekolah Al-Munawwar.</div>
-				<h2 class="sec-title_heading">Berita & Kegiatan Terkini</h2>
-			</div>
+        <div class="auto-container">
+            <!-- Sec Title -->
+            <div class="sec-title centered">
+                <div class="sec-title_title">Ikuti informasi terbaru mengenai kegiatan, lomba, pengumuman pendaftaran, dan agenda sekolah Al-Munawwar.</div>
+                <h2 class="sec-title_heading">{{ $homepage?->news_title ?? 'Berita & Kegiatan Terkini' }}</h2>
+            </div>
 			<div class="row clearfix">
 
 				@forelse(($latestNews ?? []) as $item)
@@ -491,7 +491,7 @@
 		<div class="auto-container">
 			<div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
 				<div class="cta-two_bg" style="background-image:url(assets/images/background/cta-one_bg.png)"></div>
-				<h3 class="cta-two_heading">Raih Masa Depan Gemilang Bersama<br />Yayasan Islami Al-Munawwar</h3><br />
+				<h3 class="cta-two_heading">Raih Masa Depan Gemilang Bersama<br />Yayasan Al-Munawwar</h3><br />
 				<!-- Button Box -->
 				<div class="cta-two_button">
 					<a href="{{ route('hubungi-kami') }}" class="theme-btn btn-style-three">

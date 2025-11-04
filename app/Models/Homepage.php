@@ -17,6 +17,9 @@ class Homepage extends Model
         'description',
         'photo',
         'photo_title',
+        'program_title',
+        'explore_title',
+        'news_title',
         'youtube_embed',
     ];
 

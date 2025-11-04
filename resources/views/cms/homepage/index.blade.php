@@ -98,6 +98,25 @@
                             </div>
                         </div>
 
+                        <!-- New Section Titles -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Program Title</label>
+                                <input type="text" name="program_title" value="{{ old('program_title', $homepage->program_title) }}" class="w-full border rounded p-2">
+                                @error('program_title')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Explore Title</label>
+                                <input type="text" name="explore_title" value="{{ old('explore_title', $homepage->explore_title) }}" class="w-full border rounded p-2">
+                                @error('explore_title')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">News Title</label>
+                                <input type="text" name="news_title" value="{{ old('news_title', $homepage->news_title) }}" class="w-full border rounded p-2">
+                                @error('news_title')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-1">Photo</label>
@@ -127,7 +146,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium mb-1">YouTube Video URL</label>
-                                <input type="url" id="youtube_url" name="youtube_url" value="{{ old('youtube_url') }}" class="w-full border rounded p-2" placeholder="https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID" oninput="validateYoutubeUrl()">
+                                <input type="url" id="youtube_url" name="youtube_url" value="{{ old('youtube_url', $homepage->youtube_url) }}" class="w-full border rounded p-2" placeholder="https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID" oninput="validateYoutubeUrl()">
                                 <p id="youtube_help" class="text-xs text-gray-500 mt-1">Only YouTube links are allowed. Paste a full video URL.</p>
                                 @error('youtube_url')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
                             </div>

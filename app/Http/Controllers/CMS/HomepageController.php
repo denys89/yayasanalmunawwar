@@ -48,6 +48,9 @@ class HomepageController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'photo_title' => ['nullable', 'string', 'max:255'],
+            'program_title' => ['nullable', 'string', 'max:255'],
+            'explore_title' => ['nullable', 'string', 'max:255'],
+            'news_title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'max:5120'], // up to ~5MB
             // Accept only YouTube URLs; sanitized to embed server-side

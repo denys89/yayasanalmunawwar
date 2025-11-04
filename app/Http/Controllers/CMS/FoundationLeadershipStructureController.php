@@ -15,9 +15,9 @@ class FoundationLeadershipStructureController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'icon' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'position' => 'required|string|max:255',
         ]);
 
         $os = OrganizationalStructure::first();
@@ -28,8 +28,24 @@ class FoundationLeadershipStructureController extends Controller
             ]);
         }
 
-        $validated['organizational_structure_id'] = $os->id;
-        FoundationLeadershipStructure::create($validated);
+        $data = [
+            'organizational_structure_id' => $os->id,
+            'title' => $validated['title'],
+            'position' => $validated['position'],
+        ];
+
+        // Handle photo upload
+        try {
+            if ($request->hasFile('photo')) {
+                $path = $request->file('photo')->store('organizational-structure/leadership', 'public');
+                $data['photo'] = $path;
+            }
+        } catch (\Throwable $e) {
+            return redirect()->route('cms.organizational_structure.index')
+                ->with('error', 'Upload foto gagal: ' . $e->getMessage());
+        }
+
+        FoundationLeadershipStructure::create($data);
 
         return redirect()->route('cms.organizational_structure.index')->with('success', 'Leadership structure added successfully.');
     }
@@ -40,12 +56,31 @@ class FoundationLeadershipStructureController extends Controller
     public function update(Request $request, FoundationLeadershipStructure $leadership)
     {
         $validated = $request->validate([
-            'icon' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'position' => 'required|string|max:255',
         ]);
 
-        $leadership->update($validated);
+        $data = [
+            'title' => $validated['title'],
+            'position' => $validated['position'],
+        ];
+
+        try {
+            if ($request->hasFile('photo')) {
+                // delete old photo if local
+                if ($leadership->photo && !str_starts_with($leadership->photo, 'http')) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($leadership->photo);
+                }
+                $path = $request->file('photo')->store('organizational-structure/leadership', 'public');
+                $data['photo'] = $path;
+            }
+        } catch (\Throwable $e) {
+            return redirect()->route('cms.organizational_structure.index')
+                ->with('error', 'Upload foto gagal saat pembaruan: ' . $e->getMessage());
+        }
+
+        $leadership->update($data);
 
         return redirect()->route('cms.organizational_structure.index')->with('success', 'Leadership structure updated successfully.');
     }
@@ -55,6 +90,16 @@ class FoundationLeadershipStructureController extends Controller
      */
     public function destroy(FoundationLeadershipStructure $leadership)
     {
+        // Remove associated photo if stored locally
+        try {
+            if ($leadership->photo && !str_starts_with($leadership->photo, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($leadership->photo);
+            }
+        } catch (\Throwable $e) {
+            // Log error silently; proceed with deleting DB record
+            \Illuminate\Support\Facades\Log::error('Failed deleting leadership photo: ' . $e->getMessage());
+        }
+
         $leadership->delete();
         return redirect()->route('cms.organizational_structure.index')->with('success', 'Leadership structure deleted successfully.');
     }

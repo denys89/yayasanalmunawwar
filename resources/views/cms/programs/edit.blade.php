@@ -101,6 +101,7 @@
                             <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                         @enderror
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a banner image (JPG, PNG, GIF, WebP). Max size 5MB.</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Dimensi: 1920px x 398px</p>
                         
                         <!-- Current Image Display -->
                         @if($program->banner_url && !str_starts_with($program->banner_url, 'http'))
@@ -130,6 +131,7 @@
                             <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                         @enderror
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a photo (JPG, PNG, GIF, WebP). Max size 5MB.</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Dimensi: 500px x 600px</p>
                         
                         <!-- Current Image Display -->
                         @if($program->photo_url && !str_starts_with($program->photo_url, 'http'))

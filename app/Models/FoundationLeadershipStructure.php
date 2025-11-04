@@ -11,9 +11,9 @@ class FoundationLeadershipStructure extends Model
 
     protected $fillable = [
         'organizational_structure_id',
-        'icon',
+        'photo',
         'title',
-        'description',
+        'position',
     ];
 
     protected $casts = [

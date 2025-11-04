@@ -97,6 +97,37 @@
     </div>
 </section>
 
+<!-- Curriculum Section -->
+<section class="about-one" aria-labelledby="curriculum-title" style="padding: 120px 0;">
+    <div class="auto-container">
+        <!-- Judul Section -->
+        <div class="sec-title centered">
+            <div class="sec-title_title">KURIKULUM</div>
+            <h2 id="curriculum-title" class="sec-title_heading">Kurikulum Program</h2>
+        </div>
+
+        <!-- Konten Kurikulum -->
+        <div class="row clearfix">
+            <div class="about-one_content-column col-lg-10 col-md-12 col-sm-12 mx-auto">
+                <article class="inner-column">
+                    @if(!empty($program->curriculum))
+                        <div class="content">
+                            <div class="sec-title_text">
+                                {!! $program->curriculum !!}
+                            </div>
+                        </div>
+                    @else
+                        <!-- Fallback jika kurikulum kosong -->
+                        <div class="content">
+                            <p class="text-muted">Kurikulum belum tersedia untuk program ini.</p>
+                        </div>
+                    @endif
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Facilities -->
 <section class="featured-one" style="padding: 120px 0;">
     <div class="auto-container">

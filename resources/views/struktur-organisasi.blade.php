@@ -248,7 +248,7 @@
 }
 
 .green-theme .institute-block_one-heading {
-    margin-bottom: 25px;
+    margin-bottom: -15px;
 }
 
 .green-theme .institute-block_one-heading a {
@@ -438,27 +438,68 @@
 <div class="green-theme">
 
     <!-- Welcome One -->
+    <style>
+        /* Scoped styles for organisasi hero section */
+        .org-hero {
+            align-items: center;
+            gap: 1.5rem;
+        }
+        @media (min-width: 992px) {
+            .org-hero {
+                gap: 2.5rem;
+            }
+        }
+        .org-hero__content {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0.75rem 0;
+        }
+        .org-hero__title .sec-title_title { margin-bottom: .25rem; }
+        .org-hero__title .sec-title_heading {
+            margin: 0 0 .75rem 0;
+            line-height: 1.25;
+        }
+        .org-hero__text h4 { margin-bottom: .5rem; }
+        .org-hero__text p { margin-bottom: .75rem; }
+        .org-hero__quote {
+            margin-top: .75rem;
+            padding-left: .75rem;
+            border-left: 3px solid #e9f5ef;
+        }
+        .org-hero__image-outer {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .org-hero__image {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        }
+    </style>
     <section class="welcome-one">
         <div class="auto-container">
             @if(!empty($errorMessage))
                 <div class="alert alert-warning" role="alert">{{ $errorMessage }}</div>
             @endif
-            <div class="row clearfix">
+            <div class="row clearfix org-hero">
                 <!-- Content Column -->
                 <div class="welcome-one_content-column col-lg-6 col-md-12 col-sm-12">
-                    <div class="welcome-one_content-inner">
+                    <div class="welcome-one_content-inner org-hero__content">
                         <!-- Sec Title -->
-                        <div class="sec-title">
+                        <div class="sec-title org-hero__title">
                             <div class="sec-title_title">{{ $organizationalStructure->name ?? 'Struktur Organisasi' }}</div>
                             <h2 class="sec-title_heading">{{ $organizationalStructure->title ?? 'Tata Kelola ' }}<span>Organisasi</span>{{ ($organizationalStructure && $organizationalStructure->title) ? '' : ' yang Profesional' }}</h2>
                             <div class="sec-title_text">{!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->description ?? 'Yayasan Al-Munawwar memiliki struktur organisasi yang jelas, profesional, dan akuntabel untuk memastikan tata kelola yang baik dalam menjalankan amanah pendidikan dan dakwah Islam.') !!}</div>
                         </div>
                         
-                        <div class="welcome-one_text">
+                        <div class="welcome-one_text org-hero__text">
                             <h4>Prinsip Tata Kelola</h4>
                             <p>{!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->governance_principles ?? 'Struktur organisasi kami dibangun berdasarkan prinsip transparansi, akuntabilitas, dan profesionalisme dalam menjalankan amanah pendidikan dan dakwah sesuai dengan nilai-nilai Islam.') !!}</p>
                             
-                            <div class="quote-box">
+                            <div class="quote-box org-hero__quote">
                                 <p>
                                     <i class="fa fa-quote-left"></i>
                                     {!! \App\Helpers\TinyMCEHelper::sanitizeContent($organizationalStructure->quran_quote ?? '') !!}
@@ -471,8 +512,8 @@
                 <!-- Image Column -->
                 <div class="welcome-one_image-column col-lg-6 col-md-12 col-sm-12">
                     <div class="welcome-two_image-inner">
-                        <div class="welcome-two_image-outer">
-                            <img src="{{ $imageUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
+                        <div class="welcome-two_image-outer org-hero__image-outer">
+                            <img class="org-hero__image" src="{{ $imageUrl ?? asset('images/resource/welcome-1.jpg') }}" alt="Struktur Organisasi Yayasan Al-Munawwar" onerror="this.src='{{ asset('images/resource/about-3.png') }}'" />
                         </div>
                     </div>
                 </div>
@@ -490,22 +531,45 @@
                 <h2 class="sec-title_heading">Struktur <span>Kepemimpinan</span> Yayasan</h2>
                 <div class="sec-title_text">Susunan organisasi yang terstruktur dan hierarkis untuk mencapai tujuan yayasan secara efektif dan efisien</div>
             </div>
-            
+            <!--
+                Komponen Kartu Anggota Organisasi (dinamis)
+                - Menampilkan foto, nama (title), dan jabatan (position)
+                - Konsisten dengan tema: memakai grid Bootstrap (col-*) dan
+                  gaya kartu `.institute-block_one-inner` yang sudah ada.
+                - Foto menggunakan utilitas global `util-thumb` untuk rasio/ukuran seragam.
+                - Data bersumber dari koleksi `$leadershipStructures` yang dikirim controller.
+            -->
             <div class="row clearfix">
-                @if(isset($leadershipStructures) && $leadershipStructures->count())
-                    @foreach($leadershipStructures as $index => $item)
-                        <div class="institute-block_one col-lg-6 col-md-6 col-sm-12">
-                            <div class="institute-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
-                                <div class="institute-block_one-icon {{ $item->icon ?? 'flaticon-mosque' }}"></div>
-                                <h5 class="institute-block_one-heading"><a href="#">{{ $item->title }}</a></h5>
-                                <div class="institute-block_one-text">{{ $item->description }}</div>
+                @php
+                    // Data dari controller: koleksi leadership structures dengan kolom ['photo','title','position']
+                    $members = isset($leadershipStructures) ? $leadershipStructures : collect();
+                @endphp
+
+                @if(isset($errorMessage) && $errorMessage)
+                    <div class="col-12 text-center" style="color:#d33;">{{ $errorMessage }}</div>
+                @else
+                    @forelse($members as $index => $leader)
+                        @php
+                            $photo = $leader->photo ?? null;
+                            $isExternal = $photo && Str::startsWith($photo, ['http://', 'https://']);
+                            $imgSrc = $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png');
+                        @endphp
+                        <div class="institute-block_one col-lg-3 col-md-4 col-sm-6">
+                            <div class="institute-block_one-inner wow fadeInLeft" data-wow-delay="{{ 120 * ($index + 1) }}ms" data-wow-duration="1000ms">
+                                <!-- Foto profil: rasio persegi seragam -->
+                                <div class="mb-3">
+                                    <img class="util-thumb" src="{{ $imgSrc }}" alt="Foto {{ $leader->title ?? 'Anggota Organisasi' }}" onerror="this.src='{{ asset('assets/images/resource/course-dummy1.png') }}'" />
+                                </div>
+                                <!-- Nama lengkap (menggunakan kolom 'title') -->
+                                <h5 class="institute-block_one-heading">{{ $leader->title }}</h5>
+                                <!-- Jabatan (menggunakan kolom 'position') -->
+                                <div class="institute-block_one-text">{{ $leader->position }}</div>
                             </div>
                         </div>
-                    @endforeach
-                @else
-                    <div class="col-12">
-                        <div class="text-center" style="color:#666;">Belum ada struktur kepemimpinan ditambahkan.</div>
-                    </div>
+                    @empty
+                        <!-- Fallback: tampilkan placeholder jika belum ada data -->
+                        <div class="col-12 text-center text-muted">Belum ada data struktur organisasi yang ditambahkan.</div>
+                    @endforelse
                 @endif
             </div>
         </div>

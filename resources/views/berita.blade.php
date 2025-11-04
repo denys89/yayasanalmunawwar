@@ -63,12 +63,6 @@
                             </h5>
                             <div class="news-block_one-text">{{ Str::limit($item->summary ?? $item->content ?? 'Ringkasan berita akan ditampilkan di sini...', 100) }}</div>
                             <div class="news-block_one-info d-flex justify-content-between align-items-center flex-wrap">
-                                <div class="news-block_one-author">
-                                    <!-- <div class="news-block_one-author_image">
-                                        <img src="{{ $item->author_avatar ?? asset('images/resource/author-1.png') }}" alt="{{ $item->author_name ?? 'Admin' }}" />
-                                    </div> -->
-                                    {{ optional($item->createdBy)->name ?? 'Admin' }}
-                                </div>
                                 <a class="news-block_one-more theme-btn" href="{{ route('berita.detail', $item->slug ?? '#') }}">Baca Selengkapnya</a>
                             </div>
                         </div>

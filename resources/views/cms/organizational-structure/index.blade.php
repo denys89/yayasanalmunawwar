@@ -131,21 +131,30 @@
                         <table class="min-w-full border">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th class="p-2 border">Icon</th>
+                                    <th class="p-2 border">Photo</th>
                                     <th class="p-2 border">Title</th>
-                                    <th class="p-2 border">Description</th>
+                                    <th class="p-2 border">Position</th>
                                     <th class="p-2 border">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($leadershipStructures as $item)
                                     <tr>
-                                        <td class="p-2 border text-center"><i class="{{ $item->icon }} text-xl"></i></td>
+                                        <td class="p-2 border text-center">
+                                            @php
+                                                $photoUrl = $item->photo ? (str_starts_with($item->photo, 'http') ? $item->photo : Storage::disk('public')->url($item->photo)) : null;
+                                            @endphp
+                                            @if($photoUrl)
+                                                <img src="{{ $photoUrl }}" alt="Photo" class="inline-block w-16 h-16 md:w-24 md:h-24 object-cover rounded" />
+                                            @else
+                                                <div class="inline-flex items-center justify-center w-16 h-16 md:w-24 md:h-24 bg-gray-100 text-gray-400 rounded">No Photo</div>
+                                            @endif
+                                        </td>
                                         <td class="p-2 border">{{ $item->title }}</td>
-                                        <td class="p-2 border">{{ $item->description }}</td>
+                                        <td class="p-2 border">{{ $item->position }}</td>
                                         <td class="p-2 border">
                                             <div class="flex items-center space-x-2">
-                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $item->id }}" data-icon="{{ $item->icon }}" data-title="{{ $item->title }}" data-description="{{ $item->description }}" onclick="openEditLeadershipFromButton(this)" title="Edit">
+                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $item->id }}" data-photo-url="{{ $photoUrl }}" data-title="{{ $item->title }}" data-position="{{ $item->position }}" onclick="openEditLeadershipFromButton(this)" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
@@ -240,31 +249,23 @@
                     <h3 class="text-lg font-semibold">Add Leadership Item</h3>
                     <button onclick="closeAddLeadership()" class="text-gray-500">✕</button>
                 </div>
-                <form action="{{ route('cms.organizational_structure.foundation_leadership_structures.store') }}" method="POST" class="space-y-3">
+                <form action="{{ route('cms.organizational_structure.foundation_leadership_structures.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                     @csrf
                     <div>
-                        <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="hidden" id="add-leader-icon" name="icon" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('addLeadershipIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="add-leader-selected-icon" class="hidden">
-                                <i id="add-leader-icon-preview" class="text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                            <div id="add-leader-no-icon" class="text-gray-500">
-                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
-                                <p class="text-sm">Click to select an icon</p>
-                            </div>
-                        </button>
-                    </div>
+                        <label class="block text-sm font-medium mb-1">Photo</label>
+                       <input id="add-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'add-leader-photo-preview')">
+                       <div class="mt-2">
+                           <img id="add-leader-photo-preview" alt="Preview" class="hidden max-w-[300px] max-h-[200px] object-contain rounded">
+                       </div>
+                       @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                   </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
                         <input type="text" name="title" class="w-full border rounded p-2" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Description</label>
-                        <textarea name="description" class="w-full border rounded p-2" rows="4" required></textarea>
+                        <label class="block text-sm font-medium mb-1">Position</label>
+                        <input type="text" name="position" class="w-full border rounded p-2" maxlength="255" required>
                     </div>
                     <div class="flex justify-end gap-2">
                         <button type="button" onclick="closeAddLeadership()" class="px-3 py-2 border rounded">Cancel</button>
@@ -281,32 +282,24 @@
                     <h3 class="text-lg font-semibold">Edit Leadership Item</h3>
                     <button onclick="closeEditLeadership()" class="text-gray-500">✕</button>
                 </div>
-                <form id="editLeadershipForm" action="#" method="POST" class="space-y-3">
+                <form id="editLeadershipForm" action="#" method="POST" enctype="multipart/form-data" class="space-y-3">
                     @csrf
                     @method('PATCH')
                     <div>
-                        <label class="block text-sm font-medium mb-1">Icon</label>
-                        <input type="hidden" id="edit-leader-icon" name="icon" required>
-                        
-                        <!-- Icon Selection Button -->
-                        <button type="button" onclick="IconSelector.open('editLeadershipIconSelectorModal')" class="w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:border-blue-400 transition-colors">
-                            <div id="edit-leader-selected-icon" class="hidden">
-                                <i id="edit-leader-icon-preview" class="text-3xl mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to change icon</p>
-                            </div>
-                            <div id="edit-leader-no-icon" class="text-gray-500">
-                                <i class="fa-solid fa-plus text-2xl mb-2"></i>
-                                <p class="text-sm">Click to select an icon</p>
-                            </div>
-                        </button>
-                    </div>
+                        <label class="block text-sm font-medium mb-1">Photo</label>
+                       <input id="edit-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'edit-leader-photo-preview')">
+                       <div class="mt-2">
+                           <img id="edit-leader-photo-preview" alt="Current Photo" class="hidden max-w-[300px] max-h-[200px] object-contain rounded">
+                       </div>
+                       @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                   </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
                         <input id="edit-leader-title" type="text" name="title" class="w-full border rounded p-2" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Description</label>
-                        <textarea id="edit-leader-description" name="description" class="w-full border rounded p-2" rows="4" required></textarea>
+                        <label class="block text-sm font-medium mb-1">Position</label>
+                        <input id="edit-leader-position" type="text" name="position" class="w-full border rounded p-2" maxlength="255" required>
                     </div>
                     <div class="flex justify-end gap-2">
                         <button type="button" onclick="closeEditLeadership()" class="px-3 py-2 border rounded">Cancel</button>
@@ -461,6 +454,18 @@
             el.className = iconClass + ' text-2xl';
         }
 
+        function previewImage(input, imgId) {
+            const img = document.getElementById(imgId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function openAddLeadership() {
             document.getElementById('addLeadershipModal').classList.remove('hidden');
             document.getElementById('addLeadershipModal').classList.add('flex');
@@ -470,23 +475,19 @@
             document.getElementById('addLeadershipModal').classList.remove('flex');
         }
 
-        function openEditLeadership(id, icon, title, description) {
+        function openEditLeadership(id, photoUrl, title, position) {
             const form = document.getElementById('editLeadershipForm');
             form.action = '{{ route('cms.organizational_structure.foundation_leadership_structures.update', ['leadership' => '__ID__']) }}'.replace('__ID__', id);
-            document.getElementById('edit-leader-icon').value = icon;
-            
-            // Update the new UI structure
-            if (icon) {
-                document.getElementById('edit-leader-icon-preview').className = icon + ' text-3xl mb-2';
-                document.getElementById('edit-leader-selected-icon').classList.remove('hidden');
-                document.getElementById('edit-leader-no-icon').classList.add('hidden');
+            const img = document.getElementById('edit-leader-photo-preview');
+            if (photoUrl) {
+                img.src = photoUrl;
+                img.classList.remove('hidden');
             } else {
-                document.getElementById('edit-leader-selected-icon').classList.add('hidden');
-                document.getElementById('edit-leader-no-icon').classList.remove('hidden');
+                img.classList.add('hidden');
             }
-            
+            document.getElementById('edit-leader-photo-input').value = '';
             document.getElementById('edit-leader-title').value = title;
-            document.getElementById('edit-leader-description').value = description;
+            document.getElementById('edit-leader-position').value = position;
             document.getElementById('editLeadershipModal').classList.remove('hidden');
             document.getElementById('editLeadershipModal').classList.add('flex');
         }
@@ -536,19 +537,7 @@
         // IconSelector.close is available; removed local closeIconSelector.
 
         // Icon selector callback functions
-        function handleAddLeadershipIconSelect(iconClass) {
-            document.getElementById('add-leader-icon').value = iconClass;
-            document.getElementById('add-leader-icon-preview').className = iconClass + ' text-3xl mb-2';
-            document.getElementById('add-leader-selected-icon').classList.remove('hidden');
-            document.getElementById('add-leader-no-icon').classList.add('hidden');
-        }
-
-        function handleEditLeadershipIconSelect(iconClass) {
-            document.getElementById('edit-leader-icon').value = iconClass;
-            document.getElementById('edit-leader-icon-preview').className = iconClass + ' text-3xl mb-2';
-            document.getElementById('edit-leader-selected-icon').classList.remove('hidden');
-            document.getElementById('edit-leader-no-icon').classList.add('hidden');
-        }
+        // Leadership icon functions removed; now using image upload preview.
 
         function handleAddValueIconSelect(iconClass) {
             document.getElementById('add-value-icon').value = iconClass;
@@ -566,10 +555,10 @@
 
         function openEditLeadershipFromButton(btn) {
             const id = btn.getAttribute('data-id');
-            const icon = btn.getAttribute('data-icon');
+            const photoUrl = btn.getAttribute('data-photo-url');
             const title = btn.getAttribute('data-title');
-            const description = btn.getAttribute('data-description');
-            openEditLeadership(id, icon, title, description);
+            const position = btn.getAttribute('data-position');
+            openEditLeadership(id, photoUrl, title, position);
         }
 
         function openEditValueFromButton(btn) {

@@ -19,7 +19,7 @@
                                     <div class="footer_list">
                                         <li>Jln. Pemuda no. 42, 43<br> Bogor,  Jawa Barat<br> Indonesia 16161</li>
                                         <li>0896-3954-5861</li>
-                                        <!-- <li>info@yayasanalmunawwar.org</li> -->
+                                        <li>yayasanpendidikanislamalmunaww@gmail.com</li>
                                     </div>
                                     <!-- Social Box -->
                                     <div class="footer_socials">

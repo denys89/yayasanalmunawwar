@@ -9,7 +9,7 @@
                     <div class="left-box d-flex align-items-center flex-wrap">
                         <!-- Info List -->
                         <ul class="header-top_list">
-                            <li><span class="icon fa-solid fa-envelope fa-fw"></span>almunawwar@gmail.com</li>
+                            <li><span class="icon fa-solid fa-envelope fa-fw"></span>yayasanpendidikanislamalmunaww@gmail.com</li>
                             <li><span class="icon fa-solid fa-location-dot fa-fw"></span>Kota Bogor, Jawa Barat, Indonesia</li>
                         </ul>
                         <div class="bismillah"><img src="{{ asset('assets/images/icons/bismillah.png') }}" alt="" /> </div>

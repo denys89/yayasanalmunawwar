@@ -185,10 +185,10 @@
 }
 
 .green-theme .institute-block_one-inner {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fdf4 100%);
-    border: 2px solid #e8f5d8;
+    background: transparent !important;
+    border: none;
     border-radius: 20px;
-    padding: 45px 35px;
+    padding: 0;
     text-align: center;
     transition: all 0.4s ease;
     position: relative;
@@ -214,7 +214,7 @@
 }
 
 .green-theme .institute-block_one-inner:hover::before {
-    opacity: 1;
+    opacity: 0;
     animation: shimmer 1.5s ease-in-out;
 }
 
@@ -224,15 +224,12 @@
 }
 
 .green-theme .institute-block_one-inner:hover {
-    background: linear-gradient(135deg, #C5E96B 0%, #a2d155 100%);
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 25px 60px rgba(197, 233, 107, 0.4);
-    border-color: #C5E96B;
+  
 }
 
 .green-theme .institute-block_one-inner:hover .institute-block_one-heading a,
 .green-theme .institute-block_one-inner:hover .institute-block_one-text {
-    color: #ffffff !important;
+  color: #666 !important;
 }
 
 .green-theme .institute-block_one-icon {
@@ -243,7 +240,7 @@
 }
 
 .green-theme .institute-block_one-inner:hover .institute-block_one-icon {
-    color: #ffffff;
+   
     transform: scale(1.1) rotate(5deg);
 }
 
@@ -439,16 +436,7 @@
 
     <!-- Welcome One -->
     <style>
-        /* Scoped styles for organisasi hero section */
-        .org-hero {
-            align-items: center;
-            gap: 1.5rem;
-        }
-        @media (min-width: 992px) {
-            .org-hero {
-                gap: 2.5rem;
-            }
-        }
+    
         .org-hero__content {
             max-width: 640px;
             margin: 0 auto;

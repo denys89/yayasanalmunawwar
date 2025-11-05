@@ -272,10 +272,10 @@
 	<section class="featured-one mt-0">
 		<div class="auto-container mb-5 mt-5">
 			<div class="inner-container" style="background-image:url(assets/images/icons/featured.png)">
-				<div class="row clearfix">
+				<div class="row justify-content-center">
 
 					@forelse(($foundationValues ?? []) as $value)
-						<div class="feature-block_one col-lg-4 col-md-6 col-sm-12">
+						<div class="feature-block_one col-lg-3 col-md-4 col-sm-6">
 							<div class="feature-block_one-inner">
 								<div class="feature-block_one-icon {{ $value->icon }}"></div>
 								<h4 class="feature-block_one-heading">{{ $value->title }}</h4>

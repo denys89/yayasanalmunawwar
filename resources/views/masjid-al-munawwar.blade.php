@@ -64,8 +64,8 @@
         <!-- Sec Title -->
         <div class="sec-title centered">
             <div class="sec-title_title">KEGIATAN & LAYANAN</div>
-            <h2 class="sec-title_heading">Program Ibadah & Dakwah <br> Masjid Al Munawwar</h2>
-            <div class="sec-title_text">Berbagai kegiatan dan layanan yang tersedia di Masjid Al Munawwar untuk memenuhi kebutuhan spiritual dan sosial umat Islam.</div>
+            <h2 class="sec-title_heading whiteText">Program Ibadah & Dakwah <br> Masjid Al Munawwar</h2>
+            <div class="sec-title_text whiteText">Berbagai kegiatan dan layanan yang tersedia di Masjid Al Munawwar untuk memenuhi kebutuhan spiritual dan sosial umat Islam.</div>
         </div>
         
         <div class="row clearfix">
@@ -102,7 +102,9 @@
             <!-- Institute Block One -->
             <div class="institute-block_one col-lg-6 col-md-12 col-sm-12">
                 <div class="institute-block_one-inner">
-                    <div class="institute-block_one-icon"><i class="fas fa-praying-hands" style="font-size: 24px; color: #28a745;"></i></div>
+                    <div class="institute-block_one-icon">
+                        <i class="fas fa-praying-hands" style="font-size: 55px; color: #28a745;"></i>
+                    </div>
                     <h4 class="institute-block_one-heading">Jadwal Sholat Harian</h4>
                     <div class="institute-block_one-text">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -113,7 +115,7 @@
             <!-- Institute Block One -->
             <div class="institute-block_one col-lg-6 col-md-12 col-sm-12">
                 <div class="institute-block_one-inner">
-                    <div class="institute-block_one-icon"><i class="fas fa-calendar-alt" style="font-size: 24px; color: #28a745;"></i></div>
+                    <div class="institute-block_one-icon"><i class="fas fa-calendar-alt" style="font-size: 55px; color: #28a745;"></i></div>
                     <h4 class="institute-block_one-heading">Kegiatan Mingguan</h4>
                     <div class="institute-block_one-text">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -126,7 +128,7 @@
 </section>
 
 <!-- Donation Section -->
-<section class="featured-one" style="padding: 120px 0;">
+<section class="featured-one" style="padding: 100px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
     <div class="auto-container">
         <!-- Sec Title -->
         <div class="sec-title centered">
@@ -134,16 +136,19 @@
             <h2 class="sec-title_heading">Masjid Al Munawwar</h2>
             <div class="sec-title_text">Berbagai cara mudah untuk berdonasi ke Masjid Al Munawwar.</div>
         </div>
-        <div class="row clearfix">
+        <div class="row clearfix justify-content-center">
             @forelse(($donations ?? []) as $donation)
-                <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                        <div class="featured-block_one-icon">
-                            @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
-                            <i class="fas {{ $icon }}" style="font-size: 48px; color: #28a745;"></i>
+                @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="donation-card wow fadeInUp" data-wow-delay="{{ ($loop->index ?? 0) * 100 }}ms" data-wow-duration="800ms">
+                        <div class="donation-card_badge"><i class="fas {{ $icon }}" aria-hidden="true"></i></div>
+                        <div class="donation-card_body">
+                            <h5 class="donation-card_title">{{ $donation->name }}</h5>
+                            <div class="donation-card_text">{!! $donation->description !!}</div>
+                            @if(!empty($donation->url))
+                                <a href="{{ $donation->url }}" class="theme-btn btn-style-one donation-card_btn"><span class="btn-title">Donasi Sekarang</span></a>
+                            @endif
                         </div>
-                        <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
-                        <div class="featured-block_one-text">{!! $donation->description !!}</div>
                     </div>
                 </div>
             @empty

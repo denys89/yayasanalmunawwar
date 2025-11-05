@@ -84,7 +84,7 @@
 </section>
 
 <!-- Donation Section -->
-<section class="featured-one" style="padding: 120px 0;">
+<section class="featured-one" style="padding: 100px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
     <div class="auto-container">
         <!-- Sec Title -->
         <div class="sec-title centered">
@@ -92,16 +92,20 @@
             <h2 class="sec-title_heading">Bergabunglah Membantu <br> Anak Yatim Piatu</h2>
             <div class="sec-title_text">Berbagai cara mudah untuk berdonasi dan membantu anak-anak yatim piatu dan dhuafa melalui Panti Al Munawwar.</div>
         </div>
-        <div class="row clearfix">
+
+        <div class="row clearfix justify-content-center">
             @forelse(($donations ?? []) as $donation)
-                <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                        <div class="featured-block_one-icon">
-                            @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
-                            <i class="fas {{ $icon }}" style="font-size: 48px; color: #28a745;"></i>
+                @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="donation-card wow fadeInUp" data-wow-delay="{{ ($loop->index ?? 0) * 100 }}ms" data-wow-duration="800ms">
+                        <div class="donation-card_badge"><i class="fas {{ $icon }}" aria-hidden="true"></i></div>
+                        <div class="donation-card_body">
+                            <h5 class="donation-card_title">{{ $donation->name }}</h5>
+                            <div class="donation-card_text">{!! $donation->description !!}</div>
+                            @if(!empty($donation->url))
+                                <a href="{{ $donation->url }}" class="theme-btn btn-style-one donation-card_btn"><span class="btn-title">Donasi Sekarang</span></a>
+                            @endif
                         </div>
-                        <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
-                        <div class="featured-block_one-text">{!! $donation->description !!}</div>
                     </div>
                 </div>
             @empty
@@ -226,10 +230,11 @@ document.addEventListener('DOMContentLoaded', function() {
             slidesPerView: 3,
             spaceBetween: 30,
             slidesPerGroup: 1,
-            loop: true,
+            loop: false,
             autoplay: {
                 delay: 4000,
                 disableOnInteraction: false,
+                stopOnLastSlide: true,
             },
             navigation: {
                 nextEl: '.swiper-button-next',

@@ -70,14 +70,17 @@
         
         <div class="row clearfix">
             @forelse(($activities ?? []) as $activity)
-                <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
+
+            <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
                     <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                        <div class="service-block_one-icon">
-                            @php $icon = $activity->fa_icon ?? 'fa-praying-hands'; @endphp
-                            <i class="fas {{ $icon }}" style="font-size: 24px; color: #28a745;"></i>
+                        <div class="service-block_one-upper">
+                            <div class="service-block_one-icon">
+                                @php $icon = $activity->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                                <i class="fas {{ $icon }}"></i>
+                            </div>
+                            <h4 class="service-block_one-heading"><a href="#">{{ $activity->name }}</a></h4>
+                            <div class="service-block_one-text">{!! $activity->description !!}</div>
                         </div>
-                        <h5 class="service-block_one-heading">{{ $activity->name }}</h5>
-                        <div class="service-block_one-text">{!! $activity->description !!}</div>
                     </div>
                 </div>
             @empty
@@ -167,42 +170,45 @@
             <h2 class="sec-title_heading">Informasi Kontak <br> Masjid Al Munawwar</h2>
             <div class="sec-title_text">Untuk informasi lebih lanjut tentang kegiatan, jadwal sholat, atau program dakwah di Masjid Al Munawwar, silakan hubungi kami.</div>
         </div>
-        
-        <div class="row clearfix">
-            
-            @if(!empty($program->phone))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-phone" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Telepon</h4>
-                    <div class="contact-info-block_text">
-                        <a href="tel:{{ preg_replace('/\s+/', '', $program->phone) }}">{{ $program->phone }}</a>
+
+        <div class="inner-container mb-5">
+            <div class="row clearfix">
+                <!-- Info Column -->
+                 
+                @if($program->address)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-location-dot fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Yayasan</h4>
+                        <div class="contact-info_text">{{ $program->address }}</div>
                     </div>
                 </div>
-            </div>
-            @endif
-            
-            @if(!empty($program->email))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-envelope" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Email</h4>
-                    <div class="contact-info-block_text">
-                        <a href="mailto:{{ $program->email }}">{{ $program->email }}</a>
+                @endif
+
+                <!-- Info Column -->
+                @if($program->phone)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-phone fa-fw"></div>
+                        <h4 class="contact-info_heading">Nomor Telepon</h4>
+                        <div class="contact-info_text">{{ $program->phone }}<span>Let’s Talk <a href="tel:{{ preg_replace('/\s+/', '',$program->phone) }}">{{ $program->phone }}</a></span></div>
                     </div>
                 </div>
-            </div>
-            @endif
-            
-            @if(!empty($program->address))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-map-marker-alt" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Alamat</h4>
-                    <div class="contact-info-block_text">{!! nl2br(e($program->address)) !!}</div>
+                @endif
+
+                <!-- Info Column -->
+                  @if($program->email)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-envelope fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Email</h4>
+                        <div class="contact-info_text">
+                            <a href="mailto:{{ $program->email }}">{{ $program->email }}</a></div>
+                    </div>
                 </div>
+                @endif
+
             </div>
-            @endif
             
         </div>
 

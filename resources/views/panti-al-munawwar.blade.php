@@ -66,14 +66,17 @@
         </div>
         <div class="row clearfix">
             @forelse(($services ?? []) as $service)
+
                 <div class="service-block_one col-lg-4 col-md-6 col-sm-12">
                     <div class="service-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                        <div class="service-block_one-icon">
-                            @php $icon = $service->fa_icon ?? 'fa-hand-holding-heart'; @endphp
-                            <i class="fas {{ $icon }}" style="font-size: 24px; color: #28a745;"></i>
+                        <div class="service-block_one-upper">
+                            <div class="service-block_one-icon">
+                                @php $icon = $service->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                                <i class="fas {{ $icon }}"></i>
+                            </div>
+                            <h4 class="service-block_one-heading"><a href="#">{{ $service->name }}</a></h4>
+                            <div class="service-block_one-text">{!! $service->description !!}</div>
                         </div>
-                        <h5 class="service-block_one-heading"><a href="#">{{ $service->name }}</a></h5>
-                        <div class="service-block_one-text">{!! $service->description !!}</div>
                     </div>
                 </div>
             @empty
@@ -84,7 +87,7 @@
 </section>
 
 <!-- Donation Section -->
-<section class="featured-one" style="padding: 120px 0;">
+<section class="featured-one" style="padding: 100px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
     <div class="auto-container">
         <!-- Sec Title -->
         <div class="sec-title centered">
@@ -92,16 +95,20 @@
             <h2 class="sec-title_heading">Bergabunglah Membantu <br> Anak Yatim Piatu</h2>
             <div class="sec-title_text">Berbagai cara mudah untuk berdonasi dan membantu anak-anak yatim piatu dan dhuafa melalui Panti Al Munawwar.</div>
         </div>
-        <div class="row clearfix">
+
+        <div class="row clearfix justify-content-center">
             @forelse(($donations ?? []) as $donation)
-                <div class="featured-block_one col-lg-4 col-md-6 col-sm-12">
-                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-                        <div class="featured-block_one-icon">
-                            @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
-                            <i class="fas {{ $icon }}" style="font-size: 48px; color: #28a745;"></i>
+                @php $icon = $donation->fa_icon ?? 'fa-hand-holding-heart'; @endphp
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="donation-card wow fadeInUp" data-wow-delay="{{ ($loop->index ?? 0) * 100 }}ms" data-wow-duration="800ms">
+                        <div class="donation-card_badge"><i class="fas {{ $icon }}" aria-hidden="true"></i></div>
+                        <div class="donation-card_body">
+                            <h5 class="donation-card_title">{{ $donation->name }}</h5>
+                            <div class="donation-card_text">{!! $donation->description !!}</div>
+                            @if(!empty($donation->url))
+                                <a href="{{ $donation->url }}" class="theme-btn btn-style-one donation-card_btn"><span class="btn-title">Donasi Sekarang</span></a>
+                            @endif
                         </div>
-                        <h5 class="featured-block_one-heading">{{ $donation->name }}</h5>
-                        <div class="featured-block_one-text">{!! $donation->description !!}</div>
                     </div>
                 </div>
             @empty
@@ -226,10 +233,11 @@ document.addEventListener('DOMContentLoaded', function() {
             slidesPerView: 3,
             spaceBetween: 30,
             slidesPerGroup: 1,
-            loop: true,
+            loop: false,
             autoplay: {
                 delay: 4000,
                 disableOnInteraction: false,
+                stopOnLastSlide: true,
             },
             navigation: {
                 nextEl: '.swiper-button-next',
@@ -258,6 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+
 <!-- Contact Section -->
 <section class="contact-one" style="padding: 120px 0;">
     <div class="auto-container">
@@ -267,42 +277,44 @@ document.addEventListener('DOMContentLoaded', function() {
             <h2 class="sec-title_heading">Informasi Kontak <br> Panti Al Munawwar</h2>
             <div class="sec-title_text">Untuk informasi lebih lanjut tentang program, donasi, atau kunjungan ke Panti Al Munawwar, silakan hubungi kami melalui kontak di bawah ini.</div>
         </div>
-        
-        <div class="row clearfix">
-            
-            @if(!empty($program->phone))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-phone" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Telepon</h4>
-                    <div class="contact-info-block_text">
-                        <a href="tel:{{ preg_replace('/\s+/', '', $program->phone) }}">{{ $program->phone }}</a>
+        <div class="inner-container mb-5">
+            <div class="row clearfix">
+                <!-- Info Column -->
+                 
+                @if($program->address)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-location-dot fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Yayasan</h4>
+                        <div class="contact-info_text">{{ $program->address }}</div>
                     </div>
                 </div>
-            </div>
-            @endif
-            
-            @if(!empty($program->email))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-envelope" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Email</h4>
-                    <div class="contact-info-block_text">
-                        <a href="mailto:{{ $program->email }}">{{ $program->email }}</a>
+                @endif
+
+                <!-- Info Column -->
+                @if($program->phone)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-phone fa-fw"></div>
+                        <h4 class="contact-info_heading">Nomor Telepon</h4>
+                        <div class="contact-info_text">{{ $program->phone }}<span>Let’s Talk <a href="tel:{{ preg_replace('/\s+/', '',$program->phone) }}">{{ $program->phone }}</a></span></div>
                     </div>
                 </div>
-            </div>
-            @endif
-            
-            @if(!empty($program->address))
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-map-marker-alt" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Alamat</h4>
-                    <div class="contact-info-block_text">{!! nl2br(e($program->address)) !!}</div>
+                @endif
+
+                <!-- Info Column -->
+                  @if($program->email)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-envelope fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Email</h4>
+                        <div class="contact-info_text">
+                            <a href="mailto:{{ $program->email }}">{{ $program->email }}</a></div>
+                    </div>
                 </div>
+                @endif
+
             </div>
-            @endif
             
         </div>
 

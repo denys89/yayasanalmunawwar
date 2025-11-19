@@ -138,11 +138,18 @@
         </div>
         <div class="row clearfix">
             @forelse($facilities as $idx => $facility)
-                <div class="featured-block_one col-lg-3 col-md-6 col-sm-12">
-                    <div class="featured-block_one-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
-                        <div class="featured-block_one-icon"><i class="{{ $facility->icon }}" style="font-size: 48px; color: #28a745;"></i></div>
-                        <h5 class="featured-block_one-heading">{{ $facility->name }}</h5>
-                        <div class="featured-block_one-text">{{ $facility->description }}</div>
+                <!-- Quran Services Card UI -->
+                <div class="service-block_two col-lg-4 col-md-6 col-sm-12">
+                    <div class="service-block_two-inner wow fadeInLeft" data-wow-delay="{{ $idx * 150 }}ms" data-wow-duration="1000ms">
+                        <div class="service-block_two-upper">
+                            <div class="service-block_two-icon {{ $facility->icon }}"></div>
+                            <div class="service-block_two-big_icon">
+                                <img src="{{ asset('assets/images/icons/featured-1.png') }}" alt="" />
+                            </div>
+                            <h4 class="service-block_two-heading">{{ $facility->name }}</h4>
+                            <div class="service-block_two-text">{{ $facility->description }}</div>
+                        </div>
+                        <div class="service-block_two-lower"></div>
                     </div>
                 </div>
             @empty
@@ -153,48 +160,97 @@
 </section>
 
 <!-- Contact Info -->
-<section class="contact-one" style="padding: 120px 0;">
+<section class="contact-info" style="padding-bottom: 120px;">
     <div class="auto-container">
         <div class="sec-title centered">
             <div class="sec-title_title">HUBUNGI KAMI</div>
             <h2 class="sec-title_heading">Informasi Kontak</h2>
             <div class="sec-title_text">Hubungi kami untuk informasi pendaftaran atau konsultasi.</div>
         </div>
-        <div class="row clearfix">
-            @if($program->phone)
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-phone" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Telepon</h4>
-                    <div class="contact-info-block_text">
-                        <a href="tel:{{ preg_replace('/\s+/', '', $program->phone) }}">{{ $program->phone }}</a>
+        <div class="inner-container">
+            <div class="row clearfix">
+                <!-- Info Column -->
+                 
+                @if($program->address)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-location-dot fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Yayasan</h4>
+                        <div class="contact-info_text">{{ $program->address }}</div>
                     </div>
                 </div>
-            </div>
-            @endif
-            @if($program->email)
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-envelope" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Email</h4>
-                    <div class="contact-info-block_text">
-                        <a href="mailto:{{ $program->email }}">{{ $program->email }}</a>
+                @endif
+
+                <!-- Info Column -->
+                @if($program->phone)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-phone fa-fw"></div>
+                        <h4 class="contact-info_heading">Nomor Telepon</h4>
+                        <div class="contact-info_text">{{ $program->phone }}<span>Let’s Talk <a href="tel:{{ preg_replace('/\s+/', '',$program->phone) }}">{{ $program->phone }}</a></span></div>
                     </div>
                 </div>
-            </div>
-            @endif
-            @if($program->address)
-            <div class="contact-info-block col-lg-4 col-md-6 col-sm-12">
-                <div class="contact-info-block_inner">
-                    <div class="contact-info-block_icon"><i class="fas fa-map-marker-alt" style="font-size: 48px; color: #28a745;"></i></div>
-                    <h4 class="contact-info-block_heading">Alamat</h4>
-                    <div class="contact-info-block_text">{!! nl2br(e($program->address)) !!}</div>
+                @endif
+
+                <!-- Info Column -->
+                  @if($program->email)
+                <div class="contact-info_column col-lg-4 col-md-6 col-sm-12">
+                    <div class="contact-info_outer">
+                        <div class="contact-info_icon fa-solid fa-envelope fa-fw"></div>
+                        <h4 class="contact-info_heading">Alamat Email</h4>
+                        <div class="contact-info_text">
+                            <a href="mailto:{{ $program->email }}">{{ $program->email }}</a></div>
+                    </div>
                 </div>
+                @endif
+
             </div>
-            @endif
+            
         </div>
+        <!-- Contact Form Box -->
+        <div class="contact-form_box">
+            <div class="auto-container">
+                <h4>Hubungi Kami untuk Konsultasi dan Pendaftaran</h4>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <form method="post" action="sendemail.php" id="contact-form">
+                        
+                        <div class="form-group">
+                            <input type="text" name="username" placeholder="Nama Lengkap" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" name="email" placeholder="Alamat Email" required="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea class="" name="message" placeholder="Ketik pesanmu di sini"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <!-- Button Box -->
+                            <div class="button-box">
+                                <button type="submit" class="theme-btn btn-style-four">
+                                    <span class="btn-wrap">
+                                        <span class="text-one">Kirim Pesan</span>
+                                        <span class="text-two">Kirim Pesan</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <!-- End Comment Form -->
+
+            </div>
+        </div>
+        <!-- End Contact Form Box -->
     </div>
 </section>
+<!-- End Contact Info -->
+
 
 </div>
 @endsection

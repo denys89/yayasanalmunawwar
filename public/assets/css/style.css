@@ -612,6 +612,7 @@
 .service-block_one-heading{
 	position: relative;
 	font-weight: 500;
+	padding-right: 70px;
 }
 
 .service-block_one-heading a{
@@ -629,7 +630,7 @@
 	line-height:28px; 
 	font-size:var(--font-18);
 	color: var(--color-thirteen);
-	margin-top: var(--margin-top-30);
+	margin-top: var(--margin-top-50);
 }
 
 .service-block_one-big_icon{
@@ -1346,6 +1347,9 @@
 	-webkit-transition:all 500ms ease;
 	-ms-transition:all 500ms ease;
 	-o-transition:all 500ms ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .institute-block_one-inner:hover .institute-block_one-icon{

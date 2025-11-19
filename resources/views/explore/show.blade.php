@@ -44,10 +44,11 @@
         new Swiper('.gallery-one_carousel', {
             slidesPerView: 4,
             spaceBetween: 30,
-            loop: true,
+            loop: false,
             autoplay: {
                 delay: 5000,
                 disableOnInteraction: false,
+                stopOnLastSlide: true,
             },
             navigation: {
                 nextEl: '.gallery-one_next',

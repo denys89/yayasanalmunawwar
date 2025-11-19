@@ -41,15 +41,21 @@
         ];
         @endif
 
+        const carouselEl = document.querySelector('.gallery-one_carousel');
+        if (carouselEl && carouselEl.swiper) {
+            carouselEl.swiper.destroy(true, true);
+        }
+
+        const imgCount = galleryImages.length || document.querySelectorAll('.gallery-one_carousel .swiper-slide').length;
+        const spv4 = Math.min(4, imgCount);
+        const spv3 = Math.min(3, imgCount);
+        const spv2 = Math.min(2, imgCount);
+
         new Swiper('.gallery-one_carousel', {
-            slidesPerView: 4,
+            slidesPerView: spv4,
             spaceBetween: 30,
             loop: false,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-                stopOnLastSlide: true,
-            },
+            autoplay: false,
             navigation: {
                 nextEl: '.gallery-one_next',
                 prevEl: '.gallery-one_prev',
@@ -59,21 +65,11 @@
                 clickable: true,
             },
             breakpoints: {
-                1200: {
-                    slidesPerView: 4,
-                },
-                992: {
-                    slidesPerView: 3,
-                },
-                768: {
-                    slidesPerView: 2,
-                },
-                576: {
-                    slidesPerView: 2,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
+                1200: { slidesPerView: spv4 },
+                992:  { slidesPerView: spv3 },
+                768:  { slidesPerView: spv2 },
+                576:  { slidesPerView: spv2 },
+                0:    { slidesPerView: 1 }
             }
         });
 

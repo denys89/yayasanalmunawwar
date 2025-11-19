@@ -5,80 +5,66 @@
         <div class="inner-container">
             <!-- Widgets Section -->
             <div class="widgets-section">
+                
                 <div class="row clearfix">
-                    
-                    <!-- Big Column -->
-                    <div class="big-column col-lg-6 col-md-12 col-sm-12">
-                        <div class="row clearfix">
-
-                            <!-- Footer Column -->
-                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
-                                <div class="footer-widget logo-widget">
-                                    <div class="footer-logo" style="max-width: 100px;"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-tk-almunawwar.png') }}" alt="" title=""></a></div>
-                                    <!-- Footer List -->
-                                    <div class="footer_list">
-                                        <li>Jln. Pemuda no. 42, 43<br> Bogor,  Jawa Barat<br> Indonesia 16161</li>
-                                        <li>0896-3954-5861</li>
-                                        <li>yayasanpendidikanislamalmunaww@gmail.com</li>
-                                    </div>
-                                    <!-- Social Box -->
-                                    <div class="footer_socials">
-                                        <a href="https://facebook.com/"><i class="fa-brands fa-facebook-f"></i></a>
-                                        <a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
-                                        <a href="https://youtube.com/"><i class="fa-brands fa-youtube"></i></a>
-                                        <a href="https://instagram.com/"><i class="fa-brands fa-instagram"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Footer Column -->
-                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
-                                <div class="footer-widget links-widget">
-                                    <h4 class="footer-title">Tentang Kami</h4>
-                                    <ul class="footer-list">
-                                        <li><a href="{{ route('sejarah') }}">Sejarah</a></li>
-                                        <li><a href="{{ route('visi-misi') }}">Visi Misi</a></li>
-                                        <li><a href="{{ route('struktur-organisasi') }}">Struktur Organisasi</a></li>
-                                        <li><a href="{{ route('hubungi-kami') }}">Hubungi Kami</a></li>
-                                        <li><a href="{{ route('home') }}">Beranda</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
+                    <!-- Footer Column -->
+                    <div class="footer-column col-lg-4 col-md-4 col-sm-12">
+                        <div class="footer-widget links-widget">
+                            <h4 class="footer-title">Tentang Kami</h4>
+                            <ul class="footer-list">
+                                <li><a href="{{ route('sejarah') }}">Sejarah</a></li>
+                                <li><a href="{{ route('visi-misi') }}">Visi Misi</a></li>
+                                <li><a href="{{ route('struktur-organisasi') }}">Struktur Organisasi</a></li>
+                                <li><a href="{{ route('hubungi-kami') }}">Hubungi Kami</a></li>
+                                <li><a href="{{ route('home') }}">Beranda</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Footer Column -->
+                    <div class="footer-column col-lg-4 col-md-4 col-sm-12">
+                        <div class="footer-widget links-widget">
+                            <h4 class="footer-title">Unit Sekolah</h4>
+                            <ul class="footer-list">
+                                <li><a href="{{ route('programs.show', ['slug' => 'tk-al-munawwar']) }}">KB-TK Islam Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'sd-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'panti-al-munawwar']) }}">Panti Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'masjid-al-munawwar']) }}">Masjid Al Munawwar</a></li>
+                            </ul>
                         </div>
                     </div>
 
-                    <!-- Big Column -->
-                    <div class="big-column col-lg-6 col-md-12 col-sm-12">
-                        <div class="row clearfix">
-
-                            <!-- Footer Column -->
-                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
-                                <div class="footer-widget links-widget">
-                                    <h4 class="footer-title">Unit Sekolah</h4>
-                                    <ul class="footer-list">
-                                        <li><a href="{{ route('programs.show', ['slug' => 'tk-al-munawwar']) }}">KB-TK Islam Al Munawwar</a></li>
-                                        <li><a href="{{ route('programs.show', ['slug' => 'sd-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
-                                        <li><a href="{{ route('programs.show', ['slug' => 'panti-al-munawwar']) }}">Panti Al Munawwar</a></li>
-                                        <li><a href="{{ route('programs.show', ['slug' => 'masjid-al-munawwar']) }}">Masjid Al Munawwar</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <!-- Footer Column -->
-                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
-                                <div class="footer-widget links-widget">
-                                    <h4 class="footer-title">News & Events</h4>
-                                    <ul class="footer-list">
-                                        <li><a href="{{ route('berita') }}">Berita Terbaru</a></li>
-                                        <li><a href="{{ route('acara') }}">Acara & Kegiatan</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
+                    <!-- Footer Column -->
+                    <div class="footer-column col-lg-4 col-md-4 col-sm-12">
+                        <div class="footer-widget links-widget">
+                            <h4 class="footer-title">News & Events</h4>
+                            <ul class="footer-list">
+                                <li><a href="{{ route('berita') }}">Berita Terbaru</a></li>
+                                <li><a href="{{ route('acara') }}">Acara & Kegiatan</a></li>
+                            </ul>
                         </div>
                     </div>
 
+
+
+                </div>
+                <div class="row clearfix">
+                    <div class="footer-column col-lg-12 col-md-12 col-sm-12">
+                        <div class="footer-widget logo-widget">
+                            <!-- <div class="footer-logo" style="max-width: 80px;"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-tk-almunawwar-footer.png') }}" alt="" title=""></a></div> -->
+                            
+                            <!-- Social Box -->
+                            <div class="footer_socials mb-4">
+                                <a href="https://facebook.com/"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="https://youtube.com/"><i class="fa-brands fa-youtube"></i></a>
+                                <a href="https://instagram.com/"><i class="fa-brands fa-instagram"></i></a>
+                            </div>
+                            <!-- Footer List -->
+                            <div class="footer_list">
+                                <li style="font-size: 17px;">Jln. Pemuda no. 42, 43 Bogor,  Jawa Barat Indonesia 16161 0896-3954-5861, yayasanpendidikanislamalmunaww@gmail.com</li>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

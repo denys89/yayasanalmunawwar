@@ -372,3 +372,9 @@
     line-height: 1.6;
 }
 .donation-card_btn { margin-top: 14px; }
+.courses-one .row.clearfix { align-items: stretch; }
+.course-block_one { display: flex; }
+.course-block_one-inner { display: flex; flex-direction: column; height: 100%; }
+.course-block_one-content { display: flex; flex-direction: column; flex: 1; }
+.course-block_one-text { flex: 1; }
+.course-block_one-buttons { margin-top: auto; }

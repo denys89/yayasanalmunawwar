@@ -321,12 +321,26 @@
                     <input type="hidden" id="add-leader-type" name="type" value="foundation">
                     <div>
                         <label class="block text-sm font-medium mb-1">Photo</label>
-                       <input id="add-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'add-leader-photo-preview')">
-                       <div class="mt-2">
-                           <img id="add-leader-photo-preview" alt="Preview" class="hidden max-w-[300px] max-h-[200px] object-contain rounded">
-                       </div>
-                       @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
-                   </div>
+                        <div id="add-leader-drop-area" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="add-leader-photo-input" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                        <span>Upload a file</span>
+                                        <input id="add-leader-photo-input" name="photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="previewImage(this, 'add-leader-photo-preview')">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG, WEBP up to 5MB</p>
+                            </div>
+                        </div>
+                        @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                        <div class="mt-3">
+                            <img id="add-leader-photo-preview" alt="Preview" class="hidden w-48 h-48 object-cover mx-auto rounded-md border border-gray-200">
+                        </div>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
                         <input type="text" name="title" class="w-full border rounded p-2" required>
@@ -356,12 +370,26 @@
                     <input type="hidden" id="edit-leader-type" name="type" value="foundation">
                     <div>
                         <label class="block text-sm font-medium mb-1">Photo</label>
-                       <input id="edit-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'edit-leader-photo-preview')">
-                       <div class="mt-2">
-                           <img id="edit-leader-photo-preview" alt="Current Photo" class="hidden max-w-[300px] max-h-[200px] object-contain rounded">
-                       </div>
-                       @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
-                   </div>
+                        <div id="edit-leader-drop-area" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="edit-leader-photo-input" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-600 hover:text-yellow-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-yellow-500">
+                                        <span>Upload a new file</span>
+                                        <input id="edit-leader-photo-input" name="photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="previewImage(this, 'edit-leader-photo-preview')">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG, WEBP up to 5MB</p>
+                            </div>
+                        </div>
+                        @error('photo')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
+                        <div class="mt-3">
+                            <img id="edit-leader-photo-preview" alt="Current Photo" class="hidden w-48 h-48 object-cover mx-auto rounded-md border border-gray-200">
+                        </div>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Title</label>
                         <input id="edit-leader-title" type="text" name="title" class="w-full border rounded p-2" required>
@@ -533,6 +561,7 @@
                 reader.onload = e => {
                     img.src = e.target.result;
                     img.classList.remove('hidden');
+                    img.classList.add('w-48','h-48','object-cover','mx-auto','rounded-md','border','border-gray-200');
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -657,7 +686,31 @@
             openEditValue(id, icon, title, description);
         }
 
-        // Default open General tab
+        function setupDropArea(inputId, previewId, dropAreaId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            const dropArea = document.getElementById(dropAreaId);
+            if (!dropArea || !input) return;
+            ['dragenter','dragover','dragleave','drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, function(e){ e.preventDefault(); e.stopPropagation(); });
+            });
+            ['dragenter','dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, function(){ dropArea.classList.add('border-blue-400'); });
+            });
+            ['dragleave','drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, function(){ dropArea.classList.remove('border-blue-400'); });
+            });
+            dropArea.addEventListener('drop', function(e){
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+                    input.files = e.dataTransfer.files;
+                    previewImage(input, previewId);
+                }
+            });
+        }
+
+        setupDropArea('add-leader-photo-input','add-leader-photo-preview','add-leader-drop-area');
+        setupDropArea('edit-leader-photo-input','edit-leader-photo-preview','edit-leader-drop-area');
+
         openTab('general');
     </script>
 @endsection

@@ -569,12 +569,45 @@
         <div class="auto-container">
             <!-- Sec Title -->
             <div class="sec-title centered">
-                <div class="sec-title_title">Prinsip Kepemimpinan</div>
-                <h2 class="sec-title_heading">Nilai-Nilai <span>Kepemimpinan</span> Islami</h2>
-                <div class="sec-title_text">Prinsip-prinsip fundamental yang menjadi pedoman dalam kepemimpinan dan tata kelola organisasi berdasarkan nilai-nilai Islam</div>
+                <div class="sec-title_title">Hierarki Organisasi</div>
+                <h2 class="sec-title_heading">Struktur <span>Kepemimpinan</span> Sekolah</h2>
+                <div class="sec-title_text">Susunan organisasi yang terstruktur dan hierarkis untuk mencapai tujuan yayasan secara efektif dan efisien</div>
+            </div>
+            <div class="row clearfix">
+                @php
+                    // Data dari controller: koleksi leadership structures dengan kolom ['photo','title','position']
+                    $members = isset($leadershipStructures) ? $leadershipStructures : collect();
+                @endphp
+
+                @if(isset($errorMessage) && $errorMessage)
+                    <div class="col-12 text-center" style="color:#d33;">{{ $errorMessage }}</div>
+                @else
+                    @forelse($members as $index => $leader)
+                        @php
+                            $photo = $leader->photo ?? null;
+                            $isExternal = $photo && Str::startsWith($photo, ['http://', 'https://']);
+                            $imgSrc = $photo ? ($isExternal ? $photo : asset('storage/' . $photo)) : asset('assets/images/resource/course-dummy1.png');
+                        @endphp
+                        <div class="institute-block_one col-lg-3 col-md-4 col-sm-6">
+                            <div class="institute-block_one-inner wow fadeInLeft" data-wow-delay="{{ 120 * ($index + 1) }}ms" data-wow-duration="1000ms">
+                                <!-- Foto profil: rasio persegi seragam -->
+                                <div class="mb-3">
+                                    <img class="util-thumb" src="{{ $imgSrc }}" alt="Foto {{ $leader->title ?? 'Anggota Organisasi' }}" onerror="this.src='{{ asset('assets/images/resource/course-dummy1.png') }}'" />
+                                </div>
+                                <!-- Nama lengkap (menggunakan kolom 'title') -->
+                                <h5 class="institute-block_one-heading">{{ $leader->title }}</h5>
+                                <!-- Jabatan (menggunakan kolom 'position') -->
+                                <div class="institute-block_one-text">{{ $leader->position }}</div>
+                            </div>
+                        </div>
+                    @empty
+                        <!-- Fallback: tampilkan placeholder jika belum ada data -->
+                        <div class="col-12 text-center text-muted">Belum ada data struktur organisasi yang ditambahkan.</div>
+                    @endforelse
+                @endif
             </div>
             
-            <div class="row clearfix">
+            <!-- <div class="row clearfix">
                 @if(isset($leadershipValues) && $leadershipValues->count())
                     @foreach($leadershipValues as $index => $value)
                         <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
@@ -590,7 +623,7 @@
                         <div class="text-center" style="color:#666;">Belum ada nilai kepemimpinan ditambahkan.</div>
                     </div>
                 @endif
-            </div>
+            </div> -->
         </div>
     </section>
     <!-- End Students One -->

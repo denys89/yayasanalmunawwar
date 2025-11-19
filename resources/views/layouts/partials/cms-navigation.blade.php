@@ -4,7 +4,23 @@
             <ul role="list" class="-mx-2 space-y-1">
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'editor')
                 <li>
-                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">CONTENT MANAGEMENT</div>
+                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">WEBSITE</div>
+                </li>
+                <li>
+                    <a href="{{ route('cms.homepage.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.homepage*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.homepage*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4.5 9.75V21h15V9.75" />
+                        </svg>
+                        Homepage
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ Auth::user()->role === 'editor' ? route('cms.banners.editor.index') : route('cms.banners.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.banners*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.banners*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5h16.5A1.5 1.5 0 0121.75 6v12a1.5 1.5 0 01-1.5 1.5H3.75A1.5 1.5 0 012.25 18V6A1.5 1.5 0 013.75 4.5zm4.5 3h7.5v6h-7.5V7.5zm0 7.5h4.5v3h-4.5v-3z" />
+                        </svg>
+                        Banners
+                    </a>
                 </li>
                 <li>
                     <a href="{{ route('cms.pages.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.pages*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
@@ -13,6 +29,38 @@
                         </svg>
                         Pages
                     </a>
+                </li>
+                
+                <li>
+                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">ABOUT</div>
+                </li>
+                <li>
+                    <a href="{{ route('cms.history.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.history*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.history*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75zm.75 4.5a.75.75 0 00-1.5 0v4.5a.75.75 0 00.75.75h3a.75.75 0 000-1.5h-2.25V11.25z" />
+                        </svg>
+                        History
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('cms.vision_mission.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.vision_mission*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.vision_mission*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75m-3 3.75h6m-6 3h6" />
+                        </svg>
+                        Vision & Mission
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('cms.organizational_structure.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.organizational_structure*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.organizational_structure*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-15a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5zm3 3h9v5.25h-9V9.75z" />
+                        </svg>
+                        Organizational Structure
+                    </a>
+                </li>
+                
+                <li>
+                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">PROGRAMS & CONTENT</div>
                 </li>
                 <li>
                     <a href="{{ route('cms.programs.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.programs*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
@@ -48,47 +96,16 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ Auth::user()->role === 'editor' ? route('cms.banners.editor.index') : route('cms.banners.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.banners*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.banners*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5h16.5A1.5 1.5 0 0121.75 6v12a1.5 1.5 0 01-1.5 1.5H3.75A1.5 1.5 0 012.25 18V6A1.5 1.5 0 013.75 4.5zm4.5 3h7.5v6h-7.5V7.5zm0 7.5h4.5v3h-4.5v-3z" />
+                    <a href="{{ route('cms.media.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.media*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.media*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                         </svg>
-                        Banners
+                        Media
                     </a>
                 </li>
+                
                 <li>
-                    <a href="{{ route('cms.history.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.history*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.history*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75zm.75 4.5a.75.75 0 00-1.5 0v4.5a.75.75 0 00.75.75h3a.75.75 0 000-1.5h-2.25V11.25z" />
-                        </svg>
-                        History
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('cms.vision_mission.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.vision_mission*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.vision_mission*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V3m0 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 23.25 12 23.25s8.25-3.694 8.25-8.25S16.556 6.75 12 6.75m-3 3.75h6m-6 3h6" />
-                        </svg>
-                        Vision & Mission
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('cms.homepage.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.homepage*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.homepage*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4.5 9.75V21h15V9.75" />
-                        </svg>
-                        Homepage
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('cms.organizational_structure.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.organizational_structure*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.organizational_structure*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-15a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5zm3 3h9v5.25h-9V9.75z" />
-                        </svg>
-                        Organizational Structure
-                    </a>
-                </li>
-                <li>
-                    <!-- Admissions menu removed -->
+                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">ADMISSIONS</div>
                 </li>
                 <li>
                     <a href="{{ route('cms.admission-waves.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.admission-waves*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
@@ -107,12 +124,16 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('cms.media.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.media*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.media*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    <a href="{{ route('cms.discounts.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.discounts*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.discounts*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
                         </svg>
-                        Media
+                        Discounts
                     </a>
+                </li>
+                
+                <li>
+                    <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">SUPPORT</div>
                 </li>
                 <li>
                    <a href="{{ route('cms.faqs.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.faqs*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
@@ -128,14 +149,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.32 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                         </svg>
                         Contact Us
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('cms.discounts.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.discounts*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.discounts*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
-                        </svg>
-                        Discounts
                     </a>
                 </li>
                 @endif

@@ -492,26 +492,6 @@
 	</section>
 	<!-- End News One -->
 
-	<!-- CTA One -->
-	<section class="cta-two">
-		<div class="auto-container">
-			<div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
-				<div class="cta-two_bg" style="background-image:url(assets/images/background/cta-one_bg.png)"></div>
-				<h3 class="cta-two_heading">Raih Masa Depan Gemilang Bersama<br />Yayasan Al-Munawwar</h3><br />
-				<!-- Button Box -->
-				<div class="cta-two_button">
-					<a href="{{ route('hubungi-kami') }}" class="theme-btn btn-style-three">
-						<span class="btn-wrap">
-							<span class="text-one">Daftar Sekarang</span>
-							<span class="text-two">Daftar Sekarang</span>
-						</span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End CTA One -->
-
 <!-- Tab Styles -->
 <style>
 .school-programs-tabs {

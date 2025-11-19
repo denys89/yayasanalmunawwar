@@ -163,7 +163,7 @@
 
 /* Institute Section Improvements */
 .green-theme .institute-one {
-    padding: 100px 0;
+    padding: 50px 0;
     background: linear-gradient(135deg, #f8fdf4 0%, #ffffff 50%, #f0f8e8 100%);
     position: relative;
 }
@@ -392,7 +392,7 @@
     
     .green-theme .institute-one,
     .green-theme .students-one {
-        padding: 80px 0;
+        padding: 50px 0;
     }
     
     .green-theme .sec-title_heading {

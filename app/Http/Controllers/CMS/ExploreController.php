@@ -41,6 +41,7 @@ class ExploreController extends Controller
             'order' => 'nullable|integer|min:0',
             'image_url' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         // Sanitize rich text fields
@@ -59,6 +60,12 @@ class ExploreController extends Controller
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('explores', 'public');
             $validated['image_url'] = $path;
+        }
+
+        // If a banner is uploaded, store it and set banner_url to stored path
+        if ($request->hasFile('banner')) {
+            $path = $request->file('banner')->store('explores/banners', 'public');
+            $validated['banner_url'] = $path;
         }
 
         Explore::create($validated);
@@ -96,6 +103,7 @@ class ExploreController extends Controller
             'order' => 'nullable|integer|min:0',
             'image_url' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         // Sanitize rich text fields
@@ -121,6 +129,15 @@ class ExploreController extends Controller
             }
             $path = $request->file('image')->store('explores', 'public');
             $validated['image_url'] = $path;
+        }
+
+        // If a new banner is uploaded, delete old stored file (if local) and set new path
+        if ($request->hasFile('banner')) {
+            if ($explore->banner_url && !str_starts_with($explore->banner_url, 'http')) {
+                Storage::disk('public')->delete($explore->banner_url);
+            }
+            $path = $request->file('banner')->store('explores/banners', 'public');
+            $validated['banner_url'] = $path;
         }
 
         $explore->update($validated);

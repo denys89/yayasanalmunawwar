@@ -64,6 +64,36 @@
                 </div>
                 @endif
 
+                @if($explore->banner_url)
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Banner Image:</label>
+                    <div class="mt-2">
+                        @php
+                            $bannerPlaceholder = 'data:image/svg+xml;utf8,' . rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="18">Banner unavailable</text></svg>');
+                            $rawBanner = $explore->banner_url;
+                            $resolvedBanner = null;
+                            $validBanner = false;
+
+                            if ($rawBanner) {
+                                if (\Illuminate\Support\Str::startsWith($rawBanner, ['http://', 'https://'])) {
+                                    $validBanner = filter_var($rawBanner, FILTER_VALIDATE_URL) !== false;
+                                    $resolvedBanner = $validBanner ? $rawBanner : null;
+                                } else {
+                                    $validBanner = \Illuminate\Support\Facades\Storage::disk('public')->exists($rawBanner);
+                                    $resolvedBanner = $validBanner ? asset('storage/' . $rawBanner) : null;
+                                }
+                            }
+
+                            if (!$validBanner) {
+                                \Illuminate\Support\Facades\Log::warning('CMS Explore banner image invalid or missing', ['explore_id' => $explore->id, 'banner_url' => $rawBanner]);
+                                $resolvedBanner = $bannerPlaceholder;
+                            }
+                        @endphp
+                        <img src="{{ $resolvedBanner }}" alt="{{ $explore->title }} Banner" class="w-full max-h-48 object-cover rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" onerror="console.warn('Banner image failed to load:', this.src); this.onerror=null; this.src='{{ $bannerPlaceholder }}';" loading="lazy">
+                    </div>
+                </div>
+                @endif
+
                 @if($explore->summary)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Summary:</label>

@@ -16,6 +16,7 @@ class Explore extends Model
         'category',
         'content',
         'image_url',
+        'banner_url',
         'summary',
         'status',
         'order',

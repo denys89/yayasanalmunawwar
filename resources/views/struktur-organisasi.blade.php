@@ -565,7 +565,7 @@
     <!-- End Institute One -->
 
     <!-- Students One -->
-    <section class="students-one">
+    <section class="institute-one">
         <div class="auto-container">
             <!-- Sec Title -->
             <div class="sec-title centered">

@@ -525,12 +525,12 @@
                 - Konsisten dengan tema: memakai grid Bootstrap (col-*) dan
                   gaya kartu `.institute-block_one-inner` yang sudah ada.
                 - Foto menggunakan utilitas global `util-thumb` untuk rasio/ukuran seragam.
-                - Data bersumber dari koleksi `$leadershipStructures` yang dikirim controller.
+                - Data bersumber dari koleksi `$foundationLeadershipStructures` yang dikirim controller (type: foundation).
             -->
             <div class="row clearfix">
                 @php
-                    // Data dari controller: koleksi leadership structures dengan kolom ['photo','title','position']
-                    $members = isset($leadershipStructures) ? $leadershipStructures : collect();
+                    // Data dari controller: koleksi foundation leadership structures dengan kolom ['photo','title','position','type']
+                    $members = isset($foundationLeadershipStructures) ? $foundationLeadershipStructures : collect();
                 @endphp
 
                 @if(isset($errorMessage) && $errorMessage)
@@ -556,7 +556,7 @@
                         </div>
                     @empty
                         <!-- Fallback: tampilkan placeholder jika belum ada data -->
-                        <div class="col-12 text-center text-muted">Belum ada data struktur organisasi yang ditambahkan.</div>
+                        <div class="col-12 text-center text-muted">Belum ada data struktur kepemimpinan yayasan yang ditambahkan.</div>
                     @endforelse
                 @endif
             </div>
@@ -571,12 +571,12 @@
             <div class="sec-title centered">
                 <div class="sec-title_title">Hierarki Organisasi</div>
                 <h2 class="sec-title_heading">Struktur <span>Kepemimpinan</span> Sekolah</h2>
-                <div class="sec-title_text">Susunan organisasi yang terstruktur dan hierarkis untuk mencapai tujuan yayasan secara efektif dan efisien</div>
+                <div class="sec-title_text">Susunan organisasi yang terstruktur dan hierarkis untuk mencapai tujuan sekolah secara efektif dan efisien</div>
             </div>
             <div class="row clearfix">
                 @php
-                    // Data dari controller: koleksi leadership structures dengan kolom ['photo','title','position']
-                    $members = isset($leadershipStructures) ? $leadershipStructures : collect();
+                    // Data dari controller: koleksi school leadership structures dengan kolom ['photo','title','position','type']
+                    $members = isset($schoolLeadershipStructures) ? $schoolLeadershipStructures : collect();
                 @endphp
 
                 @if(isset($errorMessage) && $errorMessage)
@@ -602,28 +602,10 @@
                         </div>
                     @empty
                         <!-- Fallback: tampilkan placeholder jika belum ada data -->
-                        <div class="col-12 text-center text-muted">Belum ada data struktur organisasi yang ditambahkan.</div>
+                        <div class="col-12 text-center text-muted">Belum ada data struktur kepemimpinan sekolah yang ditambahkan.</div>
                     @endforelse
                 @endif
             </div>
-            
-            <!-- <div class="row clearfix">
-                @if(isset($leadershipValues) && $leadershipValues->count())
-                    @foreach($leadershipValues as $index => $value)
-                        <div class="counter-block_one col-lg-3 col-md-6 col-sm-12">
-                            <div class="counter-block_one-inner" style="animation-delay: {{ number_format($index * 0.05, 2) }}s;">
-                                <div class="counter-block_one-icon {{ $value->icon ?? 'flaticon-mosque' }}"></div>
-                                <div class="counter-block_one-title">{{ $value->title }}</div>
-                                <div class="counter-block_one-text">{{ $value->description }}</div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="col-12">
-                        <div class="text-center" style="color:#666;">Belum ada nilai kepemimpinan ditambahkan.</div>
-                    </div>
-                @endif
-            </div> -->
         </div>
     </section>
     <!-- End Students One -->

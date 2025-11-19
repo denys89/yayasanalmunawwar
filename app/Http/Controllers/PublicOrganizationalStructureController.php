@@ -17,7 +17,8 @@ class PublicOrganizationalStructureController extends Controller
     public function show()
     {
         $organizationalStructure = null;
-        $leadershipStructures = collect();
+        $foundationLeadershipStructures = collect();
+        $schoolLeadershipStructures = collect();
         $leadershipValues = collect();
         $bannerUrl = null;
         $imageUrl = null;
@@ -32,12 +33,22 @@ class PublicOrganizationalStructureController extends Controller
                 $bannerUrl = $this->resolveUrl($organizationalStructure->banner);
                 $imageUrl = $this->resolveUrl($organizationalStructure->image);
 
-                // Cache leadership structures for 5 minutes per organizational structure
-                $leadershipStructures = Cache::remember('public_org_structure_leadership_' . $organizationalStructure->id, 300, function () use ($organizationalStructure) {
+                // Cache foundation leadership structures for 5 minutes per organizational structure
+                $foundationLeadershipStructures = Cache::remember('public_org_structure_foundation_leadership_' . $organizationalStructure->id, 300, function () use ($organizationalStructure) {
                     return FoundationLeadershipStructure::query()
                         ->where('organizational_structure_id', $organizationalStructure->id)
+                        ->where('type', FoundationLeadershipStructure::TYPE_FOUNDATION)
                         ->orderBy('created_at', 'asc')
-                        ->get(['photo','title','position']);
+                        ->get(['photo','title','position','type']);
+                });
+
+                // Cache school leadership structures for 5 minutes per organizational structure
+                $schoolLeadershipStructures = Cache::remember('public_org_structure_school_leadership_' . $organizationalStructure->id, 300, function () use ($organizationalStructure) {
+                    return FoundationLeadershipStructure::query()
+                        ->where('organizational_structure_id', $organizationalStructure->id)
+                        ->where('type', FoundationLeadershipStructure::TYPE_SCHOOL)
+                        ->orderBy('created_at', 'asc')
+                        ->get(['photo','title','position','type']);
                 });
 
                 // Cache leadership values for 5 minutes per organizational structure
@@ -48,6 +59,8 @@ class PublicOrganizationalStructureController extends Controller
                         ->get(['icon','title','description']);
                 });
             } else {
+                $foundationLeadershipStructures = collect();
+                $schoolLeadershipStructures = collect();
                 $errorMessage = 'Konten struktur organisasi belum tersedia.';
             }
         } catch (\Throwable $e) {
@@ -57,7 +70,8 @@ class PublicOrganizationalStructureController extends Controller
 
         return view('struktur-organisasi', [
             'organizationalStructure' => $organizationalStructure,
-            'leadershipStructures' => $leadershipStructures,
+            'foundationLeadershipStructures' => $foundationLeadershipStructures ?? collect(),
+            'schoolLeadershipStructures' => $schoolLeadershipStructures ?? collect(),
             'leadershipValues' => $leadershipValues,
             'bannerUrl' => $bannerUrl,
             'imageUrl' => $imageUrl,

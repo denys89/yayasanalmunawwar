@@ -29,15 +29,27 @@ class OrganizationalStructureController extends Controller
             ]);
         }
 
-        $leadershipStructures = FoundationLeadershipStructure::where('organizational_structure_id', $organizationalStructure->id)
+        // Separate foundation and school leadership structures
+        $foundationLeadershipStructures = FoundationLeadershipStructure::where('organizational_structure_id', $organizationalStructure->id)
+            ->where('type', FoundationLeadershipStructure::TYPE_FOUNDATION)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10, ['*'], 'foundation_page');
+
+        $schoolLeadershipStructures = FoundationLeadershipStructure::where('organizational_structure_id', $organizationalStructure->id)
+            ->where('type', FoundationLeadershipStructure::TYPE_SCHOOL)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'school_page');
 
         $leadershipValues = IslamicLeadershipValue::where('organizational_structure_id', $organizationalStructure->id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('cms.organizational-structure.index', compact('organizationalStructure', 'leadershipStructures', 'leadershipValues'));
+        return view('cms.organizational-structure.index', compact(
+            'organizationalStructure', 
+            'foundationLeadershipStructures', 
+            'schoolLeadershipStructures', 
+            'leadershipValues'
+        ));
     }
 
     /**

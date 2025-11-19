@@ -44,7 +44,8 @@
             <div class="border-b px-4 pt-4">
                 <nav class="flex space-x-4" role="tablist">
                     <button class="py-2 px-3 border-b-2" id="tab-general" onclick="openTab('general')">General Info</button>
-                    <button class="py-2 px-3" id="tab-leadership" onclick="openTab('leadership')">Foundation Leadership Structure</button>
+                    <button class="py-2 px-3" id="tab-foundation-leadership" onclick="openTab('foundation-leadership')">Foundation Leadership Structure</button>
+                    <button class="py-2 px-3" id="tab-school-leadership" onclick="openTab('school-leadership')">School Leadership Structure</button>
                     <button class="py-2 px-3" id="tab-values" onclick="openTab('values')">Islamic Leadership Values</button>
                 </nav>
             </div>
@@ -121,10 +122,11 @@
                     </form>
                 </div>
 
-                <div id="tab-leadership-content" class="hidden">
+                <!-- Foundation Leadership Tab -->
+                <div id="tab-foundation-leadership-content" class="hidden">
                     <div class="flex justify-between items-center mb-3">
                         <h2 class="text-lg font-semibold">Foundation Leadership Structure</h2>
-                        <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="openAddLeadership()">Add Leadership Item</button>
+                        <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="openAddLeadership('foundation')">Add Leadership Item</button>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -138,7 +140,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($leadershipStructures as $item)
+                                @forelse($foundationLeadershipStructures as $item)
                                     <tr>
                                         <td class="p-2 border text-center">
                                             @php
@@ -154,7 +156,7 @@
                                         <td class="p-2 border">{{ $item->position }}</td>
                                         <td class="p-2 border">
                                             <div class="flex items-center space-x-2">
-                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $item->id }}" data-photo-url="{{ $photoUrl }}" data-title="{{ $item->title }}" data-position="{{ $item->position }}" onclick="openEditLeadershipFromButton(this)" title="Edit">
+                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $item->id }}" data-type="{{ $item->type }}" data-photo-url="{{ $photoUrl }}" data-title="{{ $item->title }}" data-position="{{ $item->position }}" onclick="openEditLeadershipFromButton(this)" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
@@ -173,7 +175,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="p-4 text-center text-gray-600">No leadership structure items yet.</td>
+                                        <td colspan="4" class="p-4 text-center text-gray-600">No foundation leadership structure items yet.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -181,7 +183,72 @@
                     </div>
 
                     <div class="mt-3">
-                        {{ $leadershipStructures->links() }}
+                        {{ $foundationLeadershipStructures->links() }}
+                    </div>
+                </div>
+
+                <!-- School Leadership Tab -->
+                <div id="tab-school-leadership-content" class="hidden">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-lg font-semibold">School Leadership Structure</h2>
+                        <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="openAddLeadership('school')">Add Leadership Item</button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="p-2 border">Photo</th>
+                                    <th class="p-2 border">Title</th>
+                                    <th class="p-2 border">Position</th>
+                                    <th class="p-2 border">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($schoolLeadershipStructures as $item)
+                                    <tr>
+                                        <td class="p-2 border text-center">
+                                            @php
+                                                $photoUrl = $item->photo ? (str_starts_with($item->photo, 'http') ? $item->photo : Storage::disk('public')->url($item->photo)) : null;
+                                            @endphp
+                                            @if($photoUrl)
+                                                <img src="{{ $photoUrl }}" alt="Photo" class="inline-block w-16 h-16 md:w-24 md:h-24 object-cover rounded" />
+                                            @else
+                                                <div class="inline-flex items-center justify-center w-16 h-16 md:w-24 md:h-24 bg-gray-100 text-gray-400 rounded">No Photo</div>
+                                            @endif
+                                        </td>
+                                        <td class="p-2 border">{{ $item->title }}</td>
+                                        <td class="p-2 border">{{ $item->position }}</td>
+                                        <td class="p-2 border">
+                                            <div class="flex items-center space-x-2">
+                                                <button type="button" class="inline-flex items-center p-2 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors duration-200" data-id="{{ $item->id }}" data-type="{{ $item->type }}" data-photo-url="{{ $photoUrl }}" data-title="{{ $item->title }}" data-position="{{ $item->position }}" onclick="openEditLeadershipFromButton(this)" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <form action="{{ route('cms.organizational_structure.foundation_leadership_structures.destroy', $item) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="inline-flex items-center p-2 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200" onclick="return confirm('Delete this item?')" title="Delete">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="p-4 text-center text-gray-600">No school leadership structure items yet.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3">
+                        {{ $schoolLeadershipStructures->links() }}
                     </div>
                 </div>
 
@@ -246,11 +313,12 @@
         <div id="addLeadershipModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center">
             <div class="bg-white rounded shadow p-4 w-full max-w-xl">
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-lg font-semibold">Add Leadership Item</h3>
+                    <h3 class="text-lg font-semibold" id="addLeadershipModalTitle">Add Leadership Item</h3>
                     <button onclick="closeAddLeadership()" class="text-gray-500">✕</button>
                 </div>
                 <form action="{{ route('cms.organizational_structure.foundation_leadership_structures.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                     @csrf
+                    <input type="hidden" id="add-leader-type" name="type" value="foundation">
                     <div>
                         <label class="block text-sm font-medium mb-1">Photo</label>
                        <input id="add-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'add-leader-photo-preview')">
@@ -285,6 +353,7 @@
                 <form id="editLeadershipForm" action="#" method="POST" enctype="multipart/form-data" class="space-y-3">
                     @csrf
                     @method('PATCH')
+                    <input type="hidden" id="edit-leader-type" name="type" value="foundation">
                     <div>
                         <label class="block text-sm font-medium mb-1">Photo</label>
                        <input id="edit-leader-photo-input" type="file" name="photo" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this, 'edit-leader-photo-preview')">
@@ -419,33 +488,36 @@
     <script>
         function openTab(tab) {
             const generalBtn = document.getElementById('tab-general');
-            const leadershipBtn = document.getElementById('tab-leadership');
+            const foundationLeadershipBtn = document.getElementById('tab-foundation-leadership');
+            const schoolLeadershipBtn = document.getElementById('tab-school-leadership');
             const valuesBtn = document.getElementById('tab-values');
             const generalContent = document.getElementById('tab-general-content');
-            const leadershipContent = document.getElementById('tab-leadership-content');
+            const foundationLeadershipContent = document.getElementById('tab-foundation-leadership-content');
+            const schoolLeadershipContent = document.getElementById('tab-school-leadership-content');
             const valuesContent = document.getElementById('tab-values-content');
+
+            // Remove all active states
+            generalBtn.classList.remove('border-b-2');
+            foundationLeadershipBtn.classList.remove('border-b-2');
+            schoolLeadershipBtn.classList.remove('border-b-2');
+            valuesBtn.classList.remove('border-b-2');
+            generalContent.classList.add('hidden');
+            foundationLeadershipContent.classList.add('hidden');
+            schoolLeadershipContent.classList.add('hidden');
+            valuesContent.classList.add('hidden');
 
             if (tab === 'general') {
                 generalBtn.classList.add('border-b-2');
-                leadershipBtn.classList.remove('border-b-2');
-                valuesBtn.classList.remove('border-b-2');
                 generalContent.classList.remove('hidden');
-                leadershipContent.classList.add('hidden');
-                valuesContent.classList.add('hidden');
-            } else if (tab === 'leadership') {
-                leadershipBtn.classList.add('border-b-2');
-                generalBtn.classList.remove('border-b-2');
-                valuesBtn.classList.remove('border-b-2');
-                leadershipContent.classList.remove('hidden');
-                generalContent.classList.add('hidden');
-                valuesContent.classList.add('hidden');
+            } else if (tab === 'foundation-leadership') {
+                foundationLeadershipBtn.classList.add('border-b-2');
+                foundationLeadershipContent.classList.remove('hidden');
+            } else if (tab === 'school-leadership') {
+                schoolLeadershipBtn.classList.add('border-b-2');
+                schoolLeadershipContent.classList.remove('hidden');
             } else {
                 valuesBtn.classList.add('border-b-2');
-                generalBtn.classList.remove('border-b-2');
-                leadershipBtn.classList.remove('border-b-2');
                 valuesContent.classList.remove('hidden');
-                generalContent.classList.add('hidden');
-                leadershipContent.classList.add('hidden');
             }
         }
 
@@ -466,7 +538,18 @@
             }
         }
 
-        function openAddLeadership() {
+        function openAddLeadership(type) {
+            // Set the type in the hidden field
+            document.getElementById('add-leader-type').value = type;
+            
+            // Update modal title
+            const modalTitle = type === 'foundation' ? 'Add Foundation Leadership Item' : 'Add School Leadership Item';
+            document.getElementById('addLeadershipModalTitle').textContent = modalTitle;
+            
+            // Clear form
+            document.getElementById('add-leader-photo-input').value = '';
+            document.getElementById('add-leader-photo-preview').classList.add('hidden');
+            
             document.getElementById('addLeadershipModal').classList.remove('hidden');
             document.getElementById('addLeadershipModal').classList.add('flex');
         }
@@ -475,9 +558,13 @@
             document.getElementById('addLeadershipModal').classList.remove('flex');
         }
 
-        function openEditLeadership(id, photoUrl, title, position) {
+        function openEditLeadership(id, type, photoUrl, title, position) {
             const form = document.getElementById('editLeadershipForm');
             form.action = '{{ route('cms.organizational_structure.foundation_leadership_structures.update', ['leadership' => '__ID__']) }}'.replace('__ID__', id);
+            
+            // Set type
+            document.getElementById('edit-leader-type').value = type;
+            
             const img = document.getElementById('edit-leader-photo-preview');
             if (photoUrl) {
                 img.src = photoUrl;
@@ -555,10 +642,11 @@
 
         function openEditLeadershipFromButton(btn) {
             const id = btn.getAttribute('data-id');
+            const type = btn.getAttribute('data-type');
             const photoUrl = btn.getAttribute('data-photo-url');
             const title = btn.getAttribute('data-title');
             const position = btn.getAttribute('data-position');
-            openEditLeadership(id, photoUrl, title, position);
+            openEditLeadership(id, type, photoUrl, title, position);
         }
 
         function openEditValueFromButton(btn) {

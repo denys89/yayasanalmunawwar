@@ -15,6 +15,7 @@ class FoundationLeadershipStructureController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'type' => 'required|in:foundation,school',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'required|string|max:255',
             'position' => 'required|string|max:255',
@@ -30,6 +31,7 @@ class FoundationLeadershipStructureController extends Controller
 
         $data = [
             'organizational_structure_id' => $os->id,
+            'type' => $validated['type'],
             'title' => $validated['title'],
             'position' => $validated['position'],
         ];
@@ -56,12 +58,14 @@ class FoundationLeadershipStructureController extends Controller
     public function update(Request $request, FoundationLeadershipStructure $leadership)
     {
         $validated = $request->validate([
+            'type' => 'required|in:foundation,school',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'required|string|max:255',
             'position' => 'required|string|max:255',
         ]);
 
         $data = [
+            'type' => $validated['type'],
             'title' => $validated['title'],
             'position' => $validated['position'],
         ];

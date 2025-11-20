@@ -9,6 +9,10 @@
 .service-one .row.clearfix{align-items:stretch}
 .service-block_one{display:flex}
 .service-block_one-inner{display:flex;flex-direction:column;height:100%}
+.featured-one .row.clearfix{align-items:stretch}
+.service-block_two{display:flex}
+.service-block_two-inner{display:flex;flex-direction:column;height:100%}
+.service-block_two-lower{margin-top:auto}
 </style>
 @endpush
 
@@ -33,8 +37,17 @@ document.addEventListener('DOMContentLoaded',function(){
     cards.forEach(function(c){var h=c.offsetHeight;if(h>max)max=h});
     cards.forEach(function(c){c.style.minHeight=max+'px'});
   }
+  function equalizeFacilityHeights(){
+    var cards=document.querySelectorAll('.featured-one .service-block_two-inner');
+    var max=0;
+    cards.forEach(function(c){c.style.minHeight='auto'});
+    cards.forEach(function(c){var h=c.offsetHeight;if(h>max)max=h});
+    cards.forEach(function(c){c.style.minHeight=max+'px'});
+  }
   setTimeout(equalizeEducationHeights,100);
+  setTimeout(equalizeFacilityHeights,120);
   window.addEventListener('resize',function(){setTimeout(equalizeEducationHeights,100)});
+  window.addEventListener('resize',function(){setTimeout(equalizeFacilityHeights,120)});
 });
 </script>
 

@@ -11,6 +11,8 @@ class IconHelper
      */
     public static function getIconCategories()
     {
+        $flaticonAll = self::getProjectFlaticonIcons();
+
         return [
             'general' => [
                 'title' => 'General Icons',
@@ -28,6 +30,12 @@ class IconHelper
                     ['class' => 'flaticon-time-management', 'name' => 'Calendar'],
                     ['class' => 'flaticon-education', 'name' => 'Clock'],
                 ]
+            ],
+            'flaticon_all' => [
+                'title' => 'All Flaticon Icons',
+                'icon' => 'fa-solid fa-icons',
+                'color' => 'blue',
+                'icons' => $flaticonAll,
             ],
             'islamic' => [
                 'title' => 'Islamic & Religious',
@@ -131,6 +139,39 @@ class IconHelper
                 ]
             ]
         ];
+    }
+
+    /**
+     * Extract available Flaticon classes from project CSS
+     * @return array<int, array{class:string,name:string}>
+     */
+    public static function getProjectFlaticonIcons(): array
+    {
+        try {
+            $files = glob(public_path('assets/css/flaticon_*.css')) ?: [];
+            if (empty($files)) {
+                $files = glob(public_path('css/flaticon_*.css')) ?: [];
+            }
+            $path = $files[0] ?? null;
+            if (!$path || !is_readable($path)) {
+                return [];
+            }
+            $css = file_get_contents($path);
+            if ($css === false) {
+                return [];
+            }
+            $icons = [];
+            if (preg_match_all('/\.flaticon-([a-z0-9\-]+)\s*:\s*before/iu', $css, $matches)) {
+                foreach ($matches[1] as $name) {
+                    $class = 'flaticon-' . $name;
+                    $pretty = ucwords(str_replace(['-', '_'], ' ', $name));
+                    $icons[] = ['class' => $class, 'name' => $pretty];
+                }
+            }
+            return $icons;
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**

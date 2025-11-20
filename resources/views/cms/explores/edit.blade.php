@@ -155,7 +155,7 @@
                 <!-- Featured Image (File Upload only) -->
                 <div>
                     <label for="image" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                        {{ ($explore->image || $explore->image_url) ? 'Replace Image (File Upload)' : 'Featured Image (File Upload)' }}
+                        {{ ($explore->image || $explore->image_url) ? 'Replace Image' : 'Featured Image' }}
                     </label>
                     <div class="mt-2">
                         <input type="file" 
@@ -167,6 +167,41 @@
                         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload an image file. Uploading will replace the current image.</p>
                     </div>
                     @error('image')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                @if($explore->banner_url)
+                <!-- Current Banner -->
+                <div>
+                    <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Current Banner</label>
+                    <div class="mt-2">
+                        @php
+                            $currentBannerSrc = preg_match('/^https?:\/\//', $explore->banner_url)
+                                ? $explore->banner_url
+                                : asset('storage/' . ltrim($explore->banner_url, '/'));
+                        @endphp
+                        <img src="{{ $currentBannerSrc }}" alt="Current banner" 
+                             class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm w-full max-h-32 object-cover">
+                    </div>
+                </div>
+                @endif
+
+                <!-- Banner Image -->
+                <div>
+                    <label for="banner" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                        {{ $explore->banner_url ? 'Replace Banner' : 'Banner Image' }}
+                    </label>
+                    <div class="mt-2">
+                        <input type="file" 
+                               name="banner" 
+                               id="banner" 
+                               accept="image/*"
+                               form="explore-form"
+                               class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 @error('banner') border-red-500 @enderror">
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload a banner image (recommended: 1920x400px)</p>
+                    </div>
+                    @error('banner')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

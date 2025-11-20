@@ -200,7 +200,20 @@
 @section('content')
 
 <!-- Page Title -->
-<section class="page-title" style="background-image:url({{ asset('images/background/page-title.jpg') }})">
+@php
+    $bannerImage = null;
+    if ($explores->isNotEmpty() && $explores->first()->banner_url) {
+        $rawBanner = $explores->first()->banner_url;
+        if (\Illuminate\Support\Str::startsWith($rawBanner, ['http://', 'https://'])) {
+            $bannerImage = $rawBanner;
+        } else {
+            $bannerImage = asset('storage/' . $rawBanner);
+        }
+    } else {
+        $bannerImage = asset('images/background/page-title.jpg');
+    }
+@endphp
+<section class="page-title" style="background-image:url({{ $bannerImage }})">
     <div class="auto-container">
         <h2>{{ $title }}</h2>
         <ul class="bread-crumb clearfix">

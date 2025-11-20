@@ -148,7 +148,7 @@ class ProgramController extends Controller
                 ->replace('</script>', '&lt;/script>');
         }
 
-        $validated['slug'] = Str::slug($validated['name']);
+        // $validated['slug'] = Str::slug($validated['name']);  // Slug is not updated to maintain URL stability and SEO
 
         // Handle brochure file upload (takes precedence over URL if both provided)
         if ($request->hasFile('brochure_file')) {

@@ -122,7 +122,7 @@
             <div class="p-6 space-y-6">
                 <!-- Featured Image (File Upload only) -->
                 <div>
-                    <label for="image" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Featured Image (File Upload)</label>
+                    <label for="image" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Featured Image</label>
                     <div class="mt-2">
                         <input type="file" 
                                name="image" 
@@ -133,6 +133,23 @@
                         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload an image file for this explore content</p>
                     </div>
                     @error('image')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Banner Image -->
+                <div>
+                    <label for="banner" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Banner Image</label>
+                    <div class="mt-2">
+                        <input type="file" 
+                               name="banner" 
+                               id="banner" 
+                               accept="image/*"
+                               form="explore-form"
+                               class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 @error('banner') border-red-500 @enderror">
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Upload a banner image (recommended: 1920x400px)</p>
+                    </div>
+                    @error('banner')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

@@ -6,6 +6,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('style/custom.css') }}">
+<style>
+.testimonial-two .testimonial-carousel .swiper-wrapper { align-items: stretch; }
+.testimonial-two .testimonial-carousel .swiper-slide { height: auto; display: flex; }
+.testimonial-two .testimonial-block_inner { display: flex; flex-direction: column; height: 100%; }
+</style>
 @endpush
 
 @section('content')
@@ -153,44 +158,38 @@
                         <!-- Decorative element -->
                         <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: {{ $currentColor['gradient'] }}; border-radius: 50%; opacity: 0.1;"></div>
                         
-                        <!-- User Photo -->
-                        <div class="testimonial-block_photo" style="text-align: center; margin-bottom: 20px;">
-                            <div style="position: relative; display: inline-block;">
+                        <div style="display: flex; gap: 24px; align-items: flex-start;">
+                            <div style="flex: 0 0 180px; position: relative;">
                                 @if($testimony->photo)
-                                    <img src="{{ str_starts_with($testimony->photo, 'http') ? $testimony->photo : asset('storage/' . $testimony->photo) }}" alt="{{ e($testimony->name) }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 4px solid {{ $currentColor['color'] }}; box-shadow: 0 5px 15px {{ $currentColor['color'] }}30;" />
+                                    <div style="width: 180px; height: 180px; border-radius: 16px; overflow: hidden; border: 6px solid {{ $currentColor['color'] }}; box-shadow: 0 10px 25px {{ $currentColor['color'] }}20;">
+                                        <img src="{{ str_starts_with($testimony->photo, 'http') ? $testimony->photo : asset('storage/' . $testimony->photo) }}" alt="{{ e($testimony->name) }}" style="width: 100%; height: 100%; object-fit: cover;" />
+                                    </div>
                                 @else
-                                    <div style="width: 80px; height: 80px; border-radius: 50%; background: {{ $currentColor['gradient'] }}; border: 4px solid {{ $currentColor['color'] }}; box-shadow: 0 5px 15px {{ $currentColor['color'] }}30; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-user" style="color: white; font-size: 30px;"></i>
+                                    <div style="width: 180px; height: 180px; border-radius: 16px; background: {{ $currentColor['gradient'] }}; border: 6px solid {{ $currentColor['color'] }}; box-shadow: 0 10px 25px {{ $currentColor['color'] }}20; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-user" style="color: white; font-size: 56px;"></i>
                                     </div>
                                 @endif
-                                <div style="position: absolute; bottom: -5px; right: -5px; width: 25px; height: 25px; background: {{ $currentColor['icon_bg'] }}; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center;">
-                                    <i class="{{ $currentColor['icon'] }}" style="color: white; font-size: 10px;"></i>
+                                <div style="position: absolute; bottom: -6px; right: -6px; width: 36px; height: 36px; background: {{ $currentColor['icon_bg'] }}; border-radius: 50%; border: 4px solid white; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 12px rgba(0,0,0,0.15);">
+                                    <i class="{{ $currentColor['icon'] }}" style="color: white; font-size: 14px;"></i>
                                 </div>
                             </div>
+                            <div style="flex: 1;">
+                                <h4 style="font-size: 20px; font-weight: 800; color: {{ $currentColor['color'] }}; margin-bottom: 10px;">{{ e($testimony->name) }}</h4>
+                                @if($testimony->education)
+                                    <div style="background: {{ $currentColor['gradient'] }}; color: white; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; display: inline-block;">{{ e($testimony->education) }}</div>
+                                @endif
+                                @if($testimony->from)
+                                    <div style="font-size: 13px; color: #666; margin-bottom: 6px;"><i class="fas fa-map-marker-alt" style="color: {{ $currentColor['color'] }}; margin-right: 6px;"></i>Asal: {{ e($testimony->from) }}</div>
+                                @endif
+                                @if($testimony->ideal)
+                                    <div style="font-size: 13px; color: #666; font-weight: 600; margin-bottom: 10px;"><i class="fas fa-star" style="color: #ffc107; margin-right: 6px;"></i>Cita-cita: {{ e($testimony->ideal) }}</div>
+                                @endif
+                                
+                            </div>
                         </div>
-                        
-                        <!-- Student Info -->
-                        <div class="testimonial-block_info" style="text-align: center; margin-bottom: 20px;">
-                            <h4 style="font-size: 18px; font-weight: 700; color: {{ $currentColor['color'] }}; margin-bottom: 8px;">{{ e($testimony->name) }}</h4>
-                            @if($testimony->education)
-                                <div style="background: {{ $currentColor['gradient'] }}; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 12px; display: inline-block;">{{ e($testimony->education) }}</div>
-                            @endif
-                            @if($testimony->from)
-                                <div style="font-size: 13px; color: #666; margin-bottom: 5px;"><i class="fas fa-map-marker-alt" style="color: {{ $currentColor['color'] }}; margin-right: 5px;"></i>Asal: {{ e($testimony->from) }}</div>
-                            @endif
-                            @if($testimony->ideal)
-                                <div style="font-size: 13px; color: #666; font-weight: 600;"><i class="fas fa-star" style="color: #ffc107; margin-right: 5px;"></i>Cita-cita: {{ e($testimony->ideal) }}</div>
-                            @endif
-                        </div>
-                        
-                        <!-- Quote Icon -->
-                        <div class="testimonial-block_icon" style="text-align: center; margin-bottom: 15px;">
-                            <i class="fas fa-quote-left" style="color: {{ $currentColor['color'] }}; font-size: 28px; opacity: 0.7;"></i>
-                        </div>
-                        
-                        <!-- Testimonial Text -->
-                        <div class="testimonial-block_text" style="font-size: 14px; line-height: 1.7; color: #555; text-align: center; font-style: italic; margin-bottom: 20px; position: relative;">
-                            "{{ e($testimony->testimony) }}"
+                        <div class="clearfix">
+                            <div style="margin: 8px 0 12px 0; color: {{ $currentColor['color'] }}; opacity: 0.8; font-size: 18px;"><i class="fas fa-quote-left"></i></div>
+                            <div style="font-size: 14px; line-height: 1.7; color: #555; font-style: italic;">"{{ e($testimony->testimony) }}"</div>
                         </div>
                         
                         <!-- Bottom decoration -->
@@ -230,7 +229,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof Swiper !== 'undefined') {
         var testimonialSwiper = new Swiper('.testimonial-carousel', {
-            slidesPerView: 3,
+            slidesPerView: 2,
             spaceBetween: 30,
             slidesPerGroup: 1,
             loop: false,
@@ -257,10 +256,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     spaceBetween: 25,
                 },
                 1024: {
-                    slidesPerView: 3,
+                    slidesPerView: 2,
                     spaceBetween: 30,
                 }
             }
+        });
+
+        function equalizeTestimonialHeights() {
+            var cards = document.querySelectorAll('.testimonial-carousel .testimonial-block_inner');
+            var max = 0;
+            cards.forEach(function(card){
+                card.style.minHeight = 'auto';
+            });
+            cards.forEach(function(card){
+                var h = card.offsetHeight;
+                if (h > max) max = h;
+            });
+            cards.forEach(function(card){
+                card.style.minHeight = max + 'px';
+            });
+        }
+
+        setTimeout(equalizeTestimonialHeights, 100);
+        window.addEventListener('resize', function(){
+            setTimeout(equalizeTestimonialHeights, 100);
+        });
+        testimonialSwiper.on('slideChangeTransitionEnd', function(){
+            setTimeout(equalizeTestimonialHeights, 100);
         });
     }
 });

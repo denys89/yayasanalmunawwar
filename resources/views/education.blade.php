@@ -5,6 +5,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('style/custom.css') }}">
+<style>
+.service-one .row.clearfix{align-items:stretch}
+.service-block_one{display:flex}
+.service-block_one-inner{display:flex;flex-direction:column;height:100%}
+</style>
 @endpush
 
 @section('content')
@@ -18,6 +23,20 @@
         </ul>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  function equalizeEducationHeights(){
+    var cards=document.querySelectorAll('.service-one .service-block_one-inner');
+    var max=0;
+    cards.forEach(function(c){c.style.minHeight='auto'});
+    cards.forEach(function(c){var h=c.offsetHeight;if(h>max)max=h});
+    cards.forEach(function(c){c.style.minHeight=max+'px'});
+  }
+  setTimeout(equalizeEducationHeights,100);
+  window.addEventListener('resize',function(){setTimeout(equalizeEducationHeights,100)});
+});
+</script>
 
 <div class="green-theme">
 

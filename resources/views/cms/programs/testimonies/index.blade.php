@@ -21,7 +21,6 @@
                     <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Education</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">From</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Ideal</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Testimony</th>
                     <th class="px-4 py-2 text-center font-medium text-gray-700 dark:text-gray-300">Visible</th>
                     <th class="px-4 py-2 text-right font-medium text-gray-700 dark:text-gray-300">Actions</th>
                 </tr>
@@ -44,9 +43,6 @@
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-300">{{ $testimony->education }}</td>
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-300">{{ $testimony->from }}</td>
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-300">{{ $testimony->ideal }}</td>
-                        <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
-                            <div class="max-w-xs truncate">{{ $testimony->testimony }}</div>
-                        </td>
                         <td class="px-4 py-2 text-center">
                             <form action="{{ route('cms.programs.testimonies.toggle-visibility', [$program, $testimony]) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status visibilitas testimoni ini?')">
                                 @csrf

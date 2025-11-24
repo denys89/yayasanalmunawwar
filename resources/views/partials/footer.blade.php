@@ -45,9 +45,9 @@
                         <div class="footer-widget links-widget">
                             <h4 class="footer-title">Unit Sekolah</h4>
                             <ul class="footer-list">
-                                <li><a href="{{ route('programs.show', ['slug' => 'tk-al-munawwar']) }}">KB-TK Islam Al Munawwar</a></li>
-                                <li><a href="{{ route('programs.show', ['slug' => 'sd-al-munawwar']) }}">SD Islam Al Munawwar</a></li>
-                                <li><a href="{{ route('programs.show', ['slug' => 'panti-al-munawwar']) }}">Panti Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'kb-tk-islam-al-munawwar']) }}">KB-TK Islam Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'sdit-al-munawwar']) }}">SDIT Islam Al Munawwar</a></li>
+                                <li><a href="{{ route('programs.show', ['slug' => 'rumah-kasih-sayang-untuk-anak-yatim']) }}">Panti Al Munawwar</a></li>
                                 <li><a href="{{ route('programs.show', ['slug' => 'masjid-al-munawwar']) }}">Masjid Al Munawwar</a></li>
                             </ul>
                         </div>

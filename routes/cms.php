@@ -128,7 +128,7 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     // Student Registrations Management
     Route::resource('student-registrations', StudentRegistrationController::class)->parameters([
         'student-registrations' => 'student_registration'
-    ])->only(['index', 'show', 'update']);
+    ])->except(['edit', 'destroy']);
     
     // Payment Management Routes
     Route::post('student-registrations/{payment}/upload-transfer-proof', [StudentRegistrationController::class, 'uploadTransferProof'])

@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\StudentRegistration;
 use App\Models\AdmissionWave;
 use App\Models\Payment;
+use App\Models\Guardian;
 use App\Http\Requests\UpdateStudentRegistrationRequest;
+use App\Http\Requests\StoreStudentRegistrationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class StudentRegistrationController extends Controller
 {
@@ -79,6 +82,95 @@ class StudentRegistrationController extends Controller
             'registrationStatuses'
         ));
     }
+
+    /**
+     * Show the form for creating a new student registration.
+     */
+    public function create()
+    {
+        // Get active admission waves for dropdown
+        $admissionWaves = AdmissionWave::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('cms.student-registrations.create', compact('admissionWaves'));
+    }
+
+    /**
+     * Store a newly created student registration.
+     */
+    public function store(StoreStudentRegistrationRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Create student registration
+            $studentRegistration = StudentRegistration::create([
+                'full_name' => $request->full_name,
+                'nickname' => $request->nickname,
+                'family_card_number' => $request->family_card_number,
+                'national_id_number' => $request->national_id_number,
+                'birthplace' => $request->birthplace,
+                'birthdate' => $request->birthdate,
+                'gender' => $request->gender,
+                'sibling_name' => $request->sibling_name,
+                'sibling_class' => $request->sibling_class,
+                'school_choice' => $request->school_choice,
+                'registration_type' => $request->registration_type,
+                'admission_wave_id' => $request->admission_wave_id,
+                'selected_class' => $request->selected_class,
+                'track' => $request->track,
+                'selection_method' => $request->selection_method,
+                'previous_school_type' => $request->previous_school_type,
+                'previous_school_name' => $request->previous_school_name,
+                'registration_info_source' => $request->registration_info_source,
+                'registration_reason' => $request->registration_reason,
+                'created_by' => Auth::id(),
+            ]);
+
+            // Create guardians
+            $this->createGuardian($studentRegistration, 'father', $request->input('father'));
+            $this->createGuardian($studentRegistration, 'mother', $request->input('mother'));
+            $this->createGuardian($studentRegistration, 'guardian', $request->input('guardian'));
+
+            DB::commit();
+
+            return redirect()
+                ->route('cms.student-registrations.show', $studentRegistration)
+                ->with('success', 'Student registration created successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to create student registration. Please try again.');
+        }
+    }
+
+    /**
+     * Helper method to create a guardian if data is provided.
+     */
+    private function createGuardian(StudentRegistration $studentRegistration, string $type, ?array $data): void
+    {
+        // Only create guardian if name is provided
+        if (empty($data['name'])) {
+            return;
+        }
+
+        Guardian::create([
+            'student_registration_id' => $studentRegistration->id,
+            'type' => $type,
+            'name' => $data['name'],
+            'job' => $data['job'] ?? null,
+            'company' => $data['company'] ?? null,
+            'email' => $data['email'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+        ]);
+    }
+
 
     /**
      * Display the specified resource.

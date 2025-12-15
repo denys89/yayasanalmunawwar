@@ -91,15 +91,31 @@
                                     @endif
                                 </div>
                                 
-                               
+                                
                                 
                                 
                                 <!-- Share -->
                                 <div class="event-detail_share">
                                     <span>Bagikan Berita:</span>
-                                    <a href="#" class="fa-brands fa-facebook-f fa-fw"></a>
-                                    <a href="#" class="fa-brands fa-twitter fa-fw"></a>
-                                    <a href="#" class="fa-brands fa-whatsapp fa-fw"></a>
+                                    @php
+                                        $shareUrl = route('berita.detail', $news->slug ?? request()->path());
+                                        $shareText = trim($news->title ?? 'Berita');
+                                    @endphp
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}"
+                                       target="_blank"
+                                       rel="noopener nofollow"
+                                       aria-label="Bagikan ke Facebook"
+                                       class="fa-brands fa-facebook-f fa-fw"></a>
+                                    <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($shareText) }}"
+                                       target="_blank"
+                                       rel="noopener nofollow"
+                                       aria-label="Bagikan ke Twitter"
+                                       class="fa-brands fa-twitter fa-fw"></a>
+                                    <a href="https://wa.me/?text={{ urlencode($shareText . ' ' . $shareUrl) }}"
+                                       target="_blank"
+                                       rel="noopener nofollow"
+                                       aria-label="Bagikan ke WhatsApp"
+                                       class="fa-brands fa-whatsapp fa-fw"></a>
                                 </div>
                             </div>
                         </div>
@@ -248,6 +264,21 @@
 .cta-extracted .cta-link { color: #0f5132; }
 .cta-extracted .cta-link:hover { text-decoration: underline; }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var container = document.querySelector('.event-detail_share');
+    if (!container || !navigator.share) return;
+    var titleEl = document.querySelector('.blog-detail_heading');
+    var title = titleEl ? (titleEl.textContent || '').trim() : document.title;
+    var url = window.location.href;
+    container.addEventListener('click', function (e) {
+        var link = e.target.closest('a');
+        if (!link) return;
+        e.preventDefault();
+        navigator.share({ title: title, url: url }).catch(function(){ window.open(link.href, '_blank', 'noopener'); });
+    });
+});
+</script>
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {

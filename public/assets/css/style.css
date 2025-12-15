@@ -5765,6 +5765,15 @@
 	color: var(--color-fiftytwo);
 	margin-bottom: var(--margin-bottom-15);
 }
+.blog-detail ul,
+.blog-detail ol{
+	padding-left: 20px;
+
+}
+.blog-detail ul li,
+.blog-detail ol li{
+	list-style: inherit;
+}
 
 .blog-detail_subtitle{
 	position: relative;

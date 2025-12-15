@@ -23,9 +23,26 @@
             <style>
             .blog-one .row.clearfix { align-items: stretch }
             .news-block_one { display: flex }
-            .news-block_one-inner { display: flex; flex-direction: column; height: 100% }
-            .news-block_one-content { display: flex; flex-direction: column; height: 100% }
+            .news-block_one-inner { display: flex; flex-direction: column }
+            .news-block_one-content { display: flex; flex-direction: column }
             .news-block_one-info { margin-top: auto }
+
+            /* Make card content heights more consistent without over-stretching */
+            .news-block_one-heading {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                line-height: 1.35;
+            }
+            .news-block_one-text {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                line-height: 1.6;
+                margin-bottom: var(--margin-bottom-15);
+            }
             </style>
             <!-- Sec Title -->
             <div class="sec-title centered">
@@ -237,15 +254,28 @@
 
             <script>
             document.addEventListener('DOMContentLoaded', function() {
-                function equalizeNewsHeights() {
-                    var cards = document.querySelectorAll('.blog-one .news-block_one-inner');
-                    var max = 0;
-                    cards.forEach(function(c){ c.style.minHeight = 'auto'; });
-                    cards.forEach(function(c){ var h = c.offsetHeight; if (h > max) max = h; });
-                    cards.forEach(function(c){ c.style.minHeight = max + 'px'; });
+                function equalizeContentHeightsByRow() {
+                    var inners = Array.prototype.slice.call(document.querySelectorAll('.blog-one .news-block_one-inner'));
+                    if (!inners.length) return;
+                    var rows = {};
+                    inners.forEach(function(inner){
+                        var top = inner.offsetTop;
+                        rows[top] = rows[top] || [];
+                        rows[top].push(inner);
+                    });
+                    Object.keys(rows).forEach(function(key){
+                        var rowInners = rows[key];
+                        var contents = rowInners.map(function(el){ return el.querySelector('.news-block_one-content'); }).filter(Boolean);
+                        contents.forEach(function(c){ c.style.minHeight = 'auto'; });
+                        var max = 0;
+                        contents.forEach(function(c){ var h = c.offsetHeight; if (h > max) max = h; });
+                        contents.forEach(function(c){ c.style.minHeight = max + 'px'; });
+                    });
                 }
-                setTimeout(equalizeNewsHeights, 100);
-                window.addEventListener('resize', function(){ setTimeout(equalizeNewsHeights, 100); });
+                // Run after layout and images load
+                window.addEventListener('load', function(){ requestAnimationFrame(equalizeContentHeightsByRow); });
+                setTimeout(equalizeContentHeightsByRow, 120);
+                window.addEventListener('resize', function(){ requestAnimationFrame(function(){ setTimeout(equalizeContentHeightsByRow, 60); }); });
             });
             </script>
 

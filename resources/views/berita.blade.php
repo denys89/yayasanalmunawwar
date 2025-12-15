@@ -20,6 +20,13 @@
     <!-- Blog One -->
     <section class="blog-one">
         <div class="auto-container">
+            <style>
+            .blog-one .row.clearfix { align-items: stretch }
+            .news-block_one { display: flex }
+            .news-block_one-inner { display: flex; flex-direction: column; height: 100% }
+            .news-block_one-content { display: flex; flex-direction: column; height: 100% }
+            .news-block_one-info { margin-top: auto }
+            </style>
             <!-- Sec Title -->
             <div class="sec-title centered">
                 <div class="sec-title_title">Berita Terkini</div>
@@ -228,6 +235,20 @@
 
             </div>
 
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                function equalizeNewsHeights() {
+                    var cards = document.querySelectorAll('.blog-one .news-block_one-inner');
+                    var max = 0;
+                    cards.forEach(function(c){ c.style.minHeight = 'auto'; });
+                    cards.forEach(function(c){ var h = c.offsetHeight; if (h > max) max = h; });
+                    cards.forEach(function(c){ c.style.minHeight = max + 'px'; });
+                }
+                setTimeout(equalizeNewsHeights, 100);
+                window.addEventListener('resize', function(){ setTimeout(equalizeNewsHeights, 100); });
+            });
+            </script>
+
             <!-- Pagination -->
             @if(isset($news) && $news->hasPages())
             <div class="styled-pagination text-center">
@@ -238,26 +259,6 @@
     </section>
     <!-- End Blog One -->
 
-    <!-- CTA One -->
-    <section class="cta-two">
-        <div class="auto-container">
-            <div class="inner-container d-flex justify-content-between align-items-center flex-wrap">
-                <div class="cta-two_bg" style="background-image:url({{ asset('images/background/cta-one_bg.png') }})"></div>
-                <div class="cta-two_icon flaticon-nabawi-mosque"></div>
-                <h3 class="cta-two_heading">Bergabunglah dengan Keluarga Besar <br> Yayasan Al-Munawwar</h3>
-                <!-- Button Box -->
-                <div class="cta-two_button">
-                    <a href="{{ route('hubungi-kami') }}" class="theme-btn btn-style-three">
-                        <span class="btn-wrap">
-                            <span class="text-one">Daftar Sekarang</span>
-                            <span class="text-two">Daftar Sekarang</span>
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End CTA One -->
 
 </div>
 @endsection

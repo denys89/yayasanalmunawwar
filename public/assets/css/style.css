@@ -1822,7 +1822,7 @@
 .news-block_one-image{
 	position: relative;
 	overflow: hidden;
-	background-color: var(--main-color);
+	background-color: var(--main-color);	
 }
 
 .news-block_one-image img{
@@ -1834,6 +1834,9 @@
 	-webkit-transition:all 500ms ease;
 	-ms-transition:all 500ms ease;
 	-o-transition:all 500ms ease;
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
 }
 
 .news-block_one-image:before{
@@ -5749,7 +5752,10 @@
 	margin-bottom: var(--margin-bottom-20);
 }
 
-.blog-detail p{
+.blog-detail p,
+.blog-detail ul li,
+.blog-detail ol li,
+.blog-detail span{
 	position: relative;
 	line-height: 28px;
 	font-weight: 400;

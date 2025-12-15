@@ -202,11 +202,12 @@
 <!-- Map One -->
 <section class="map-one">
     <div class="map-outer">
-        <iframe  class="map w-100"  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+        <iframe class="map w-100" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=id&amp;q=-6.5718291,106.7977193%20(Yayasan%20Pendidikan%20Islam%20Al%20-%20Munawwar)&amp;t=m&amp;z=20&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+        </iframe>
     </div>
 </section>
 <!-- End Map One -->
 
 
 @endsection
-

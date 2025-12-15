@@ -5770,9 +5770,11 @@
 	padding-left: 20px;
 
 }
-.blog-detail ul li,
 .blog-detail ol li{
 	list-style: inherit;
+}
+.blog-detail ul li{
+	list-style: disc;
 }
 
 .blog-detail_subtitle{

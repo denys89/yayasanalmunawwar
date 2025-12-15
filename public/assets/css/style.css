@@ -1823,6 +1823,7 @@
 	position: relative;
 	overflow: hidden;
 	background-color: var(--main-color);	
+	height: 400px;
 }
 
 .news-block_one-image img{
@@ -5759,7 +5760,7 @@
 	position: relative;
 	line-height: 28px;
 	font-weight: 400;
-	opacity: 0.80;
+	opacity: 1;
 	font-size: var(--font-16);
 	color: var(--color-fiftytwo);
 	margin-bottom: var(--margin-bottom-15);

@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register observers
+        \App\Models\StudentRegistration::observe(\App\Observers\StudentRegistrationObserver::class);
+        
         // Share explore categories with all views
         $this->shareExploreData();
     }

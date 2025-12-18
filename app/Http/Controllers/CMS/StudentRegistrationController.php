@@ -129,9 +129,14 @@ class StudentRegistrationController extends Controller
             ]);
 
             // Create guardians
-            $this->createGuardian($studentRegistration, 'father', $request->input('father'));
-            $this->createGuardian($studentRegistration, 'mother', $request->input('mother'));
-            $this->createGuardian($studentRegistration, 'guardian', $request->input('guardian'));
+        if ($request->has('guardians')) {
+            foreach ($request->input('guardians') as $guardianData) {
+                // Ensure type is set (validation handles this but good for safety)
+                if (isset($guardianData['type'])) {
+                    $this->createGuardian($studentRegistration, $guardianData['type'], $guardianData);
+                }
+            }
+        }
 
             DB::commit();
 

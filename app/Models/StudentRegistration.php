@@ -35,6 +35,7 @@ class StudentRegistration extends Model
         'registration_status',
         'created_by',
         'updated_by',
+        'student_id',
     ];
 
     protected $casts = [
@@ -232,6 +233,30 @@ class StudentRegistration extends Model
     public function admissionWave(): BelongsTo
     {
         return $this->belongsTo(AdmissionWave::class);
+    }
+
+    /**
+     * Get the student record if this registration has been copied.
+     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    /**
+     * Check if this registration has been copied to students table.
+     */
+    public function hasBeenCopiedToStudents(): bool
+    {
+        return !is_null($this->student_id);
+    }
+
+    /**
+     * Check if this registration can be copied to students table.
+     */
+    public function canBeCopiedToStudents(): bool
+    {
+        return $this->registration_status === 'passed' && !$this->hasBeenCopiedToStudents();
     }
 
     /**

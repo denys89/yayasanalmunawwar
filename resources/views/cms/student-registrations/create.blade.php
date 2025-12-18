@@ -183,28 +183,25 @@
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Registration Information</h2>
             </div>
             <div class="px-6 py-5 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- School Choice -->
-                    <div>
-                        <label for="school_choice" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            School Choice <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="school_choice" id="school_choice" value="{{ old('school_choice') }}" required
-                               placeholder="e.g., TK Al-Munawwar"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                        @error('school_choice')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <!-- Hidden fields with default values -->
+                <input type="hidden" name="school_choice" value="Al-Munawwar">
+                <input type="hidden" name="track" value="Regular">
+                <input type="hidden" name="selection_method" value="Standard">
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Registration Type -->
                     <div>
                         <label for="registration_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Registration Type <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="registration_type" id="registration_type" value="{{ old('registration_type') }}" required
-                               placeholder="e.g., New Student, Transfer"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                        <select name="registration_type" id="registration_type" required
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">Select Registration Type</option>
+                            <option value="New Student" {{ old('registration_type') == 'New Student' ? 'selected' : '' }}>New Student</option>
+                            <option value="Transfer" {{ old('registration_type') == 'Transfer' ? 'selected' : '' }}>Transfer</option>
+                            <option value="Internal TK" {{ old('registration_type') == 'Internal TK' ? 'selected' : '' }}>Internal TK</option>
+                            <option value="Internal Guru" {{ old('registration_type') == 'Internal Guru' ? 'selected' : '' }}>Internal Guru</option>
+                        </select>
                         @error('registration_type')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
@@ -249,33 +246,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Track -->
-                    <div>
-                        <label for="track" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Track <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="track" id="track" value="{{ old('track') }}" required
-                               placeholder="e.g., Regular, Bilingual"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                        @error('track')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
 
-                    <!-- Selection Method -->
-                    <div>
-                        <label for="selection_method" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Selection Method <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="selection_method" id="selection_method" value="{{ old('selection_method') }}" required
-                               placeholder="e.g., Test, Interview, Direct"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                        @error('selection_method')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -346,141 +317,22 @@
             </div>
         </div>
 
-        <!-- Guardian Information - Father -->
+        <!-- Guardian Information -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Father Information</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Optional - At least one guardian must be provided</p>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Guardian Information</h2>
+                    <button type="button" onclick="addGuardian()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Add Guardian
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">At least one guardian is required</p>
             </div>
-            <div class="px-6 py-5 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="father_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
-                        <input type="text" name="father[name]" id="father_name" value="{{ old('father.name') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="father_job" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job</label>
-                        <input type="text" name="father[job]" id="father_job" value="{{ old('father.job') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="father_company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
-                        <input type="text" name="father[company]" id="father_company" value="{{ old('father.company') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="father_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                        <input type="email" name="father[email]" id="father_email" value="{{ old('father.email') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="father_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
-                        <input type="text" name="father[phone]" id="father_phone" value="{{ old('father.phone') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="father_address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
-                        <input type="text" name="father[address]" id="father_address" value="{{ old('father.address') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Guardian Information - Mother -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mother Information</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Optional - At least one guardian must be provided</p>
-            </div>
-            <div class="px-6 py-5 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="mother_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
-                        <input type="text" name="mother[name]" id="mother_name" value="{{ old('mother.name') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="mother_job" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job</label>
-                        <input type="text" name="mother[job]" id="mother_job" value="{{ old('mother.job') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="mother_company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
-                        <input type="text" name="mother[company]" id="mother_company" value="{{ old('mother.company') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="mother_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                        <input type="email" name="mother[email]" id="mother_email" value="{{ old('mother.email') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="mother_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
-                        <input type="text" name="mother[phone]" id="mother_phone" value="{{ old('mother.phone') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="mother_address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
-                        <input type="text" name="mother[address]" id="mother_address" value="{{ old('mother.address') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Guardian Information - Other Guardian -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Other Guardian Information</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Optional - At least one guardian must be provided</p>
-            </div>
-            <div class="px-6 py-5 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="guardian_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
-                        <input type="text" name="guardian[name]" id="guardian_name" value="{{ old('guardian.name') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="guardian_job" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job</label>
-                        <input type="text" name="guardian[job]" id="guardian_job" value="{{ old('guardian.job') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="guardian_company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
-                        <input type="text" name="guardian[company]" id="guardian_company" value="{{ old('guardian.company') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="guardian_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                        <input type="email" name="guardian[email]" id="guardian_email" value="{{ old('guardian.email') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="guardian_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
-                        <input type="text" name="guardian[phone]" id="guardian_phone" value="{{ old('guardian.phone') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                    <div>
-                        <label for="guardian_address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
-                        <input type="text" name="guardian[address]" id="guardian_address" value="{{ old('guardian.address') }}"
-                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                    </div>
-                </div>
+            <div class="px-6 py-5" id="guardians-container">
+                <!-- Guardian template will be added here by JavaScript -->
             </div>
         </div>
 
@@ -502,4 +354,110 @@
         </div>
     </form>
 </div>
+<script>
+let guardianIndex = 0;
+
+function addGuardian() {
+    const container = document.getElementById('guardians-container');
+    const guardianHtml = `
+        <div class="guardian-item border-t border-gray-200 dark:border-gray-700 pt-4 mt-4" data-index="${guardianIndex}">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-md font-medium text-gray-900 dark:text-white">Guardian #${guardianIndex + 1}</h3>
+                <button type="button" onclick="removeGuardian(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 text-sm">
+                    Remove
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Guardian Type <span class="text-red-500">*</span>
+                        </label>
+                        <select name="guardians[${guardianIndex}][type]" required
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">Select Type</option>
+                            <option value="father">Father</option>
+                            <option value="mother">Mother</option>
+                            <option value="guardian">Guardian</option>
+                            <option value="brother">Brother</option>
+                            <option value="sister">Sister</option>
+                            <option value="grandfather">Grandfather</option>
+                            <option value="grandmother">Grandmother</option>
+                            <option value="uncle">Uncle</option>
+                            <option value="aunty">Aunty</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="guardians[${guardianIndex}][name]" required
+                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job</label>
+                        <select name="guardians[${guardianIndex}][job]"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">Select Job</option>
+                            <option value="PNS">PNS</option>
+                            <option value="Swasta">Swasta</option>
+                            <option value="Wiraswasta">Wiraswasta</option>
+                            <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                            <option value="TNI/Polri">TNI/Polri</option>
+                            <option value="Petani/Nelayan">Petani/Nelayan</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
+                        <input type="text" name="guardians[${guardianIndex}][company]"
+                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                        <input type="email" name="guardians[${guardianIndex}][email]"
+                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
+                        <input type="text" name="guardians[${guardianIndex}][phone]"
+                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
+                    <textarea name="guardians[${guardianIndex}][address]" rows="2"
+                              class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600"></textarea>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', guardianHtml);
+    guardianIndex++;
+}
+
+function removeGuardian(button) {
+    const guardianItem = button.closest('.guardian-item');
+    guardianItem.remove();
+    updateGuardianNumbers();
+}
+
+function updateGuardianNumbers() {
+    const guardians = document.querySelectorAll('.guardian-item');
+    guardians.forEach((guardian, index) => {
+        guardian.querySelector('h3').textContent = `Guardian #${index + 1}`;
+    });
+}
+
+// Add one guardian by default on page load
+document.addEventListener('DOMContentLoaded', function() {
+    addGuardian();
+});
+</script>
 @endsection

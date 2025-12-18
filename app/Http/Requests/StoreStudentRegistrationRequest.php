@@ -49,50 +49,27 @@ class StoreStudentRegistrationRequest extends FormRequest
             'registration_info_source' => 'required|string|max:255',
             'registration_reason' => 'nullable|string',
 
-            // Guardian Information - Father
-            'father.name' => 'nullable|string|max:255',
-            'father.job' => 'nullable|string|max:255',
-            'father.company' => 'nullable|string|max:255',
-            'father.email' => 'nullable|email|max:255',
-            'father.phone' => 'nullable|string|max:255',
-            'father.address' => 'nullable|string',
-
-            // Guardian Information - Mother
-            'mother.name' => 'nullable|string|max:255',
-            'mother.job' => 'nullable|string|max:255',
-            'mother.company' => 'nullable|string|max:255',
-            'mother.email' => 'nullable|email|max:255',
-            'mother.phone' => 'nullable|string|max:255',
-            'mother.address' => 'nullable|string',
-
-            // Guardian Information - Guardian
-            'guardian.name' => 'nullable|string|max:255',
-            'guardian.job' => 'nullable|string|max:255',
-            'guardian.company' => 'nullable|string|max:255',
-            'guardian.email' => 'nullable|email|max:255',
-            'guardian.phone' => 'nullable|string|max:255',
-            'guardian.address' => 'nullable|string',
+            // Guardian Information
+            'guardians' => 'required|array|min:1',
+            'guardians.*.type' => 'required|in:father,mother,guardian,brother,sister,grandfather,grandmother,uncle,aunty,other',
+            'guardians.*.name' => 'required|string|max:255',
+            'guardians.*.job' => 'nullable|string|max:255',
+            'guardians.*.company' => 'nullable|string|max:255',
+            'guardians.*.email' => 'nullable|email|max:255',
+            'guardians.*.phone' => 'nullable|string|max:255',
+            'guardians.*.address' => 'nullable|string',
         ];
     }
 
     /**
      * Configure the validator instance.
      */
+    /**
+     * Configure the validator instance.
+     */
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            // Ensure at least one guardian is provided
-            $hasFather = !empty($this->input('father.name'));
-            $hasMother = !empty($this->input('mother.name'));
-            $hasGuardian = !empty($this->input('guardian.name'));
-
-            if (!$hasFather && !$hasMother && !$hasGuardian) {
-                $validator->errors()->add(
-                    'guardians',
-                    'At least one guardian (Father, Mother, or Guardian) must be provided.'
-                );
-            }
-        });
+        // Custom validation logic if needed
     }
 
     /**
@@ -110,15 +87,10 @@ class StoreStudentRegistrationRequest extends FormRequest
             'previous_school_type' => 'previous school type',
             'previous_school_name' => 'previous school name',
             'registration_info_source' => 'information source',
-            'father.name' => 'father\'s name',
-            'father.email' => 'father\'s email',
-            'father.phone' => 'father\'s phone',
-            'mother.name' => 'mother\'s name',
-            'mother.email' => 'mother\'s email',
-            'mother.phone' => 'mother\'s phone',
-            'guardian.name' => 'guardian\'s name',
-            'guardian.email' => 'guardian\'s email',
-            'guardian.phone' => 'guardian\'s phone',
+            'guardians.*.name' => 'guardian name',
+            'guardians.*.email' => 'guardian email',
+            'guardians.*.phone' => 'guardian phone',
+            'guardians.*.type' => 'guardian type',
         ];
     }
 

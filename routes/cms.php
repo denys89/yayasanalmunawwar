@@ -138,6 +138,9 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     Route::get('student-registrations/{payment}/view-transfer-proof', [StudentRegistrationController::class, 'viewTransferProof'])
         ->name('student-registrations.view-transfer-proof');
     
+    // Students Management
+    Route::resource('students', \App\Http\Controllers\CMS\StudentController::class);
+    
     // Media Management
     Route::resource('media', MediaController::class);
     Route::post('media/upload', [MediaController::class, 'upload'])->name('media.upload');

@@ -145,7 +145,8 @@
                             Class <span class="text-red-500">*</span>
                         </label>
                         <select name="selected_class" id="selected_class" required
-                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600"
+                                onchange="updateClassLevelOptions()">
                             <option value="">Select Class</option>
                             <option value="kb" {{ old('selected_class') == 'kb' ? 'selected' : '' }}>KB (Kelompok Bermain)</option>
                             <option value="tk" {{ old('selected_class') == 'tk' ? 'selected' : '' }}>TK (Taman Kanak-kanak)</option>
@@ -153,6 +154,18 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label for="class_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Class Level
+                        </label>
+                        <select name="class_level" id="class_level"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">Select Class First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="admission_wave_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Admission Wave
@@ -167,9 +180,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="registration_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Registration Type <span class="text-red-500">*</span>
@@ -183,7 +194,9 @@
                             <option value="Internal Guru" {{ old('registration_type') == 'Internal Guru' ? 'selected' : '' }}>Internal Guru</option>
                         </select>
                     </div>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Status <span class="text-red-500">*</span>
@@ -194,6 +207,14 @@
                             <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                             <option value="graduated" {{ old('status') == 'graduated' ? 'selected' : '' }}>Graduated</option>
                         </select>
+                    </div>
+
+                    <div>
+                        <label for="enrolled_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Enrollment Date
+                        </label>
+                        <input type="date" name="enrolled_at" id="enrolled_at" value="{{ old('enrolled_at', date('Y-m-d')) }}"
+                               class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
                     </div>
                 </div>
 
@@ -213,14 +234,6 @@
                         <input type="text" name="previous_school_name" id="previous_school_name" value="{{ old('previous_school_name') }}" required
                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
                     </div>
-                </div>
-
-                <div>
-                    <label for="enrolled_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Enrollment Date
-                    </label>
-                    <input type="date" name="enrolled_at" id="enrolled_at" value="{{ old('enrolled_at', date('Y-m-d')) }}"
-                           class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
                 </div>
             </div>
         </div>
@@ -362,9 +375,51 @@ function updateGuardianNumbers() {
     });
 }
 
+// Function to update class level options based on selected class
+function updateClassLevelOptions() {
+    const selectedClass = document.getElementById('selected_class').value;
+    const classLevelSelect = document.getElementById('class_level');
+    
+    // Clear existing options
+    classLevelSelect.innerHTML = '';
+    
+    if (!selectedClass) {
+        classLevelSelect.innerHTML = '<option value="">Select Class First</option>';
+        return;
+    }
+    
+    // Add default option
+    classLevelSelect.innerHTML = '<option value="">Select Level</option>';
+    
+    // Add options based on selected class
+    if (selectedClass === 'kb') {
+        classLevelSelect.innerHTML += '<option value="KB">KB</option>';
+    } else if (selectedClass === 'tk') {
+        classLevelSelect.innerHTML += '<option value="A">A</option>';
+        classLevelSelect.innerHTML += '<option value="B">B</option>';
+    } else if (selectedClass === 'sd') {
+        for (let i = 1; i <= 6; i++) {
+            classLevelSelect.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+    }
+    
+    // Restore old value if exists
+    const oldValue = '{{ old("class_level") }}';
+    if (oldValue) {
+        classLevelSelect.value = oldValue;
+    }
+}
+
 // Add one guardian by default on page load
 document.addEventListener('DOMContentLoaded', function() {
     addGuardian();
+    
+    // Initialize class level options if class is already selected
+    const selectedClass = document.getElementById('selected_class').value;
+    if (selectedClass) {
+        updateClassLevelOptions();
+    }
 });
+
 </script>
 @endsection

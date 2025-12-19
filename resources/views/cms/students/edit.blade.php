@@ -85,6 +85,33 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Class -->
+                    <div>
+                        <label for="selected_class" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Class <span class="text-red-500">*</span>
+                        </label>
+                        <select name="selected_class" id="selected_class" required
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600"
+                                onchange="updateClassLevelOptionsEdit()">
+                            <option value="kb" {{ old('selected_class', $student->selected_class) == 'kb' ? 'selected' : '' }}>KB (Kelompok Bermain)</option>
+                            <option value="tk" {{ old('selected_class', $student->selected_class) == 'tk' ? 'selected' : '' }}>TK (Taman Kanak-kanak)</option>
+                            <option value="sd" {{ old('selected_class', $student->selected_class) == 'sd' ? 'selected' : '' }}>SD (Sekolah Dasar)</option>
+                        </select>
+                    </div>
+
+                    <!-- Class Level -->
+                    <div>
+                        <label for="class_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Class Level
+                        </label>
+                        <select name="class_level" id="class_level"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">Select Level</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Status -->
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -129,10 +156,6 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Class</label>
-                        <div class="text-sm text-gray-900 dark:text-white">{{ strtoupper($student->selected_class) }}</div>
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Enrolled Date</label>
                         <div class="text-sm text-gray-900 dark:text-white">{{ $student->enrolled_at ? $student->enrolled_at->format('F j, Y') : 'N/A' }}</div>
                     </div>
@@ -156,4 +179,41 @@
         </div>
     </form>
 </div>
+
+<script>
+// Function to update class level options based on selected class
+function updateClassLevelOptionsEdit() {
+    const selectedClass = document.getElementById('selected_class').value;
+    const classLevelSelect = document.getElementById('class_level');
+    const currentLevel = '{{ old("class_level", $student->class_level) }}';
+    
+    // Clear existing options
+    classLevelSelect.innerHTML = '';
+    
+    // Add default option
+    classLevelSelect.innerHTML = '<option value="">Select Level</option>';
+    
+    // Add options based on selected class
+    if (selectedClass === 'kb') {
+        classLevelSelect.innerHTML += '<option value="KB">KB</option>';
+    } else if (selectedClass === 'tk') {
+        classLevelSelect.innerHTML += '<option value="A">A</option>';
+        classLevelSelect.innerHTML += '<option value="B">B</option>';
+    } else if (selectedClass === 'sd') {
+        for (let i = 1; i <= 6; i++) {
+            classLevelSelect.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+    }
+    
+    // Restore current value if exists
+    if (currentLevel) {
+        classLevelSelect.value = currentLevel;
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateClassLevelOptionsEdit();
+});
+</script>
 @endsection

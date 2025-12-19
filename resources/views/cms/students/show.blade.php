@@ -73,6 +73,18 @@
                         </td>
                     </tr>
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Class Level</td>
+                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">
+                            @if($student->class_level)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                                    {{ $student->class_level }}
+                                </span>
+                            @else
+                                <span class="text-gray-400">N/A</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Status</td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">
                             @php

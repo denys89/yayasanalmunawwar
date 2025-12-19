@@ -24,6 +24,7 @@ class Student extends Model
         'sibling_name',
         'sibling_class',
         'selected_class',
+        'class_level',
         'registration_type',
         'previous_school_type',
         'previous_school_name',

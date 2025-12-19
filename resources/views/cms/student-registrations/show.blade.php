@@ -399,18 +399,27 @@
     @endif
 
     <!-- Payment Information Table -->
-    @if($studentRegistration->payments && $studentRegistration->payments->count() > 0)
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                </svg>
-                Payment Information ({{ $studentRegistration->payments->count() }} {{ $studentRegistration->payments->count() === 1 ? 'Payment' : 'Payments' }})
-            </h2>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                    Payment Information ({{ $studentRegistration->payments->count() }} {{ $studentRegistration->payments->count() === 1 ? 'Payment' : 'Payments' }})
+                </h2>
+                <button type="button" 
+                        onclick="openAddPaymentModal()"
+                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 rounded-lg shadow-sm transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Payment
+                </button>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    @if($studentRegistration->payments && $studentRegistration->payments->count() > 0)
+        <div class="overflow-x-auto">            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
@@ -503,26 +512,16 @@
                 </tbody>
             </table>
         </div>
-    </div>
     @else
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                </svg>
-                Payment Information
-            </h2>
-        </div>
         <div class="px-6 py-8 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
             </svg>
             <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No Payment Information</h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">No payment records are associated with this student registration.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Click "Add Payment" button above to create a payment record.</p>
         </div>
-    </div>
     @endif
+    </div>
 
     <!-- Admin Update Form -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
@@ -844,7 +843,164 @@ window.onclick = function(event) {
     if (event.target === updateModal) {
         closeUpdateConfirmation();
     }
+    const addPaymentModal = document.getElementById('addPaymentModal');
+    if (event.target === addPaymentModal) {
+        closeAddPaymentModal();
+    }
+}
+
+function openAddPaymentModal() {
+    const modal = document.getElementById('addPaymentModal');
+    modal.classList.remove('hidden');
+}
+
+function closeAddPaymentModal() {
+    const modal = document.getElementById('addPaymentModal');
+    modal.classList.add('hidden');
+    document.getElementById('addPaymentForm').reset();
+}
+
+function calculateDiscount() {
+    const amountInput = document.getElementById('payment_amount');
+    const discountSelect = document.getElementById('discount_id');
+    const finalAmountDiv = document.getElementById('final_amount_display');
+    
+    const amount = parseFloat(amountInput.value) || 0;
+    const selectedOption = discountSelect.options[discountSelect.selectedIndex];
+    
+    if (!selectedOption || !selectedOption.value) {
+        finalAmountDiv.innerHTML = '';
+        return;
+    }
+    
+    const discountType = selectedOption.dataset.type;
+    const discountAmount = parseFloat(selectedOption.dataset.amount) || 0;
+    
+    let finalAmount = amount;
+    let discountValue = 0;
+    
+    if (discountType === 'percentage') {
+        discountValue = amount * (discountAmount / 100);
+        finalAmount = amount - discountValue;
+    } else {
+        discountValue = discountAmount;
+        finalAmount = amount - discountAmount;
+    }
+    
+    finalAmount = Math.max(0, finalAmount);
+    
+    finalAmountDiv.innerHTML = `
+        <div class="p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+            <div class="text-xs space-y-0.5">
+                <div class="flex justify-between text-gray-700 dark:text-gray-300">
+                    <span>Original:</span>
+                    <span class="font-medium">Rp ${amount.toLocaleString('id-ID')}</span>
+                </div>
+                <div class="flex justify-between text-green-600 dark:text-green-400">
+                    <span>Discount:</span>
+                    <span class="font-medium">- Rp ${discountValue.toLocaleString('id-ID')}</span>
+                </div>
+                <div class="flex justify-between text-sm font-semibold text-gray-900 dark:text-white border-t border-blue-300 dark:border-blue-700 pt-0.5">
+                    <span>Final:</span>
+                    <span>Rp ${finalAmount.toLocaleString('id-ID')}</span>
+                </div>
+            </div>
+        </div>
+    `;
 }
 </script>
+
+<!-- Add Payment Modal -->
+<div id="addPaymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-4 border w-full max-w-md shadow-lg rounded-lg bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Add New Payment</h3>
+            <button type="button" onclick="closeAddPaymentModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <form id="addPaymentForm" action="{{ route('cms.student-registrations.store-payment', $studentRegistration) }}" method="POST">
+            @csrf
+            <div class="space-y-3">
+                <!-- Payment Type -->
+                <div>
+                    <label for="type" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Payment Type <span class="text-red-500">*</span>
+                    </label>
+                    <select name="type" id="type" required
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                        <option value="">Select Payment Type</option>
+                        <option value="registration_fee">Registration Fee</option>
+                        <option value="final_payment_fee">Final Payment Fee</option>
+                    </select>
+                </div>
+
+                <!-- Amount -->
+                <div>
+                    <label for="payment_amount" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Amount (Rp) <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" 
+                           name="amount" 
+                           id="payment_amount" 
+                           min="0" 
+                           max="9999999999.99"
+                           step="1000" 
+                           required
+                           oninput="calculateDiscount()"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="e.g., 10000000">
+                    <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Max: Rp 9,999,999,999.99</p>
+                </div>
+
+                <!-- Discount -->
+                <div>
+                    <label for="discount_id" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Discount (Optional)
+                    </label>
+                    <select name="discount_id" id="discount_id" onchange="calculateDiscount()"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                        <option value="">No Discount</option>
+                        @foreach($discounts as $discount)
+                            <option value="{{ $discount->id }}" 
+                                    data-type="{{ $discount->type }}" 
+                                    data-amount="{{ $discount->amount }}">
+                                {{ $discount->name }} 
+                                ({{ $discount->type === 'percentage' ? $discount->amount . '%' : 'Rp ' . number_format($discount->amount, 0, ',', '.') }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Final Amount Display -->
+                <div id="final_amount_display"></div>
+
+                <!-- Info Box -->
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-2">
+                    <p class="text-xs text-yellow-800 dark:text-yellow-200">
+                        <strong>Note:</strong> Payment will be created with "Unpaid" status.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 mt-4">
+                <button type="button" 
+                        onclick="closeAddPaymentModal()"
+                        class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500 rounded-md">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-md">
+                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Payment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @endsection

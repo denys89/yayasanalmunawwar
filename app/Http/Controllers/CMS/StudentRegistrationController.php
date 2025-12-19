@@ -7,6 +7,7 @@ use App\Models\StudentRegistration;
 use App\Models\AdmissionWave;
 use App\Models\Payment;
 use App\Models\Guardian;
+use App\Models\Discount;
 use App\Http\Requests\UpdateStudentRegistrationRequest;
 use App\Http\Requests\StoreStudentRegistrationRequest;
 use Illuminate\Http\Request;
@@ -182,7 +183,7 @@ class StudentRegistrationController extends Controller
      */
     public function show(StudentRegistration $studentRegistration)
     {
-        $studentRegistration->load(['admissionWave', 'guardians', 'payments']);
+        $studentRegistration->load(['admissionWave', 'guardians', 'payments.discount', 'payments.confirmedBy']);
         
         // Get registration steps and statuses for dropdowns with labels
         $registrationSteps = [
@@ -203,10 +204,16 @@ class StudentRegistrationController extends Controller
             'failed' => 'Failed',
         ];
         
+        // Get available discounts for the admission wave
+        $discounts = Discount::where('admission_wave_id', $studentRegistration->admission_wave_id)
+            ->orWhereNull('admission_wave_id')
+            ->get();
+        
         return view('cms.student-registrations.show', compact(
             'studentRegistration', 
             'registrationSteps', 
-            'registrationStatuses'
+            'registrationStatuses',
+            'discounts'
         ));
     }
 
@@ -234,9 +241,56 @@ class StudentRegistrationController extends Controller
 
         $studentRegistration->update($updateData);
 
+        return redirect()->back()->with('success', 'Registration updated successfully.');
+    }
+
+    /**
+     * Store a new payment for student registration.
+     */
+    public function storePayment(Request $request, StudentRegistration $studentRegistration)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:registration_fee,final_payment_fee',
+            'amount' => 'required|numeric|min:0|max:9999999999.99',
+            'discount_id' => 'nullable|exists:discounts,id',
+        ], [
+            'type.required' => 'Payment type is required.',
+            'type.in' => 'Invalid payment type selected.',
+            'amount.required' => 'Payment amount is required.',
+            'amount.numeric' => 'Payment amount must be a number.',
+            'amount.min' => 'Payment amount cannot be negative.',
+            'amount.max' => 'Payment amount cannot exceed Rp 9,999,999,999.99.',
+            'discount_id.exists' => 'Selected discount is invalid.',
+        ]);
+
+        // Calculate final amount after discount if applicable
+        $finalAmount = $validated['amount'];
+        if (!empty($validated['discount_id'])) {
+            $discount = Discount::find($validated['discount_id']);
+            if ($discount) {
+                if ($discount->type === 'percentage') {
+                    $finalAmount = $validated['amount'] - ($validated['amount'] * $discount->amount / 100);
+                } else {
+                    $finalAmount = $validated['amount'] - $discount->amount;
+                }
+                $finalAmount = max(0, $finalAmount); // Ensure amount is not negative
+            }
+        }
+
+        // Create the payment
+        $payment = Payment::create([
+            'student_registration_id' => $studentRegistration->id,
+            'admission_wave_id' => $studentRegistration->admission_wave_id,
+            'level' => $studentRegistration->selected_class,
+            'type' => $validated['type'],
+            'amount' => $finalAmount,
+            'status' => 'unpaid',
+            'discount_id' => $validated['discount_id'] ?? null,
+        ]);
+
         return redirect()
             ->route('cms.student-registrations.show', $studentRegistration)
-            ->with('success', 'Registration updated successfully.');
+            ->with('success', 'Payment added successfully.');
     }
 
     /**

@@ -35,6 +35,11 @@ class StudentController extends Controller
             $query->where('selected_class', $request->selected_class);
         }
 
+        // Filter by class level
+        if ($request->filled('class_level')) {
+            $query->where('class_level', $request->class_level);
+        }
+
         // Filter by admission wave
         if ($request->filled('admission_wave_id')) {
             $query->where('admission_wave_id', $request->admission_wave_id);
@@ -91,6 +96,7 @@ class StudentController extends Controller
             // Academic Information
             'admission_wave_id' => 'nullable|exists:admission_waves,id',
             'selected_class' => 'required|in:kb,tk,sd',
+            'class_level' => 'nullable|string|max:10',
             'registration_type' => 'required|string|max:255',
             
             // Previous School
@@ -129,6 +135,7 @@ class StudentController extends Controller
                 'sibling_name' => $validated['sibling_name'] ?? null,
                 'sibling_class' => $validated['sibling_class'] ?? null,
                 'selected_class' => $validated['selected_class'],
+                'class_level' => $validated['class_level'] ?? null,
                 'registration_type' => $validated['registration_type'],
                 'previous_school_type' => $validated['previous_school_type'],
                 'previous_school_name' => $validated['previous_school_name'],
@@ -188,6 +195,8 @@ class StudentController extends Controller
             'nickname' => 'nullable|string|max:255',
             'sibling_name' => 'nullable|string|max:255',
             'sibling_class' => 'nullable|string|max:255',
+            'selected_class' => 'required|in:kb,tk,sd',
+            'class_level' => 'nullable|string|max:10',
             'status' => 'required|in:active,inactive,graduated',
         ]);
 

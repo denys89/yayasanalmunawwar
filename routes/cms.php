@@ -131,6 +131,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     ])->except(['edit', 'destroy']);
     
     // Payment Management Routes
+    Route::post('student-registrations/{student_registration}/payments', [StudentRegistrationController::class, 'storePayment'])
+        ->name('student-registrations.store-payment');
     Route::post('student-registrations/{payment}/upload-transfer-proof', [StudentRegistrationController::class, 'uploadTransferProof'])
         ->name('student-registrations.upload-transfer-proof');
     Route::put('student-registrations/{payment}/update-payment-status', [StudentRegistrationController::class, 'updatePaymentStatus'])
@@ -140,6 +142,11 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     
     // Students Management
     Route::resource('students', \App\Http\Controllers\CMS\StudentController::class);
+    
+    // Monthly Payments Management
+    Route::resource('monthly-payments', \App\Http\Controllers\CMS\MonthlyPaymentController::class);
+    Route::post('monthly-payments/{monthlyPayment}/confirm', [\App\Http\Controllers\CMS\MonthlyPaymentController::class, 'confirm'])
+        ->name('monthly-payments.confirm');
     
     // Media Management
     Route::resource('media', MediaController::class);

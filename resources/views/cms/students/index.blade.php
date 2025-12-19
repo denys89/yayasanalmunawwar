@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- Secondary Filters Row -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Admission Wave Filter -->
                     <div>
                         <label for="admission_wave_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Admission Wave</label>
@@ -62,6 +62,25 @@
                                     {{ $wave->name }} ({{ strtoupper($wave->level) }})
                                 </option>
                             @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Class Level Filter -->
+                    <div>
+                        <label for="class_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Class Level</label>
+                        <select name="class_level" 
+                                id="class_level"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:ring-gray-600">
+                            <option value="">All Levels</option>
+                            <option value="KB" {{ request('class_level') == 'KB' ? 'selected' : '' }}>KB</option>
+                            <option value="A" {{ request('class_level') == 'A' ? 'selected' : '' }}>A</option>
+                            <option value="B" {{ request('class_level') == 'B' ? 'selected' : '' }}>B</option>
+                            <option value="1" {{ request('class_level') == '1' ? 'selected' : '' }}>1</option>
+                            <option value="2" {{ request('class_level') == '2' ? 'selected' : '' }}>2</option>
+                            <option value="3" {{ request('class_level') == '3' ? 'selected' : '' }}>3</option>
+                            <option value="4" {{ request('class_level') == '4' ? 'selected' : '' }}>4</option>
+                            <option value="5" {{ request('class_level') == '5' ? 'selected' : '' }}>5</option>
+                            <option value="6" {{ request('class_level') == '6' ? 'selected' : '' }}>6</option>
                         </select>
                     </div>
 
@@ -87,7 +106,7 @@
                         </svg>
                         Search & Filter
                     </button>
-                    @if(request()->hasAny(['search', 'selected_class', 'admission_wave_id', 'status']))
+                    @if(request()->hasAny(['search', 'selected_class', 'class_level', 'admission_wave_id', 'status']))
                         <a href="{{ route('cms.students.index') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -125,6 +144,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Student Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Class</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Level</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Admission Wave</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Enrolled Date</th>
@@ -155,6 +175,15 @@
                                     @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 @endif">
                                     {{ strtoupper($student->selected_class) }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                @if($student->class_level)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                                        {{ $student->class_level }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
@@ -206,7 +235,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-16 text-center">
+                            <td colspan="8" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center">
                                     <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,13 +244,13 @@
                                     </div>
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">No students found</h3>
                                     <p class="text-sm text-gray-500 dark:text-gray-400 text-center max-w-md">
-                                        @if(request()->hasAny(['search', 'selected_class', 'admission_wave_id', 'status']))
+                                        @if(request()->hasAny(['search', 'selected_class', 'class_level', 'admission_wave_id', 'status']))
                                             No students match your current filters. Try adjusting your search criteria or clearing the filters.
                                         @else
                                             There are no students in the system yet. Students will appear here once their registration is marked as "passed".
                                         @endif
                                     </p>
-                                    @if(request()->hasAny(['search', 'selected_class', 'admission_wave_id', 'status']))
+                                    @if(request()->hasAny(['search', 'selected_class', 'class_level', 'admission_wave_id', 'status']))
                                         <div class="mt-4">
                                             <a href="{{ route('cms.students.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

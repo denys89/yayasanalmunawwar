@@ -2,6 +2,98 @@
 
 @section('title', 'Create Monthly Payment')
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        background-color: transparent;
+        border: 1px solid rgb(209 213 219);
+        border-radius: 0.375rem;
+        height: 42px;
+        padding: 0.625rem 0.75rem;
+    }
+    .dark .select2-container--default .select2-selection--single {
+        background-color: rgb(55 65 81);
+        border-color: rgb(75 85 99);
+        color: white;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 24px;
+        color: rgb(17 24 39);
+    }
+    .dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: white;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px;
+    }
+    .select2-dropdown {
+        background-color: white;
+        border: 1px solid rgb(209 213 219);
+    }
+    .dark .select2-dropdown {
+        background-color: rgb(55 65 81);
+        border-color: rgb(75 85 99);
+    }
+    .select2-container--default .select2-results__option {
+        color: rgb(17 24 39);
+    }
+    .dark .select2-container--default .select2-results__option {
+        color: white;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: rgb(243 244 246);
+    }
+    .dark .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: rgb(55 65 81);
+    }
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1px solid rgb(209 213 219);
+        background-color: white;
+        color: rgb(17 24 39);
+    }
+    .dark .select2-container--default .select2-search--dropdown .select2-search__field {
+        background-color: rgb(55 65 81);
+        border-color: rgb(75 85 99);
+        color: white;
+    }
+    .select2-results__option .student-name {
+        font-weight: 600;
+        color: rgb(17 24 39);
+        font-size: 0.95rem;
+    }
+    .dark .select2-results__option .student-name {
+        color: white;
+    }
+    .select2-results__option .student-details {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.25rem;
+        font-size: 0.8125rem;
+        color: rgb(107 114 128);
+    }
+    .dark .select2-results__option .student-details {
+        color: rgb(156 163 175);
+    }
+    .select2-results__option .student-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    .select2-results__option .badge-active {
+        background-color: rgb(220 252 231);
+        color: rgb(22 101 52);
+    }
+    .dark .select2-results__option .badge-active {
+        background-color: rgb(20 83 45);
+        color: rgb(187 247 208);
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="mb-8">
@@ -53,14 +145,9 @@
                     </label>
                     <select name="student_id" id="student_id" required
                             class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm dark:bg-gray-700 dark:text-white dark:ring-gray-600">
-                        <option value="">-- Select Student --</option>
-                        @foreach($students as $student)
-                            <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                {{ $student->full_name }} - {{ strtoupper($student->selected_class) }}{{ $student->class_level ? ' ' . $student->class_level : '' }}
-                            </option>
-                        @endforeach
+                        <option value="">-- Search and Select Student --</option>
                     </select>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Only active students are shown</p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Type to search by student name</p>
                 </div>
             </div>
         </div>
@@ -172,3 +259,75 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#student_id').select2({
+        ajax: {
+            url: '{{ route("cms.monthly-payments.search-students") }}',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term,
+                    page: params.page || 1
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.results,
+                    pagination: {
+                        more: data.pagination.more
+                    }
+                };
+            },
+            cache: true
+        },
+        templateResult: formatStudent,
+        templateSelection: formatStudentSelection,
+        placeholder: '-- Search and Select Student --',
+        minimumInputLength: 0,
+        allowClear: true,
+        width: '100%'
+    });
+
+    function formatStudent(student) {
+        if (student.loading) {
+            return student.text;
+        }
+
+        var $container = $(
+            '<div class="student-option">' +
+                '<div class="student-name">' + student.full_name + '</div>' +
+                '<div class="student-details">' +
+                    '<span><strong>Class:</strong> ' + student.selected_class + (student.class_level ? ' ' + student.class_level : '') + '</span>' +
+                    '<span class="student-badge badge-active">' + student.status + '</span>' +
+                '</div>' +
+            '</div>'
+        );
+
+        return $container;
+    }
+
+    function formatStudentSelection(student) {
+        return student.full_name || student.text;
+    }
+
+    // Pre-select if old value exists
+    @if(old('student_id'))
+        $.ajax({
+            url: '{{ route("cms.monthly-payments.search-students") }}',
+            data: { student_id: {{ old('student_id') }} }
+        }).then(function(data) {
+            if (data.results.length > 0) {
+                var option = new Option(data.results[0].text, data.results[0].id, true, true);
+                $('#student_id').append(option).trigger('change');
+            }
+        });
+    @endif
+});
+</script>
+@endpush

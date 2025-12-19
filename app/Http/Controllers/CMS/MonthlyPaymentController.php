@@ -62,6 +62,68 @@ class MonthlyPaymentController extends Controller
     }
 
     /**
+     * Search students for Select2 AJAX.
+     */
+    public function searchStudents(Request $request)
+    {
+        $search = $request->get('search', '');
+        $page = $request->get('page', 1);
+        $perPage = 10;
+
+        // If specific student_id requested (for pre-selecting old value)
+        if ($request->filled('student_id')) {
+            $student = Student::find($request->student_id);
+            if ($student) {
+                return response()->json([
+                    'results' => [
+                        [
+                            'id' => $student->id,
+                            'text' => $student->full_name,
+                            'full_name' => $student->full_name,
+                            'selected_class' => strtoupper($student->selected_class),
+                            'class_level' => $student->class_level,
+                            'status' => ucfirst($student->status)
+                        ]
+                    ],
+                    'pagination' => ['more' => false]
+                ]);
+            }
+        }
+
+        // Search query
+        $query = Student::where('status', 'active');
+
+        if (!empty($search)) {
+            $query->where('full_name', 'like', '%' . $search . '%');
+        }
+
+        $total = $query->count();
+        
+        $students = $query->orderBy('full_name')
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+
+        $results = $students->map(function ($student) {
+            return [
+                'id' => $student->id,
+                'text' => $student->full_name,
+                'full_name' => $student->full_name,
+                'selected_class' => strtoupper($student->selected_class),
+                'class_level' => $student->class_level,
+                'status' => ucfirst($student->status)
+            ];
+        });
+
+        return response()->json([
+            'results' => $results,
+            'pagination' => [
+                'more' => ($page * $perPage) < $total
+            ]
+        ]);
+    }
+
+    /**
      * Show the form for creating a new payment for a specific student.
      */
     public function create(Request $request)

@@ -144,6 +144,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth', 'admin'])->group(functio
     Route::resource('students', \App\Http\Controllers\CMS\StudentController::class);
     
     // Monthly Payments Management
+    Route::get('monthly-payments/search-students', [\App\Http\Controllers\CMS\MonthlyPaymentController::class, 'searchStudents'])
+        ->name('monthly-payments.search-students');
     Route::resource('monthly-payments', \App\Http\Controllers\CMS\MonthlyPaymentController::class);
     Route::post('monthly-payments/{monthlyPayment}/confirm', [\App\Http\Controllers\CMS\MonthlyPaymentController::class, 'confirm'])
         ->name('monthly-payments.confirm');

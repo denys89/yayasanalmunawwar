@@ -23,13 +23,8 @@ class CheckPermission
 
         $user = Auth::user();
 
-        // Super-admin or admin role bypasses all permission checks (backward compatibility)
+        // Super-admin or admin role bypasses all permission checks
         if ($user->hasRole('super-admin') || $user->hasRole('admin')) {
-            return $next($request);
-        }
-
-        // Legacy admin role check for backward compatibility
-        if ($user->role === 'admin') {
             return $next($request);
         }
 

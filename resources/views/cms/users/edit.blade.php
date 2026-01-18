@@ -60,35 +60,16 @@
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div>
-                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">User Role <span class="text-red-600">*</span></label>
-                            <select id="role" name="role" required {{ $user->id === auth()->id() ? 'disabled' : '' }}
-                                    class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('role') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
-                                <option value="">Select Role</option>
-                                <option value="editor" {{ old('role', $user->role) === 'editor' ? 'selected' : '' }}>Editor</option>
-                                <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-                            </select>
-                            @if($user->id === auth()->id())
-                                <input type="hidden" name="role" value="{{ $user->role }}">
-                                <div class="mt-1 text-sm text-yellow-700 dark:text-yellow-400">
-                                    <div class="inline-flex items-center">
-                                        <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 6h.008v.008H12V18z" /></svg>
-                                        You cannot change your own role.
-                                    </div>
-                                </div>
-                            @endif
-                            @error('role')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
                     </div>
 
-                    <!-- Spatie Roles Section -->
+                    <!-- Roles Section -->
                     @if(isset($roles) && $roles->count() > 0)
                     <div class="mt-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Permission Roles</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                            User Roles <span class="text-red-600">*</span>
+                        </label>
                         <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Assign permission-based roles for granular access control</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Assign roles to control user access and permissions</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                                 @foreach($roles as $r)
                                 <label class="flex items-center space-x-3 cursor-pointer group p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">

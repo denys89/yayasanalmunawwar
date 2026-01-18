@@ -40,8 +40,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,editor',
-            'spatie_roles' => 'nullable|array',
+            'spatie_roles' => 'required|array|min:1',
             'spatie_roles.*' => 'exists:roles,id',
         ]);
 
@@ -92,8 +91,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,editor',
-            'spatie_roles' => 'nullable|array',
+            'spatie_roles' => 'required|array|min:1',
             'spatie_roles.*' => 'exists:roles,id',
         ]);
 
@@ -185,28 +183,13 @@ class UserController extends Controller
     public function bulk(Request $request)
     {
         $validated = $request->validate([
-            'action' => ['required', 'string', 'in:activate,deactivate,change_role,delete'],
+            'action' => ['required', 'string', 'in:activate,deactivate,delete'],
             'ids' => ['required', 'array', 'min:1'],
             'ids.*' => ['integer', 'exists:users,id'],
-            'role' => ['nullable', 'string'],
         ]);
 
         $ids = collect($validated['ids'])->map(fn($id) => (int) $id)->unique()->values()->all();
         $action = $validated['action'];
-
-        // Handle role change
-        if ($action === 'change_role') {
-            // Only roles that exist in the current DB enum to avoid SQL errors
-            $allowedRoles = ['admin', 'editor'];
-            $newRole = $request->input('role');
-
-            if (!in_array($newRole, $allowedRoles, true)) {
-                return redirect()->route('cms.users.index')->with('error', 'Invalid role selected. Only admin or editor are supported currently.');
-            }
-
-            $affected = User::whereIn('id', $ids)->update(['role' => $newRole]);
-            return redirect()->route('cms.users.index')->with('success', "Updated role to {$newRole} for {$affected} users.");
-        }
 
         // Handle delete
         if ($action === 'delete') {
@@ -281,7 +264,7 @@ class UserController extends Controller
     public function loginAs(Request $request, User $user)
     {
         // Only admins can impersonate and cannot impersonate themselves
-        if (!auth()->user() || auth()->user()->role !== 'admin' || auth()->id() === $user->id) {
+        if (!auth()->user() || !auth()->user()->hasRole('admin') || auth()->id() === $user->id) {
             return back()->with('error', 'You are not authorized to perform this action.');
         }
 

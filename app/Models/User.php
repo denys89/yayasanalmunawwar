@@ -25,7 +25,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'is_active',
     ];
 
@@ -58,7 +57,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->hasRole('admin');
     }
 
     /**
@@ -66,7 +65,7 @@ class User extends Authenticatable
      */
     public function isEditor(): bool
     {
-        return $this->role === 'editor';
+        return $this->hasRole('editor');
     }
 
     /**
@@ -74,7 +73,7 @@ class User extends Authenticatable
      */
     public function isParent(): bool
     {
-        return $this->role === 'parent';
+        return $this->hasRole('parent');
     }
 
     /**

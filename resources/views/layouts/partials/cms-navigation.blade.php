@@ -1,12 +1,8 @@
 <nav class="flex flex-1 flex-col">
     @php
-        // Helper function to check if user has permission or is legacy admin
+        // Helper function to check if user has permission
         $hasAccess = function($permission) {
             $user = Auth::user();
-            // Legacy admin role has full access
-            if ($user->role === 'admin') {
-                return true;
-            }
             // Check Spatie permission
             return $user->can($permission);
         };

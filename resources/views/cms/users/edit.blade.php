@@ -65,7 +65,6 @@
                             <select id="role" name="role" required {{ $user->id === auth()->id() ? 'disabled' : '' }}
                                     class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('role') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
                                 <option value="">Select Role</option>
-                                <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>User</option>
                                 <option value="editor" {{ old('role', $user->role) === 'editor' ? 'selected' : '' }}>Editor</option>
                                 <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                             </select>
@@ -83,6 +82,34 @@
                             @enderror
                         </div>
                     </div>
+
+                    <!-- Spatie Roles Section -->
+                    @if(isset($roles) && $roles->count() > 0)
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Permission Roles</label>
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Assign permission-based roles for granular access control</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                @foreach($roles as $r)
+                                <label class="flex items-center space-x-3 cursor-pointer group p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <input type="checkbox" name="spatie_roles[]" value="{{ $r->id }}" 
+                                           class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
+                                           {{ in_array($r->id, old('spatie_roles', $userRoles ?? [])) ? 'checked' : '' }}>
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                                            {{ ucwords(str_replace('-', ' ', $r->name)) }}
+                                        </span>
+                                        <span class="ml-1 text-xs text-gray-400">({{ $r->permissions->count() }} permissions)</span>
+                                    </div>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @error('spatie_roles')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    @endif
 
                     <div class="mt-6">
                         <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bio</label>
@@ -333,15 +360,6 @@
                             <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 002.25-2.25v-1.2a1.05 1.05 0 00-.78-1.02l-3.12-.78a1.05 1.05 0 00-1.032.27l-1.17 1.17a12.04 12.04 0 01-5.61-5.61l1.17-1.17a1.05 1.05 0 00.27-1.032l-.78-3.12A1.05 1.05 0 007.2 3.75H6a2.25 2.25 0 00-2.25 2.25v.75z" /></svg>
                             Call User
                         </a>
-                    @endif
-                    @if(!$user->email_verified_at)
-                        <form action="{{ route('cms.users.resend-verification', $user) }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="inline-flex w-full items-center justify-center rounded-md border border-yellow-300 px-4 py-2 text-sm font-semibold text-yellow-700 hover:bg-yellow-50 dark:border-yellow-700 dark:text-yellow-300 dark:hover:bg-yellow-900/30">
-                                <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 6h.008v.008H12V18z" /></svg>
-                                Resend Verification
-                            </button>
-                        </form>
                     @endif
                     @if($user->id !== auth()->id())
                         <button type="button" class="inline-flex items-center justify-center rounded-md border border-indigo-300 px-4 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30" onclick="loginAsUser()">

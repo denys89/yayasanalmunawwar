@@ -25,7 +25,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'editor' => \App\Http\Middleware\EditorMiddleware::class,
             'parent.access' => \App\Http\Middleware\ParentAccess::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
+        
+        // Redirect authenticated users to CMS dashboard
+        $middleware->redirectGuestsTo('/login');
+        $middleware->redirectUsersTo('/cms/dashboard');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

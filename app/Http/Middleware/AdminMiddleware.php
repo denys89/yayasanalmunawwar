@@ -11,6 +11,9 @@ class AdminMiddleware
 {
     /**
      * Handle an incoming request.
+     * 
+     * Allow access for users with admin or super-admin role,
+     * OR users with the legacy 'admin' role field (for backward compatibility).
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
@@ -20,10 +23,18 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Unauthorized access.');
+        $user = Auth::user();
+
+        // Check new Spatie roles first
+        if ($user->hasRole(['super-admin', 'admin'])) {
+            return $next($request);
         }
 
-        return $next($request);
+        // Fallback to legacy role field for backward compatibility
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized access. Admin privileges required.');
     }
 }

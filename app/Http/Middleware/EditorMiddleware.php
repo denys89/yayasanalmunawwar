@@ -11,6 +11,9 @@ class EditorMiddleware
 {
     /**
      * Handle an incoming request.
+     * 
+     * Allow access for users with editor, admin, or super-admin role,
+     * OR users with the legacy 'admin' or 'editor' role field (for backward compatibility).
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
@@ -20,10 +23,18 @@ class EditorMiddleware
             return redirect()->route('login');
         }
 
-        if (!Auth::user()->isEditor() && !Auth::user()->isAdmin()) {
-            abort(403, 'Unauthorized access.');
+        $user = Auth::user();
+
+        // Check new Spatie roles first
+        if ($user->hasRole(['super-admin', 'admin', 'editor'])) {
+            return $next($request);
         }
 
-        return $next($request);
+        // Fallback to legacy role field for backward compatibility
+        if (in_array($user->role, ['admin', 'editor'])) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized access. Editor privileges required.');
     }
 }

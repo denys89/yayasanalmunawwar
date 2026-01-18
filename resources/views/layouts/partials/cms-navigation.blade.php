@@ -1,11 +1,47 @@
 <nav class="flex flex-1 flex-col">
+    @php
+        // Helper function to check if user has permission or is legacy admin
+        $hasAccess = function($permission) {
+            $user = Auth::user();
+            // Legacy admin role has full access
+            if ($user->role === 'admin') {
+                return true;
+            }
+            // Check Spatie permission
+            return $user->can($permission);
+        };
+        
+        $hasAnyAccess = function($permissions) use ($hasAccess) {
+            foreach ($permissions as $permission) {
+                if ($hasAccess($permission)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    @endphp
+    
     <ul role="list" class="flex flex-1 flex-col gap-y-7">
         <li>
             <ul role="list" class="-mx-2 space-y-1">
-                @if(Auth::user()->role === 'admin' || Auth::user()->role === 'editor')
+                {{-- Dashboard - Available to all CMS users --}}
+                <li>
+                    <a href="{{ route('cms.dashboard') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.dashboard') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.dashboard') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                
+                {{-- WEBSITE Section --}}
+                @if($hasAnyAccess(['edit-homepage', 'manage-banners', 'manage-pages']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">WEBSITE</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('edit-homepage'))
                 <li>
                     <a href="{{ route('cms.homepage.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.homepage*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.homepage*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -14,14 +50,20 @@
                         Homepage
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-banners'))
                 <li>
-                    <a href="{{ Auth::user()->role === 'editor' ? route('cms.banners.editor.index') : route('cms.banners.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.banners*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                    <a href="{{ route('cms.banners.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.banners*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.banners*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5h16.5A1.5 1.5 0 0121.75 6v12a1.5 1.5 0 01-1.5 1.5H3.75A1.5 1.5 0 012.25 18V6A1.5 1.5 0 013.75 4.5zm4.5 3h7.5v6h-7.5V7.5zm0 7.5h4.5v3h-4.5v-3z" />
                         </svg>
                         Banners
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-pages'))
                 <li>
                     <a href="{{ route('cms.pages.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.pages*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.pages*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -30,10 +72,16 @@
                         Pages
                     </a>
                 </li>
+                @endif
                 
+                {{-- ABOUT Section --}}
+                @if($hasAnyAccess(['manage-history', 'manage-vision-mission', 'manage-organizational-structure']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">ABOUT</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-history'))
                 <li>
                     <a href="{{ route('cms.history.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.history*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.history*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -42,6 +90,9 @@
                         History
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-vision-mission'))
                 <li>
                     <a href="{{ route('cms.vision_mission.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.vision_mission*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.vision_mission*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -50,6 +101,9 @@
                         Vision & Mission
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-organizational-structure'))
                 <li>
                     <a href="{{ route('cms.organizational_structure.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.organizational_structure*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.organizational_structure*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -58,10 +112,16 @@
                         Organizational Structure
                     </a>
                 </li>
+                @endif
                 
+                {{-- PROGRAMS & CONTENT Section --}}
+                @if($hasAnyAccess(['manage-programs', 'manage-explores', 'create-news', 'edit-news', 'manage-events', 'manage-media']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">PROGRAMS & CONTENT</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-programs'))
                 <li>
                     <a href="{{ route('cms.programs.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.programs*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.programs*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -70,6 +130,9 @@
                         Programs
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-explores'))
                 <li>
                     <a href="{{ route('cms.explores.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.explores*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.explores*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -79,6 +142,9 @@
                         Explores
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAnyAccess(['create-news', 'edit-news']))
                 <li>
                     <a href="{{ route('cms.news.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.news*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.news*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -87,6 +153,9 @@
                         News
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-events'))
                 <li>
                     <a href="{{ route('cms.events.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.events*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.events*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -95,6 +164,9 @@
                         Events
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-media'))
                 <li>
                     <a href="{{ route('cms.media.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.media*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.media*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -103,10 +175,16 @@
                         Media
                     </a>
                 </li>
+                @endif
                 
+                {{-- ADMISSIONS Section --}}
+                @if($hasAnyAccess(['manage-admission-waves', 'view-registrations', 'view-students', 'manage-discounts', 'manage-payments']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">ADMISSIONS</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-admission-waves'))
                 <li>
                     <a href="{{ route('cms.admission-waves.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.admission-waves*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.admission-waves*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -115,6 +193,9 @@
                         Admission Waves
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('view-registrations'))
                 <li>
                     <a href="{{ route('cms.student-registrations.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.student-registrations*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.student-registrations*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -123,6 +204,9 @@
                         Student Registrations
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('view-students'))
                 <li>
                     <a href="{{ route('cms.students.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.students*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.students*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -131,6 +215,9 @@
                         Students
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-discounts'))
                 <li>
                     <a href="{{ route('cms.discounts.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.discounts*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.discounts*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -139,6 +226,9 @@
                         Discounts
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-payments'))
                 <li>
                     <a href="{{ route('cms.monthly-payments.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.monthly-payments*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.monthly-payments*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -147,18 +237,27 @@
                         Monthly Payments
                     </a>
                 </li>
+                @endif
                 
+                {{-- SUPPORT Section --}}
+                @if($hasAnyAccess(['manage-faqs', 'view-contact-us']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">SUPPORT</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-faqs'))
                 <li>
-                   <a href="{{ route('cms.faqs.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.faqs*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
-                       <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.faqs*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-                       </svg>
-                       FAQs
-                   </a>
-               </li>
+                    <a href="{{ route('cms.faqs.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.faqs*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.faqs*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                        </svg>
+                        FAQs
+                    </a>
+                </li>
+                @endif
+                
+                @if($hasAccess('view-contact-us'))
                 <li>
                     <a href="{{ route('cms.contact-us.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.contact-us*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.contact-us*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -169,10 +268,14 @@
                 </li>
                 @endif
                 
-                @if(Auth::user()->role === 'admin')
+                {{-- ADMINISTRATION Section --}}
+                @if($hasAnyAccess(['manage-users', 'manage-roles', 'manage-settings']))
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400 dark:text-gray-500 mt-6 mb-2">ADMINISTRATION</div>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-users'))
                 <li>
                     <a href="{{ route('cms.users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.users*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.users*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -181,6 +284,20 @@
                         Users
                     </a>
                 </li>
+                @endif
+                
+                @if($hasAccess('manage-roles'))
+                <li>
+                    <a href="{{ route('cms.roles.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.roles*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
+                        <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.roles*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                        </svg>
+                        Roles & Permissions
+                    </a>
+                </li>
+                @endif
+                
+                @if($hasAccess('manage-settings'))
                 <li>
                     <a href="{{ route('cms.settings.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('cms.settings*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-200' : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-200 dark:hover:bg-blue-900/50' }}">
                         <svg class="h-6 w-6 shrink-0 {{ request()->routeIs('cms.settings*') ? 'text-blue-700 dark:text-blue-200' : 'text-gray-400 group-hover:text-blue-700 dark:group-hover:text-blue-200' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

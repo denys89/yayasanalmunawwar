@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::with('roles')->latest()->paginate(10);
         return view('cms.users.index', compact('users'));
     }
 
@@ -26,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('cms.users.create');
+        $roles = Role::where('guard_name', 'web')->orderBy('name')->get();
+        return view('cms.users.create', compact('roles'));
     }
 
     /**
@@ -38,13 +40,25 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,editor,user',
+            'role' => 'required|in:admin,editor',
+            'spatie_roles' => 'nullable|array',
+            'spatie_roles.*' => 'exists:roles,id',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
         $validated['email_verified_at'] = now();
 
-        User::create($validated);
+        // Remove spatie_roles from validated data before creating user
+        $spatieRoles = $validated['spatie_roles'] ?? [];
+        unset($validated['spatie_roles']);
+
+        $user = User::create($validated);
+
+        // Assign Spatie roles if provided
+        if (!empty($spatieRoles)) {
+            $roles = Role::whereIn('id', $spatieRoles)->get();
+            $user->syncRoles($roles);
+        }
 
         return redirect()->route('cms.users.index')
             ->with('success', 'User created successfully.');
@@ -55,6 +69,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user->load('roles', 'permissions');
         return view('cms.users.show', compact('user'));
     }
 
@@ -63,7 +78,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('cms.users.edit', compact('user'));
+        $roles = Role::where('guard_name', 'web')->orderBy('name')->get();
+        $userRoles = $user->roles->pluck('id')->toArray();
+        return view('cms.users.edit', compact('user', 'roles', 'userRoles'));
     }
 
     /**
@@ -75,7 +92,9 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,editor,user',
+            'role' => 'required|in:admin,editor',
+            'spatie_roles' => 'nullable|array',
+            'spatie_roles.*' => 'exists:roles,id',
         ]);
 
         if (!empty($validated['password'])) {
@@ -84,7 +103,15 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
+        // Remove spatie_roles from validated data before updating user
+        $spatieRoles = $validated['spatie_roles'] ?? [];
+        unset($validated['spatie_roles']);
+
         $user->update($validated);
+
+        // Sync Spatie roles
+        $roles = !empty($spatieRoles) ? Role::whereIn('id', $spatieRoles)->get() : [];
+        $user->syncRoles($roles);
 
         return redirect()->route('cms.users.index')
             ->with('success', 'User updated successfully.');

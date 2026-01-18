@@ -83,19 +83,47 @@
                             @enderror
                         </div>
                         <div>
-                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">User Role <span class="text-red-600">*</span></label>
+                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Legacy Role <span class="text-red-600">*</span></label>
                             <select id="role" name="role" required
                                     class="mt-1 block w-full rounded-md border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
                                 <option value="">Select Role</option>
-                                <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
-                                <option value="editor" {{ old('role') === 'editor' ? 'selected' : '' }}>Editor</option>
+                                <option value="editor" {{ old('role', 'editor') === 'editor' ? 'selected' : '' }}>Editor</option>
                                 <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                             </select>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Legacy role for backward compatibility</p>
                             @error('role')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
+
+                    <!-- Spatie Roles Section -->
+                    @if(isset($roles) && $roles->count() > 0)
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Permission Roles</label>
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Assign permission-based roles for granular access control</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                @foreach($roles as $r)
+                                <label class="flex items-center space-x-3 cursor-pointer group p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <input type="checkbox" name="spatie_roles[]" value="{{ $r->id }}" 
+                                           class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
+                                           {{ in_array($r->id, old('spatie_roles', [])) ? 'checked' : '' }}>
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                                            {{ ucwords(str_replace('-', ' ', $r->name)) }}
+                                        </span>
+                                        <span class="ml-1 text-xs text-gray-400">({{ $r->permissions->count() }} permissions)</span>
+                                    </div>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @error('spatie_roles')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    @endif
 
                     <div class="mt-6">
                         <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bio</label>

@@ -88,9 +88,11 @@
                         <div class="search-box-btn search-box-outer"><span class="icon fa fa-search"></span></div>
 
                         <!-- User Box -->
+                        <?php /*
                         <a class="user-box theme-btn" href="register.html">
                             <span class="fa-regular fa-user fa-fw"></span>
                         </a>
+                        */ ?>
 
                         <!-- Button Box -->
                         <div class="header_button-box">
